@@ -14,6 +14,7 @@ c.executescript("""
 """)
 c.close()
 
+# ================ ACCESSING INFORMATION ================
 def get_user(username):
     c = db.cursor()
     c.execute("select * from Account WHERE username = ?", (username,))
@@ -21,3 +22,10 @@ def get_user(username):
     c.close()
     return user
 print(get_user("apple"))
+
+
+
+# ================ INSERTING INFORMATION ================
+def add_user(username, password):
+    c = db.cursor()
+    c.execute("insert into Account values(?,?)")
