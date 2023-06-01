@@ -1,0 +1,28 @@
+J-Impact
+Ivan Yeung
+Joshua Liu
+Jun Hong Wang 
+James Yu
+pd 8
+
+---------------------
+An interactive map that allow people to view how safe an area in NYC is based on zip codes. 
+
+ ______   ______   __   __   __       ______   _______
+/_____/\ /_____/\ /_/\ /_/\ /_/\     /_____/\ /______/\
+\:::_ \ \\::::_\/_\:\ \\ \ \\:\ \    \:::_ \ \\::::__\/__
+ \:\ \ \ \\:\/___/\\:\ \\ \ \\:\ \    \:\ \ \ \\:\ /____/\
+  \:\ \ \ \\::___\/_\:\_/.:\ \\:\ \____\:\ \ \ \\:\\_  _\/
+   \:\/.:| |\:\____/\\ ..::/ / \:\/___/\\:\_\ \ \\:\_\ \ \
+    \____/_/ \_____\/ \___/_/   \_____\/ \_____\/ \_____\/
+==============================================================
+||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||
+
+
+fristL -- TIMESTAMP
+--------------------------------------------------------------
+joahuaL -- 14:05
+* finished setup for tables being used in app (Account, Friends, FriendRequests, Messages, UserAssociation, EmojiAssociation)
+* started working on the accessor methods for retrieving data from tables
+ivanY -- 23:49
+* completed how to doc for Flask-SocketIO in order to get clearance for package
