@@ -34,3 +34,10 @@ ivanY -- 22:13
     * clarify user profile page on site map
     * expand on Cloudinary API and how we will use it in our app 
     * Add section for stretch goals if we have more time 
+joshuaL -- 22:56
+* Implemented login, register, and logout
+* Created additional accessor functions for database
+junW -- 22:56
+* Made test app to do AJAX learnination
+jamesY -- 22:56
+* Made home page with navbar and two columns
