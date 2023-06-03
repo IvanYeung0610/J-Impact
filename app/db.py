@@ -21,11 +21,23 @@ def get_user(username):
     user = c.fetchone()
     c.close()
     return user
-print(get_user("apple"))
 
-
-
-# ================ INSERTING INFORMATION ================
-def add_user(username, password):
+# Returns True or False. True if a user exists with the given info, False if not.
+def match_account_info(username, password):
     c = db.cursor()
-    c.execute("insert into Account values(?,?)")
+    c.execute('select username from Account where (username = ? AND password = ?)', (username, password,))
+    info = c.fetchone()
+    c.close()
+    return info != None
+# ================ INSERTING INFORMATION ================
+
+# ADDS NEW USER: iff the username does not already exist. 
+# Returns True/False depending on the status of adding user. False means the username already exists.
+def add_user(username, password): 
+    if(get_user(username) != None):
+        return False
+    c = db.cursor()
+    c.execute("insert into Account values(?,?,?)", (username, password, "hello",))
+    db.commit()
+    c.close()
+    return True
