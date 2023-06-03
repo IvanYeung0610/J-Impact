@@ -29,6 +29,13 @@ def match_account_info(username, password):
     info = c.fetchone()
     c.close()
     return info != None
+
+# RETURNS 
+# def get_all_users(): 
+#     c = db.cursor()
+#     c.execute("select * from Account")
+#     data = c.fetchall()
+#     return [[data[0]]]
 # ================ INSERTING INFORMATION ================
 
 # ADDS NEW USER: iff the username does not already exist. 
@@ -41,3 +48,11 @@ def add_user(username, password):
     db.commit()
     c.close()
     return True
+
+def add_message(username, group_id, message, time):
+    c = db.cursor()
+    c.execute("insert into Messages values(?,?,?, ?)", (username, group_id, message, time,))
+    db.commit()
+    c.close()
+
+def friends():
