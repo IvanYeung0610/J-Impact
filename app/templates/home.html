@@ -58,6 +58,20 @@
           <div>
             <h5>Friends</h5>
           </div>
+
+          <!--button template-->
+          <div class="d-grid gap-2">
+          <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+            <button type="button" class="btn" style="background-color: #DEF2F1;">Friends</button>
+            <button type="button" class="btn" style="background-color: #DEF2F1;">Friends</button>
+            <button type="button" class="btn btn-primary">Friends</button>
+            <button type="button" class="btn btn-primary">Friends</button>
+            <button type="button" class="btn btn-primary">Friends</button>
+            <button type="button" class="btn btn-primary">Friends</button>
+            </div>
+          </div>
+
+          <br>
           friends<br>
           friends<br>
           friends<br>
@@ -161,9 +175,7 @@
 
         <!--message input-->
         <form action="/" method="POST" autocomplete="off" id="messageform"><!--auto complete removes inut suggestions-->
-          <input type="text" name="message" minlength="1" class="form-control" placeholder="Send a message..."
-            id="messageinput" style="position: absolute; bottom: 14px; width: 75%; left: 16%; right: 0; margin: auto;"
-            required><br>
+          <input type="text" name="message" action="POST" minlength="1" class="form-control" placeholder="Send a message..." style="bottom: 14px; width: 75%; left: 0%; right: 0; margin: auto;" required><br>
           <!--style makes form go to bottom of the page-->
         </form>
 
