@@ -1,0 +1,17 @@
+#scroll::-webkit-scrollbar {
+    width: 4px;               /* width of the entire scrollbar */
+  }
+  
+#scroll::-webkit-scrollbar-thumb {
+    background-color: gray;    /* color of the scroll thumb */
+    border-radius: 30px;       /* roundness of the scroll thumb */
+  }
+
+#messages::-webkit-scrollbar {
+    width: 4px;               /* width of the entire scrollbar */
+  }
+  
+#messages::-webkit-scrollbar-thumb {
+    background-color: gray;    /* color of the scroll thumb */
+    border-radius: 30px;       /* roundness of the scroll thumb */
+  }
