@@ -21,23 +21,43 @@ An interactive map that allow people to view how safe an area in NYC is based on
 
 fristL -- TIMESTAMP
 --------------------------------------------------------------
+
 joahuaL -- 14:05
+--------------------------------------------------------------
 * finished setup for tables being used in app (Account, Friends, FriendRequests, Messages, UserAssociation, EmojiAssociation)
 * started working on the accessor methods for retrieving data from tables
+
 ivanY -- 23:49
+--------------------------------------------------------------
 * completed how to doc for Flask-SocketIO in order to get clearance for package
+
 jamesY -- 19:18
+--------------------------------------------------------------
 * finished frontend for login and registration page 
+
 ivanY -- 22:13
+--------------------------------------------------------------
 * DESIGN DOC FEEDBACK SUMMARY 
     * expand on websockets event handlers and their roles in the app
     * clarify user profile page on site map
     * expand on Cloudinary API and how we will use it in our app 
     * Add section for stretch goals if we have more time 
+    
 joshuaL -- 22:56
+--------------------------------------------------------------
 * Implemented login, register, and logout
 * Created additional accessor functions for database
+
 junW -- 22:56
+--------------------------------------------------------------
 * Made test app to do AJAX learnination
+
 jamesY -- 22:56
+--------------------------------------------------------------
 * Made home page with navbar and two columns
+
+jamesY -- 16:45
+--------------------------------------------------------------
+* Home page now has three columns: friends, the chat, and members
+* Added section above the chat to show the name of the chat
+* Made all three columns scrollable
