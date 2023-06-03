@@ -26,3 +26,11 @@ joahuaL -- 14:05
 * started working on the accessor methods for retrieving data from tables
 ivanY -- 23:49
 * completed how to doc for Flask-SocketIO in order to get clearance for package
+jamesY -- 19:18
+* finished frontend for login and registration page 
+ivanY -- 22:13
+* DESIGN DOC FEEDBACK SUMMARY 
+    * expand on websockets event handlers and their roles in the app
+    * clarify user profile page on site map
+    * expand on Cloudinary API and how we will use it in our app 
+    * Add section for stretch goals if we have more time 
