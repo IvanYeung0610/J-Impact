@@ -9,8 +9,8 @@
     integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
 </head>
 
-<body style="background-color:  #DEF2F1;">
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2B7A78;">
+<body style="background-color:  #DEF2F1; overflow-y: hidden; height: 100%; overflow-x: hidden; width: 100%;"><!--background color, overflow removes scrollbar (fixes page overflow)-->
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2B7A78;"><!--nav bar color-->
     <div class="container-fluid">
 
       <div class="navbar-header">
@@ -41,20 +41,27 @@
       </form>
     </div>
   </nav>
-</body>
+
 <div>
   <div class="row">
-    <div class="col-sm-2 border-end border-dark-subtle border-3">
+    <!--friends bar-->
+    <div class="col-sm-2 border-end border-dark-subtle border-3" style="height: 100vh;"><!--100vh makes column fill the page-->
 
       <div class="overflow-hidden">
         hey<br>
       </div>
 
     </div>
-    <div class="col-sm-9">
-      hey
+    <div class="col-sm-9" style="height: 100vh;">
+      yo
+
+      <form action="/" method="POST" autocomplete="off"><!--auto complete removes inut suggestions-->
+        <input type="text" name="message" action="POST" minlength="1" class="form-control" placeholder="Send a message..." style="position: absolute; bottom: 14px; width: 75%; left: 16%; right: 0; margin: auto;" required><br>
+        <!--style makes form go to bottom of the page-->
+      </form>
     </div>
   </div>
 </div>
 
+</body>
 </html>
