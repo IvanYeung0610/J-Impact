@@ -14,6 +14,7 @@ connected_users = {}
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         groups = get_all_groups_from_user(session.get("CLIENT"))
+        print(groups)
         group_info = {}
         accounts = get_all_users()
         for group in groups:
