@@ -55,6 +55,7 @@ def friends_page():
             f_list.append([pair[0], get_user(pair[0])[2] ])
     return render_template("friends.html", FRIENDS=f_list)  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
 
+
 # ========================== SOCKETS ==========================
 
 # If the user logs in succesfully, they will be added to our connected users
@@ -88,6 +89,39 @@ def disconnect():
 def handle_message(message):
     emit("message", message, to=connected_users["a"][0])
     print('received message: ' + message)
+
+# Sends the friend request to the proper sockets.
+# RECIEVES users: [sender, reciever]
+@socketio.on('send_request')
+def send_friend_request(users): 
+    sender = users[0]
+    reciever = users[1]
+    add_friend_request(sender,reciever)
+
+    recievers = connected_users[reciever]
+    for R in recievers:
+        emit('request_recieved', sender, to=R)
+
+@socketio.on('accepted_request')
+def accept_friend_request(users):
+    sender = users[0]
+    reciever = users[1]
+    delete_friend_request(sender, reciever)
+    add_friend(sender,reciever)
+
+    senders = connected_users[sender]
+    for S in senders:
+        emit("request_accepted", reciever, to=S)
+
+@socketio.on('rejected_request')
+def reject_friend_request(users):
+    sender = users[0]
+    reciever = users[1]
+    delete_friend_request(sender, reciever)
+
+    senders = connected_users[sender]
+    for S in senders:
+        emit("request_rejected", reciever, to=S)
 
 if __name__ == "__main__":
     app.debug = True
