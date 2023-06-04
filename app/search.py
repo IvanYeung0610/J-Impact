@@ -36,7 +36,7 @@ def search_friends(search_term, username):
                 searched.append([friend[1], get_user(friend[1])[2]])
     return searched
 
-#Returns friend requests based on search input in 2D ARRAY [[username, profile_picture],...]
+#Returns friend requests based on search input in 2D ARRAY [[username, profile_picture, {incoming or outgoing}],...]
 def search_friend_requests(search_term, username):
     data = get_all_friend_requests(username)
     searched = []
