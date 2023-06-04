@@ -66,3 +66,9 @@ joshuaL -- 17:30
 --------------------------------------------------------------
 * Added websockets to the flask side
 * Added ability to interact with other users with websockets
+
+junW -- 22:00
+--------------------------------------------------------------
+ * Made messages show up
+ * Cleared text field after submit
+ * Made a branch
