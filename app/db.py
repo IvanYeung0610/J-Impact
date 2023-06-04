@@ -37,6 +37,14 @@ def get_all_users():
     data = c.fetchall()
     return [[user[0], user[2]] for user in data]
 
+# returns a list of all groups that a certain user is in.
+def get_all_groups_from_user(username):
+    c = db.cursor()
+    c.execute('select group_id from UserAssociation where (group_id = ?)', (username,))
+    info = c.fetchall()
+    c.close()
+    return [group[0] for group in info]
+
 # Returns a list of all usernames associated to a certain group
 def get_all_users_by_group(group_id):
     c = db.cursor()

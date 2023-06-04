@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, request, redirect, url_for, jsonify
-from flask_socketio import SocketIO, send, emit
+from flask_socketio import SocketIO, send, emit, rooms
 from db import *
 
 app = Flask(__name__)
@@ -113,14 +113,23 @@ def disconnect():
     connected_users[session.get("CLIENT")].remove(request.sid)
     #print("DISCONNECT: " + session.get("CLIENT"))
 
-# Recieving message
+# RECIEVES - info: [message, group_id]
+# EMITS - "message" OR "ping": message is when they have the group selcted, otherwise they will be pinged
+#           A ping will contain the group_id that the message was recieved in
 @socketio.on('message')
-def handle_message(message):
-    emit("message", message, to=connected_users["a"][0])
-    #print('received message: ' + message)
+def handle_message(info):
+    message = info[0]
+    group_id = info[1]
+    emit("message", message, to=group_id)
+
+    users_recieving = get_all_users_by_group(group_id)
+    for user in users_recieving:                        # LOOPS THRU ALL RECIVEING USERS
+        for socket in connected_users.get(user, []):    # LOOPS THRU EACH SOCKET FOR A RECIEVING USER
+            if not (group_id in rooms(socket)):         # IF THE SOCKET IS NOT LOOKING AT THE GROUP, PING THEM
+                emit("ping", group_id, to=socket)
 
 # Sends the friend request to the proper sockets.
-# RECIEVES users: [sender, reciever]
+# RECIEVES - users: [sender, reciever]
 @socketio.on('send_request')
 def send_friend_request(users): 
     sender = users[0]
