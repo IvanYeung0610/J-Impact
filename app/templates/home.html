@@ -74,64 +74,9 @@
 
             </div>
           </div>
-
           <br>
           friends<br>
           friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          friends<br>
-          bottom<br>
         </div>
 
       </div>
@@ -147,41 +92,15 @@
         <div class="h-75 scrollable overflow-auto" id="messages" style="height: 75vh; margin-bottom: 3%;">
           hey!<br>
           hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
-          hey!<br>
         </div>
 
         <!--message input-->
-        <form action="/" method="POST" autocomplete="off" id="messageform"><!--auto complete removes inut suggestions-->
-          <input type="text" name="message" action="POST" minlength="1" class="form-control" id="messageinput"
+        <form action="" method="POST" autocomplete="off" id="messageform"><!--auto complete removes inut suggestions-->
+          <input type="text" name="message" minlength="1" class="form-control" id="messageinput"
             placeholder="Send a message..." style="bottom: 14px; width: 75%; left: 0%; right: 0; margin: auto;"
+            onchange="ajaxMessage(this.value)"
             required><br>
+          <input type="submit" style="display: none">
           <!--style makes form go to bottom of the page-->
         </form>
 
@@ -239,5 +158,5 @@
     <!-- SCRIPT -->
     <script src="../static/js/home.js"></script>
 </body>
-
+<script src="static/js/home.js"></script>
 </html>
