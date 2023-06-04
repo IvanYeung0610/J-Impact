@@ -10,8 +10,11 @@ def check_association(user1, user2):
     for request in requests:
         if ( (user2 == request[0]) ):
             return True
+        if ((user2 == request[1])):
+            return True
     return False
 
+#Returns users that are not associated based on search input in 2D ARRAY [[username, profile_picture],...]
 def search_new_friends(search_term, username):
     data = get_all_users()
     searched = []
@@ -20,29 +23,25 @@ def search_new_friends(search_term, username):
             searched.append(user)
     return searched
 
+#Returns friends based on search input in 2D ARRAY [[username, profile_picture],...]
 def search_friends(search_term, username):
     data = get_all_friends(username)
     searched = []
     for friend in data:
         if (username != friend[0]):
             if (( search_term.lower() in friend[0].lower() )):
-                searched.append(friend[0])
+                searched.append([friend[0], get_user(friend[0])[2]])
         else:
             if (( search_term.lower() in friend[1].lower() )):
-                searched.append(friend[1])
+                searched.append([friend[1], get_user(friend[1])[2]])
     return searched
 
+#Returns friend requests based on search input in 2D ARRAY [[username, profile_picture],...]
 def search_friend_requests(search_term, username):
     data = get_all_friend_requests(username)
     searched = []
     for request in data:
-        if (( search_term.lower() in request[0].lower() )):
-            searched.append(request)
+        if (username != request[0]):
+            if (( search_term.lower() in request[0].lower() )):
+                searched.append([request[0], get_user(request[0])[2]])
     return searched
-
-#Testing
-for x in range(10):
-    add_user(x, "password")
-
-print(get_all_users())
-print(search_new_friends("", "4"))
