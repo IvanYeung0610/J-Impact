@@ -61,3 +61,8 @@ jamesY -- 16:45
 * Home page now has three columns: friends, the chat, and members
 * Added section above the chat to show the name of the chat
 * Made all three columns scrollable
+
+joshuaL -- 17:30
+--------------------------------------------------------------
+* Added websockets to the flask side
+* Added ability to interact with other users with websockets
