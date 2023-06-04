@@ -30,13 +30,27 @@ def match_account_info(username, password):
     c.close()
     return info != None
 
-# RETURNS 
-def get_all_users(): 
+# RETURNS 2D ARRAY: [ [username, pfp], . . . ]
+def get_all_users():
     c = db.cursor()
     c.execute("select * from Account")
     data = c.fetchall()
     return [[user[0], user[2]] for user in data]
-print(get_all_users())
+
+# Get all requests that the user has sent or recieved. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
+def get_all_friend_requests(user):
+    c = db.cursor()
+    c.execute("select * from FriendRequests WHERE (username1 = ? OR username2 = ?)", (user,user))
+    data = c.fetchall()
+    return data
+
+# Get all friends of the user. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
+def get_all_friends(user):
+    c = db.cursor()
+    c.execute("select * from Friends WHERE (username1 = ? OR username2 = ?)", (user,user))
+    data = c.fetchall()
+    return data
+
 # ================ INSERTING INFORMATION ================
 
 # ADDS NEW USER: iff the username does not already exist. 
@@ -52,8 +66,18 @@ def add_user(username, password):
 
 def add_message(username, group_id, message, time):
     c = db.cursor()
-    c.execute("insert into Messages values(?,?,?, ?)", (username, group_id, message, time,))
+    c.execute("insert into Messages values(?,?,?,?)", (username, group_id, message, time,))
     db.commit()
     c.close()
 
-# def friends():
+def add_friend(user1, user2):
+    c = db.cursor()
+    c.execute("insert into Friends values(?,?)", (user1, user2,))
+    db.commit()
+    c.close()
+
+def add_friend_request(user1, user2):
+    c = db.cursor()
+    c.execute("insert into FriendRequests values(?,?)", (user1, user2,))
+    db.commit()
+    c.close()
