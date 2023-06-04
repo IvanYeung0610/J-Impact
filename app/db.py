@@ -31,12 +31,12 @@ def match_account_info(username, password):
     return info != None
 
 # RETURNS 
-# def get_all_users(): 
-#     c = db.cursor()
-#     c.execute("select * from Account")
-#     data = c.fetchall()
-#     return [[data[0], data[1]] in data]
-# print(get_all_users())
+def get_all_users(): 
+    c = db.cursor()
+    c.execute("select * from Account")
+    data = c.fetchall()
+    return [[user[0], user[2]] for user in data]
+print(get_all_users())
 # ================ INSERTING INFORMATION ================
 
 # ADDS NEW USER: iff the username does not already exist. 
