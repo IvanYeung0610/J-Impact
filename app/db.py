@@ -37,7 +37,15 @@ def get_all_users():
     data = c.fetchall()
     return [[user[0], user[2]] for user in data]
 
-# Returns a list of all usernames associated to a certain group.
+# returns a list of all groups that a certain user is in.
+def get_all_groups_from_user(username):
+    c = db.cursor()
+    c.execute('select group_id from UserAssociation where (group_id = ?)', (username,))
+    info = c.fetchall()
+    c.close()
+    return [group[0] for group in info]
+
+# Returns a list of all usernames associated to a certain group
 def get_all_users_by_group(group_id):
     c = db.cursor()
     c.execute('select username from UserAssociation where (group_id = ?)', (group_id,))
@@ -59,6 +67,13 @@ def get_all_friends(user):
     data = c.fetchall()
     return data
 
+def get_messages_from_group(group_id):
+    c = db.cursor()
+    c.execute("SELECT * FROM Messages WHERE (group_id = ?)", (group_id,))
+    data = c.fetchall()
+    c.close()
+    return data
+
 # ================ INSERTING INFORMATION ================
 
 # ADDS NEW USER: iff the username does not already exist. 
@@ -74,8 +89,11 @@ def add_user(username, password):
 
 def add_to_group(username, group_id):
     c = db.cursor()
-    c.execute("INSERT into UserAssociation values(?,?)", (username, group_id))
-    db.commit()
+    try:
+        c.execute("INSERT into UserAssociation values(?,?)", (username, group_id))
+        db.commit()
+    except:
+        print("ALREADY PART OF GROUP")
     c.close()
 
 def add_message(username, group_id, message, time):
@@ -87,23 +105,29 @@ def add_message(username, group_id, message, time):
 # WILL AUTOMATICALLY SET BOTH PEOPLE IN A GROUP
 def add_friend(user1, user2):
     c = db.cursor()
-    c.execute("INSERT into Friends values(?,?)", (user1, user2,))
-    c.execute("select max(group_id) from UserAssociation")
-    max_id = c.fetchone()[0]
-    if max_id != None:
-        max_id += 1
-    else:
-        max_id = 0
-    c.execute("INSERT into UserAssociation values(?,?)", (max_id, user1,))
-    c.execute("INSERT into UserAssociation values(?,?)", (max_id ,user2,))
-    db.commit()
+    try:
+        c.execute("INSERT into Friends values(?,?)", (user1, user2,))
+        c.execute("select max(group_id) from UserAssociation")
+        max_id = c.fetchone()[0]
+        if max_id != None:
+            max_id += 1
+        else:
+            max_id = 0
+        c.execute("INSERT into UserAssociation values(?,?)", (max_id, user1,))
+        c.execute("INSERT into UserAssociation values(?,?)", (max_id ,user2,))
+        db.commit()
+    except:
+        print("ALREADY FRIENDS")
     c.close()
 
 # user1: Sender, user2: reciever
 def add_friend_request(user1, user2):
     c = db.cursor()
-    c.execute("INSERT into FriendRequests values(?,?)", (user1, user2,))
-    db.commit()
+    try:
+        c.execute("INSERT into FriendRequests values(?,?)", (user1, user2,))
+        db.commit()
+    except:
+        print("ALREADY REQUESTED")
     c.close()
 
 # ================ DELETING INFORMATION ================
