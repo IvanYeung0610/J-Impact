@@ -16,25 +16,25 @@
   <br>
   <br>
   <br>
-  <div class="mx-auto" style="width: 45%;">
-    <div class="card" style="height:60%;">
+  <div class="mx-auto" style="width: 30%;">
+    <div class="card bg-transparent" style="height:60%;">
       <div class="card-body">
-        <h1 class="card-title">Register</h1>
+        <h1 class="card-title" style="color: white;">Register</h1>
         <hr>
         <div class="card-text" style="height: 12rem;">
           <form action="/register" method="POST">
-            <label>Username</label><br>
+            <label style="color: lightgray;">Username</label><br>
             <input type="text" name="username" action="POST" minlength="1" class="form-control" placeholder="Username"
               required></input><br>
-            <label>Password</label><br>
+            <label style="color: lightgray;">Password</label><br>
             <input type="password" name="password" action="POST" class="form-control" placeholder="Password"
               required></input><br>
-            <input type="submit" class="btn btn-primary" value="Log in">
+            <input type="submit" class="btn btn-primary" value="Register">
+          </form>
         </div>
-        </form>
       </div>
       <br>
-      <div class="card-footer">
+      <div class="card-footer" style="color: lightgray;">
         Have an account? <a href="{{url_for('login_page')}}">Log in</a>
       </div>
     </div>
