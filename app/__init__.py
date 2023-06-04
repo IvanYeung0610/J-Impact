@@ -54,7 +54,7 @@ def logout():
 @app.route("/friends", methods=["GET"])
 def friends_page():
     if (session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
-        print(session.get("CLIENT", None) != None)
+        #print(session.get("CLIENT", None) != None)
         unsortedf_list = get_all_friends(session.get("CLIENT"))
         f_list = []
         for pair in unsortedf_list:
@@ -65,7 +65,21 @@ def friends_page():
         return render_template("friends.html", FRIENDS=f_list)  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
     return render_template("home.html", USER=session.get("CLIENT"))
     
-    
+@app.route("/friendsajax", methods=["POST"])
+def friends_ajax():
+    #username1 is sender, 2 is receiver
+    fr = get_all_friend_requests(session.get("CLIENT"))
+    #splits the requests into incoming and outgoing, but won't really matter for showing on browser
+    requests = {"received": [], "sent": []}
+    for req in fr:
+        if req[0] == session.get("CLIENT"):
+            requests["sent"].append(req)
+        else:
+            requests["received"].append(req)
+    #print(requests)
+    if fr: 
+        return jsonify(requests=requests)
+    return jsonify({"error", "error"})
 
 # @app.route("/explore")
 # def explore_page():
