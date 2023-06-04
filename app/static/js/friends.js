@@ -30,7 +30,7 @@ var friendsList = function(sender, receiver) {
     friends.appendChild(newButton);
 }
 
-var loadFriends = function() {
+var loadRequests = function() {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -48,7 +48,7 @@ var loadFriends = function() {
             }
         }
     }
-    xhttp.open("POST", "friendsajax");
+    xhttp.open("POST", "friend-request-ajax");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send();
     return "asdf";

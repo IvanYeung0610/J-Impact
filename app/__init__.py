@@ -65,7 +65,7 @@ def friends_page():
         return render_template("friends.html", FRIENDS=f_list)  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
     return render_template("home.html", USER=session.get("CLIENT"))
     
-@app.route("/friendsajax", methods=["POST"])
+@app.route("/friend-request-ajax", methods=["POST"])
 def friends_ajax():
     #username1 is sender, 2 is receiver
     fr = get_all_friend_requests(session.get("CLIENT"))
