@@ -41,7 +41,19 @@ def logout():
     session.pop("CLIENT")
     return redirect( url_for("login_page") )
 
-
+@app.route("/friends", methods=["GET"])
+def friends_page():
+    if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
+        return render_template("home.html", USER=session.get("CLIENT"))
+    
+    unsortedf_list = get_all_friends()
+    f_list = []
+    for pair in unsortedf_list:
+        if pair[0] == session.get("CLIENT"):
+            f_list.append([ pair[1], get_user(pair[1])[2] ])
+        else:
+            f_list.append([pair[0], get_user(pair[0])[2] ])
+    return render_template("friends.html", FRIENDS=f_list)  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
 
 # ========================== SOCKETS ==========================
 
