@@ -45,4 +45,4 @@ for x in range(10):
     add_user(x, "password")
 
 print(get_all_users())
-print(search_new_friends("", "3"))
+print(search_new_friends("", "4"))
