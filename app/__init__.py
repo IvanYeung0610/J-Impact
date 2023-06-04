@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, url_for
 from flask_socketio import SocketIO, send, emit
 from db import *
+from search import search_friends
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "temp"
@@ -12,7 +13,8 @@ connected_users = {}
 @app.route("/", methods=["GET", "POST"])
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
-        return render_template("home.html", USER=session.get("CLIENT"))
+        friends = search_friends("", session.get("CLIENT"))
+        return render_template("home.html", USER=session.get("CLIENT"), FRIENDS=friends)
     return redirect( url_for("login_page") )
 
 @app.route("/login", methods=["GET", "POST"])
