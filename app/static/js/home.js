@@ -26,6 +26,8 @@ var ajaxMessage = function(str) {
     var postVars = "messageText=" + str;
     console.log(postVars);
     xhttp.send(postVars);
+    var textField = document.getElementById("messageinput");
+    textField.value = "";
 }
 
 
