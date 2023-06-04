@@ -40,7 +40,7 @@ def get_all_users():
 # returns a list of all groups that a certain user is in.
 def get_all_groups_from_user(username):
     c = db.cursor()
-    c.execute('select group_id from UserAssociation where (group_id = ?)', (username,))
+    c.execute('select group_id from UserAssociation where (username = ?)', (username,))
     info = c.fetchall()
     c.close()
     return [group[0] for group in info]

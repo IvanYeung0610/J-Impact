@@ -113,6 +113,14 @@ def disconnect():
     connected_users[session.get("CLIENT")].remove(request.sid)
     #print("DISCONNECT: " + session.get("CLIENT"))
 
+# Changes the group that the user is in
+@socketio.on('select_group')
+def select_group(group_id):
+    Current_rooms = rooms(request.sid)
+    if len(Current_rooms) == 2:
+        leave_room(Current_rooms[1])
+    join_room(group_id)
+
 # RECIEVES - info: [message, group_id]
 # EMITS - "message" OR "ping": message is when they have the group selcted, otherwise they will be pinged
 #           A ping will contain the group_id that the message was recieved in

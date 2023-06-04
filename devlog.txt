@@ -86,3 +86,21 @@ junW -- 2023-06-03 22:10
 ivanY -- 2023-06-03 22:10
 --------------------------------------------------------------
 * Worked on search functions in search.py
+
+jamesY -- 2023-06-04 19:00
+--------------------------------------------------------------
+* Worked on profile and settings page 
+
+joshuaL -- 2023-06-04 19:00
+--------------------------------------------------------------
+* Adjusted websockets to work with a more general use case 
+* Added additional accessor functions and error handling
+
+junW -- 2023-06-04 19:00
+--------------------------------------------------------------
+* Added home ajax function in the __init__.py 
+* Worked on JS for the friends page 
+
+ivanY -- 2023-06-04 19:00
+--------------------------------------------------------------
+* Set up infrustructure for displaying friends/groups on left side bar on home page

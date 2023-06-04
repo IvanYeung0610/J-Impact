@@ -31,11 +31,11 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/explore">Friends</a>
+            <a class="nav-link" style="font-size: 20px;" href="/explore">Friends</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px;" href="/friends">Settings</a>
+            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/friends">Settings</a>
           </li>
 
         </ul>
@@ -48,36 +48,28 @@
     </div>
   </nav>
 
-  <!-- header -->
-  <div style="background-color: lightgray;">
-    Friends |
-  <span>
-    <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;" id="all">All</button>
-    <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;" id="pending" onclick="loadRequests()">Pending requests</button>
-  </span>
+  <!--icon and name of profile-->
+  <div style="display: flex; align-items: center; justify-content: center;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg" class="rounded-circle" width="100px" height="100px" >
+    <h1 style="margin-left: 2%;">{{user}}</h1>
+    <form>
+        <input type="file" name="change"></input>
+    </form>
 </div>
 
-  <br>
-  <br>
-
-  <!--search bar-->
-  <div style="width:75%; margin: auto;">
-  <form action="/search" method="POST" class="d-flex">
-    <input class="form-control me-2" type="search" name="search" placeholder="Add a friend" aria-label="Search">
-    <button class="btn btn-primary" type="submit" name="search" style="width: 17%">Send friend request</button>
-  </form>
+<h4 style="text-align: center; margin-top: 3%;">About me</h4>
+<div class="row">
+    <div class="col-sm-4"></div>
+    <div class="col-sm-4">
+        {{about me}} goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this
+    </div>
+    <div class="col-sm-4"></div>
 </div>
 
-<br>
-<br>
+<div>
 
-<!--friends list-->
-<h4 style="text-align: center;" id="title">All Friends</h4>
-<br>
+</div>
 
-<div id="friendslist" style="margin-left: 50px;"></div>
 
-<script src="../static/js/friends.js"></script>
   </body>
-
   </html>
