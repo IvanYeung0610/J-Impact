@@ -13,8 +13,12 @@ connected_users = {}
 @app.route("/", methods=["GET", "POST"])
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
-        friends = search_friends("", session.get("CLIENT"))
-        return render_template("home.html", USER=session.get("CLIENT"), FRIENDS=friends)
+        groups = get_all_groups_from_user(session.get("CLIENT"))
+        group_info = {}
+        accounts = get_all_users()
+        for group in groups:
+            group_info[group] = ["name", "profile_picture"] #profile picture for groups
+        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, ACCOUNTS=accounts)
     return redirect( url_for("login_page") )
 
 @app.route("/homeajax", methods=["POST"])

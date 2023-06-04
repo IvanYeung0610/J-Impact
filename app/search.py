@@ -48,8 +48,3 @@ def search_friend_requests(search_term, username):
             if (( search_term.lower() in request[1].lower() )):
                 searched.append([request[1], get_user(request[1])[2], "outgoing"])
     return searched
-
-#Testing
-print(get_all_users())
-print(search_new_friends("", "4"))
-print(search_friends("", "1"))
