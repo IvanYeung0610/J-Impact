@@ -1,4 +1,4 @@
-from flask import Flask, render_template, session, request, redirect, url_for
+from flask import Flask, render_template, session, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO, send, emit
 from db import *
 
@@ -14,6 +14,15 @@ def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         return render_template("home.html", USER=session.get("CLIENT"))
     return redirect( url_for("login_page") )
+
+@app.route("/homeajax", methods=["POST"])
+def home_ajax():
+    current = request.form["messageText"]
+    print(current)
+    add_message(session.get("CLIENT"), -1, current, -1)
+    if current:
+        return jsonify(value=current)
+    return jsonify({"error" : "error"})
 
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
@@ -52,7 +61,7 @@ def check_login():
         connected_users[session.get("CLIENT")].append(request.sid)
     else:
         connected_users[session.get("CLIENT")] = [request.sid]
-    print("LOGIN: ", connected_users)
+    #print("LOGIN: ", connected_users)
 
 # Adds to our list of all conneceted users. IFF their cookies information is correct.
 @socketio.on('connect')
@@ -64,19 +73,19 @@ def check_connect():
             connected_users[session.get("CLIENT")].append(request.sid)
         else:
             connected_users[session.get("CLIENT")] = [request.sid]
-    print("CONNECTED: ", connected_users)
+    #print("CONNECTED: ", connected_users)
 
 @socketio.on('disconnect')
 def disconnect():
     connected_users[session.get("CLIENT")].remove(request.sid)
-    print("DISCONNECT: " + session.get("CLIENT"))
+    #print("DISCONNECT: " + session.get("CLIENT"))
 
 # Recieving message
 @socketio.on('message')
 def handle_message(message):
     emit("message", message, to=connected_users["a"][0])
-    print('received message: ' + message)
+    #print('received message: ' + message)
 
 if __name__ == "__main__":
     app.debug = True
-    socketio.run(app)
+    socketio.run(app, allow_unsafe_werkzeug=True)

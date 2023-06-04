@@ -36,7 +36,7 @@ def get_all_users():
     c.execute("select * from Account")
     data = c.fetchall()
     return [[user[0], user[2]] for user in data]
-print(get_all_users())
+# print(get_all_users())
 # ================ INSERTING INFORMATION ================
 
 # ADDS NEW USER: iff the username does not already exist. 
