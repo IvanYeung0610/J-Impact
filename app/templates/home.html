@@ -41,7 +41,7 @@
         </ul>
 
       </div>
-      <p>Welcome, {{USER}}</p>
+      <p style="color: lightgray">Welcome, {{USER}}</p>
       <form action="/logout">
         <button class="btn btn-info btn-sm" style="margin-left: 50px;" type="submit">Log out</button>
       </form>
@@ -59,15 +59,19 @@
             <h5>Friends</h5>
           </div>
 
-          <!--button template-->
+         
           <div class="d-grid gap-2">
-            <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
-              <button type="button" class="btn" style="background-color: #DEF2F1;">Friends</button>
-              <button type="button" class="btn" style="background-color: #DEF2F1;">Friends</button>
-              <button type="button" class="btn btn-primary">Friends</button>
-              <button type="button" class="btn btn-primary">Friends</button>
-              <button type="button" class="btn btn-primary">Friends</button>
-              <button type="button" class="btn btn-primary">Friends</button>
+          <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+
+             <!--button template-->
+            <div>
+              <!--image inside a button!-->
+            <button type="button" class="btn" style="background-color: #DEF2F1; width:32vh; text-align: left;">
+              <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg" class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
+              Friends and more text and even more text
+            </button>
+            </div>
+
             </div>
           </div>
 
