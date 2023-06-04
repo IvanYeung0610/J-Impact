@@ -59,6 +59,13 @@ def get_all_friends(user):
     data = c.fetchall()
     return data
 
+def get_messages_from_group(group_id):
+    c = db.cursor()
+    c.execute("SELECT * FROM Messages WHERE (group_id = ?)", (group_id,))
+    data = c.fetchall()
+    c.close()
+    return data
+
 # ================ INSERTING INFORMATION ================
 
 # ADDS NEW USER: iff the username does not already exist. 

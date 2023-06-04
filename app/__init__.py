@@ -19,9 +19,10 @@ def home_page():
 def home_ajax():
     current = request.form["messageText"]
     print(current)
+    #first -1 is group id, second is time
     add_message(session.get("CLIENT"), -1, current, -1)
     if current:
-        return jsonify(value=current)
+        return jsonify(value=current, user=session.get("CLIENT"))
     return jsonify({"error" : "error"})
 
 @app.route("/login", methods=["GET", "POST"])
