@@ -22,20 +22,20 @@ An interactive map that allow people to view how safe an area in NYC is based on
 fristL -- TIMESTAMP
 --------------------------------------------------------------
 
-joahuaL -- 14:05
+joahuaL --  2023-05-31  14:05
 --------------------------------------------------------------
 * finished setup for tables being used in app (Account, Friends, FriendRequests, Messages, UserAssociation, EmojiAssociation)
 * started working on the accessor methods for retrieving data from tables
 
-ivanY -- 23:49
+ivanY -- 2023-05-31 23:49
 --------------------------------------------------------------
 * completed how to doc for Flask-SocketIO in order to get clearance for package
 
-jamesY -- 19:18
+jamesY -- 2023-06-02 19:18
 --------------------------------------------------------------
 * finished frontend for login and registration page 
 
-ivanY -- 22:13
+ivanY -- 2023-06-02 22:13
 --------------------------------------------------------------
 * DESIGN DOC FEEDBACK SUMMARY 
     * expand on websockets event handlers and their roles in the app
@@ -43,32 +43,46 @@ ivanY -- 22:13
     * expand on Cloudinary API and how we will use it in our app 
     * Add section for stretch goals if we have more time 
     
-joshuaL -- 22:56
+joshuaL -- 2023-06-02 22:56
 --------------------------------------------------------------
 * Implemented login, register, and logout
 * Created additional accessor functions for database
 
-junW -- 22:56
+junW -- 2023-06-02 22:56
 --------------------------------------------------------------
 * Made test app to do AJAX learnination
 
-jamesY -- 22:56
+jamesY -- 2023-06-02 22:56
 --------------------------------------------------------------
 * Made home page with navbar and two columns
 
-jamesY -- 16:45
+jamesY -- 2023-06-03 16:45
 --------------------------------------------------------------
 * Home page now has three columns: friends, the chat, and members
 * Added section above the chat to show the name of the chat
 * Made all three columns scrollable
 
-joshuaL -- 17:30
+joshuaL -- 2023-06-03 17:30
 --------------------------------------------------------------
 * Added websockets to the flask side
 * Added ability to interact with other users with websockets
 
-junW -- 22:00
+jamesY -- 2023-06-03 22:10
 --------------------------------------------------------------
- * Made messages show up
- * Cleared text field after submit
- * Made a branch
+* Polished login and registratioin page 
+* Added a hard coded profile picture next to friends name 
+* Added friends page and started designing
+
+joshuaL -- 2023-06-03 22:10
+--------------------------------------------------------------
+* Added additional accessor functions for the database
+* Added friends route
+
+junW -- 2023-06-03 22:10
+--------------------------------------------------------------
+* Succesfully made messages show up on the page
+* Working AJAX from database to html
+
+ivanY -- 2023-06-03 22:10
+--------------------------------------------------------------
+* Worked on search functions in search.py
