@@ -18,7 +18,7 @@ def home_page():
         group_info = {}
         accounts = get_all_users()
         for group in groups:
-            group_info[group] = ["name", "profile_picture"] #profile picture for groups
+            group_info[group] = ["name", "profile_picture", "number of group members"] #profile picture for groups
         return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, ACCOUNTS=accounts)
     return redirect( url_for("login_page") )
 
