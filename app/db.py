@@ -37,17 +37,25 @@ def get_all_users():
     data = c.fetchall()
     return [[user[0], user[2]] for user in data]
 
+# Returns a list of all usernames associated to a certain group.
+def get_all_users_by_group(group_id):
+    c = db.cursor()
+    c.execute('select username from UserAssociation where (group_id = ?)', (group_id,))
+    info = c.fetchall()
+    c.close()
+    return [user[0] for user in info]
+
 # Get all requests that the user has sent or recieved. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
 def get_all_friend_requests(user):
     c = db.cursor()
-    c.execute("select * from FriendRequests WHERE (username1 = ? OR username2 = ?)", (user,user))
+    c.execute("select * from FriendRequests WHERE (username1 = ? OR username2 = ?)", (user, user))
     data = c.fetchall()
     return data
 
 # Get all friends of the user. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
 def get_all_friends(user):
     c = db.cursor()
-    c.execute("select * from Friends WHERE (username1 = ? OR username2 = ?)", (user,user))
+    c.execute("select * from Friends WHERE (username1 = ? OR username2 = ?)", (user, user))
     data = c.fetchall()
     return data
 
@@ -59,42 +67,49 @@ def add_user(username, password):
     if(get_user(username) != None):
         return False
     c = db.cursor()
-    c.execute("insert into Account values(?,?,?)", (username, password, "hello",))
+    c.execute("INSERT into Account values(?,?,?)", (username, password, "hello",))
     db.commit()
     c.close()
     return True
 
 def add_to_group(username, group_id):
     c = db.cursor()
-    c.execute("insert into UserAssociation values(?,?)", (username, group_id))
+    c.execute("INSERT into UserAssociation values(?,?)", (username, group_id))
     db.commit()
     c.close()
 
 def add_message(username, group_id, message, time):
     c = db.cursor()
-    c.execute("insert into Messages values(?,?,?,?)", (username, group_id, message, time,))
+    c.execute("INSERT into Messages values(?,?,?,?)", (username, group_id, message, time,))
     db.commit()
     c.close()
 
 # WILL AUTOMATICALLY SET BOTH PEOPLE IN A GROUP
 def add_friend(user1, user2):
     c = db.cursor()
-    c.execute("insert into Friends values(?,?)", (user1, user2,))
+    c.execute("INSERT into Friends values(?,?)", (user1, user2,))
     c.execute("select max(group_id) from UserAssociation")
-    max_id = c.fetchone[0]
+    max_id = c.fetchone()[0]
     if max_id != None:
         max_id += 1
     else:
         max_id = 0
-    c.execute("insert into UserAssociation values(?,?)", (user1, max_id))
-    c.execute("insert into UserAssociation values(?,?)", (user2, max_id))
+    c.execute("INSERT into UserAssociation values(?,?)", (max_id, user1,))
+    c.execute("INSERT into UserAssociation values(?,?)", (max_id ,user2,))
     db.commit()
     c.close()
 
+# user1: Sender, user2: reciever
 def add_friend_request(user1, user2):
     c = db.cursor()
-    c.execute("insert into FriendRequests values(?,?)", (user1, user2,))
+    c.execute("INSERT into FriendRequests values(?,?)", (user1, user2,))
     db.commit()
     c.close()
 
 # ================ DELETING INFORMATION ================
+# user1: Sender, user2: reciever
+def delete_friend_request(user1,user2):
+    c = db.cursor()
+    c.execute("DELETE from FriendRequests WHERE (user1 = ? AND user2 = ?)", (user1, user2,))
+    db.commit()
+    c.close()
