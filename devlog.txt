@@ -104,3 +104,7 @@ junW -- 2023-06-04 19:00
 ivanY -- 2023-06-04 19:00
 --------------------------------------------------------------
 * Set up infrustructure for displaying friends/groups on left side bar on home page
+
+junW -- 2023-06-04 20:15
+--------------------------------------------------------------
+* Set up ajax functions for displaying friend requests and added friends
