@@ -5,12 +5,13 @@ DB_FILE = "test.db"
 db = sqlite3.connect(DB_FILE, check_same_thread=False)
 c = db.cursor()
 c.executescript("""
-    create TABLE if NOT EXISTS Account(username text primary key, password text, pfp text);
+    create TABLE if NOT EXISTS Account(username text primary key, password text, pfp text, desc text);
     create TABLE if NOT EXISTS Friends(username1 text, username2 text, PRIMARY KEY (username1, username2));
     create TABLE if NOT EXISTS FriendRequests(username1 text, username2 text, PRIMARY KEY (username1, username2));
     create TABLE if NOT EXISTS Messages(username text, group_id int, message text, time text);
     create TABLE if NOT EXISTS UserAssociation(group_id int, username text, PRIMARY KEY (group_id, username));
     create TABLE if NOT EXISTS EmojiAssociation(group_id int, emoji text, PRIMARY KEY (group_id, emoji));
+    create TABLE if NOT EXISTS Groups(group_id int primary key, Title text, image text);
 """)
 c.close()
 
@@ -67,10 +68,27 @@ def get_all_friends(user):
     data = c.fetchall()
     return data
 
+# Gets all messages that were sent in a group
 def get_messages_from_group(group_id):
     c = db.cursor()
     c.execute("SELECT * FROM Messages WHERE (group_id = ?)", (group_id,))
     data = c.fetchall()
+    c.close()
+    return data
+
+# Gets the title for the group
+def get_group_title(group_id):
+    c = db.cursor()
+    c.execute("SELECT Title FROM Groups WHERE (group_id = ?)", (group_id,))
+    data = c.fetchone()
+    c.close()
+    return data
+
+# Gets the image (pfp) for the group
+def get_group_image(group_id):
+    c = db.cursor()
+    c.execute("SELECT image FROM Groups WHERE (group_id = ?)", (group_id,))
+    data = c.fetchone()
     c.close()
     return data
 
@@ -130,6 +148,34 @@ def add_friend_request(user1, user2):
         print("ALREADY REQUESTED")
     c.close()
 
+# Adds a group to database when a new one is created either through an accepted friend request or a group that is made
+def add_group(group_id, title, image):
+    c = db.cursor()
+    try:
+        c.execute("INSERT into Groups values(?,?,?)", (group_id, title, image,))
+        db.commit()
+    except:
+        print("GROUP ALREADY EXISTS")
+
+# ================ CHANGING INFORMATION ================
+
+#Changes title of the group
+def change_group_title(group_id, title):
+    c = db.cursor()
+    try:
+        c.execute("UPDATE Groups SET (Title = ?) WHERE (group_id = ?)", (title, group_id,))
+        db.commit()
+    except:
+        print("GROUP DOES NOT EXIST")
+
+#Changes image(pfp) of the group
+def change_group_image(group_id, new_image):
+    c = db.cursor()
+    try:
+        c.execute("UPDATE Groups SET (image = ?) WHERE (group_id = ?)", (new_image, group_id,))
+        db.commit()
+    except:
+        print("GROUP DOES NOT EXIST")
 # ================ DELETING INFORMATION ================
 # user1: Sender, user2: reciever
 def delete_friend_request(user1,user2):
