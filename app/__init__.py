@@ -25,7 +25,6 @@ def home_page():
 @app.route("/homeajax", methods=["POST"])
 def home_ajax():
     current = request.form["messageText"]
-    print(current)
     #first -1 is group id, second is time
     add_message(session.get("CLIENT"), -1, current, -1)
     if current:
@@ -61,17 +60,47 @@ def logout():
 @app.route("/friends", methods=["GET"])
 def friends_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
-        return render_template("home.html", USER=session.get("CLIENT"))
+        unsortedf_list = get_all_friends(session.get("CLIENT"))
+        f_list = []
+        for pair in unsortedf_list:
+            # print(pair[1])
+            # print(get_user(pair[1]))
+            if pair[0] == session.get("CLIENT"):
+                f_list.append([ pair[1], get_user(pair[1])[2] ])
+            else:
+                f_list.append([pair[0], get_user(pair[0])[2] ])
+        return render_template("friends.html", FRIENDS=f_list)  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
+    return render_template("home.html", USER=session.get("CLIENT"))
     
-    unsortedf_list = get_all_friends()
-    f_list = []
-    for pair in unsortedf_list:
-        if pair[0] == session.get("CLIENT"):
-            f_list.append([ pair[1], get_user(pair[1])[2] ])
+@app.route("/friend-request-ajax", methods=["POST"])
+def friend_request_ajax():
+    #username1 is sender, 2 is receiver
+    fr = get_all_friend_requests(session.get("CLIENT"))
+    #splits the requests into incoming and outgoing, but won't really matter for showing on browser
+    requests = {"received": [], "sent": []}
+    for req in fr:
+        if req[0] == session.get("CLIENT"):
+            requests["sent"].append(req)
         else:
-            f_list.append([pair[0], get_user(pair[0])[2] ])
-    return render_template("friends.html", FRIENDS=f_list)  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
+            requests["received"].append(req)
+    #print(requests)
+    if fr: 
+        return jsonify(requests=requests)
+    return jsonify({"error", "error"})
 
+@app.route("/friend-list", methods=["POST"])
+def friends_list_ajax():
+    #usernames can be in any order
+    fr = get_all_friends(session.get("CLIENT"))
+    #splits the requests into incoming and outgoing, but won't really matter for showing on browser
+    requests = {"friends": fr, "username": session.get("CLIENT")}
+    if fr: 
+        return jsonify(requests=requests)
+    return jsonify({"error", "error"})
+
+# @app.route("/explore")
+# def explore_page():
+#     return 0
 
 # ========================== SOCKETS ==========================
 

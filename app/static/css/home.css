@@ -15,3 +15,12 @@
     background-color: gray;    /* color of the scroll thumb */
     border-radius: 30px;       /* roundness of the scroll thumb */
   }
+
+#mutual::-webkit-scrollbar {
+    width: 4px;               /* width of the entire scrollbar */
+  }
+  
+#mutual::-webkit-scrollbar-thumb {
+    background-color: gray;    /* color of the scroll thumb */
+    border-radius: 30px;       /* roundness of the scroll thumb */
+  }
