@@ -43,8 +43,8 @@ def search_friend_requests(search_term, username):
     for request in data:
         if (username != request[0]):
             if (( search_term.lower() in request[0].lower() )):
-                searched.append([request[0], get_user(request[0])[2], "incoming"])
+                searched.append([request[0], username, get_user(request[0])[2], "incoming"])
         else:
             if (( search_term.lower() in request[1].lower() )):
-                searched.append([request[1], get_user(request[1])[2], "outgoing"])
+                searched.append([request[1], username, get_user(request[1])[2], "outgoing"])
     return searched

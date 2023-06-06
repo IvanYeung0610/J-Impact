@@ -101,9 +101,14 @@ def friends_list_ajax():
 @app.route("/search-friends", methods=["POST"])
 def search_friends_ajax():
     friends = search_friends(request.form["searchTerm"], session.get("CLIENT"))
-    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    # print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     return jsonify(friends=friends)
 
+@app.route("/search-friend-requests", methods=["POST"])
+def search_friend_requests_ajax():
+    freqs = search_friend_requests(request.form["searchTerm"], session.get("CLIENT"))
+    # print(freqs)
+    return jsonify(freqs=freqs)
 
 
 # @app.route("/explore")

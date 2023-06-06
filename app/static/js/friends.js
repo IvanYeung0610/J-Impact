@@ -76,15 +76,15 @@ var loadFriends = function() {
         if (this.readyState == 4 && this.status == 200) {
             clearFriends();
             var response = JSON.parse(xhttp.responseText);
-            var friends = response.requests.friends;
+            var f = response.requests.friends;
             var username = response.requests.username;
-            // console.log(friends);
-            for (let i = 0; i < friends.length; i++) {
-                console.log(friends[i]);
-                if (friends[i][0] == username) {
-                    friendsList(friends[i][1]);
+            console.log(f);
+            for (let i = 0; i < f.length; i++) {
+                //console.log(friends[i]);
+                if (f[i][0] == username) {
+                    friendsList(f[i][1]);
                 } else {
-                    friendsList(friends[i][0]);
+                    friendsList(f[i][0]);
                 }
             }
         }
@@ -97,30 +97,43 @@ var loadFriends = function() {
 var search = function(str) {
     //if all button is selected, search bar does something
     //if the pending request button is selected, search bar does other thing
-    console.log(document.getElementById("all").getAttribute("selected"));
     // console.log(str);
+    document.getElementById("pending").getAttribute("selected");
     if (document.getElementById("all").getAttribute("selected")) {
-        console.log("asdl;fjas;lkdfjhaskl;dfjl;kasdjfl;asdjfl;k");
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
-            console.log(this.readyState);
             if (this.readyState == 4 && this.status == 200) {
+                clearFriends();
                 var response = JSON.parse(xhttp.responseText);
-                console.log(response);
+                // console.log(response);
+                f = response.friends;
+                console.log(f);
+                for (let i = 0; i < f.length; i++) {
+                    friendsList(f[i][0]);
+                }
             }
         }
         xhttp.open("POST", "search-friends");
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         var postVars = "searchTerm=" + str;
         xhttp.send(postVars);
-    } else if (document.getElementById("pending").getAttribute("selected") == true) {
-        console.log("asdf");
-    }
-}
-
-var search_friends = function(search_term, username) {
-    console.log(document.getElementById("all").getAttribute("selected"));
-    if (document.getElementById("all").getAttribute("selected") == true) {
-
+    } else if (document.getElementById("pending").getAttribute("selected")) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                clearFriends();
+                var response = JSON.parse(xhttp.responseText);
+                // console.log(response);
+                f = response.freqs;
+                console.log(f);
+                for (let i = 0; i < f.length; i++) {
+                    friendRequest(f[i][0], f[i][1]);
+                }
+            }
+        }
+        xhttp.open("POST", "search-friend-requests");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        postVars = "searchTerm=" + str;
+        xhttp.send(postVars);
     }
 }
