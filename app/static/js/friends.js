@@ -1,15 +1,30 @@
+var socket = io();
 var all = document.getElementById("all"); //all button
 var pending = document.getElementById("pending"); //pending friend requests button
 var friends = document.getElementById("friendslist"); //friends list div
 var title = document.getElementById("title"); //friends list label
+var friend = document.getElementById("friends");//friends tab
+var search = document.getElementById("search"); //search bar in all
+var searchFriends = document.getElementById("searchFriends"); //search bar in friends
 
-all.style.backgroundColor = "gray"; //all tab is selected by default
+//all tab is selected by default
+all.style.backgroundColor = "gray";
+pending.style.backgroundColor = "lightgray";
+title.innerHTML = "All";
+friend.style.backgroundColor = "lightgray";
+search.hidden = false;
+searchFriends.hidden = true; 
+
+socket.emit("select_group", "all_friends_page");
 
 //changes background color to indicate which tab is selected
 all.addEventListener("click", (e) => {
     all.style.backgroundColor = "gray";
     pending.style.backgroundColor = "lightgray";
-    title.innerHTML = "All Friends";
+    title.innerHTML = "All";
+    friend.style.backgroundColor = "lightgray";
+    search.hidden = false;
+    searchFriends.hidden = true; 
 
     socket.emit("select_group", "all_friends_page")
 }
@@ -18,7 +33,22 @@ all.addEventListener("click", (e) => {
 pending.addEventListener("click", (e) => {
     pending.style.backgroundColor = "gray";
     all.style.backgroundColor = "lightgray";
-    title.innerHTML = "Pending Requests"
+    friend.style.backgroundColor = "lightgray";
+    title.innerHTML = "Pending Requests";
+    search.hidden = true;
+    searchFriends.hidden = true;
+
+    socket.emit("select_group", "pending_requests")
+}
+)
+
+friend.addEventListener("click", (e) => {
+    friend.style.backgroundColor = "gray";
+    all.style.backgroundColor = "lightgray";
+    pending.style.backgroundColor = "lightgray";
+    title.innerHTML = "All Friends";
+    search.hidden = true;
+    searchFriends.hidden = false;
 
     socket.emit("select_group", "pending_requests")
 }
