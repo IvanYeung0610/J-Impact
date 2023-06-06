@@ -1,6 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO, send, emit, rooms
 from db import *
+from search import *
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "temp"
@@ -50,7 +51,7 @@ def logout():
     session.pop("CLIENT")
     return redirect( url_for("login_page") )
 
-@app.route("/friends", methods=["GET"])
+@app.route("/friends", methods=["GET", "POST"])
 def friends_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         unsortedf_list = get_all_friends(session.get("CLIENT"))
@@ -90,6 +91,14 @@ def friends_list_ajax():
     if fr: 
         return jsonify(requests=requests)
     return jsonify({"error", "error"})
+
+@app.route("/search-friends", methods=["POST"])
+def search_friends_ajax():
+    friends = search_friends(request.form["searchTerm"], session.get("CLIENT"))
+    print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    return jsonify(friends=friends)
+
+
 
 # @app.route("/explore")
 # def explore_page():

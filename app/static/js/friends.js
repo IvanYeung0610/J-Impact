@@ -44,6 +44,8 @@ var clearFriends = function() {
 }
 
 var loadRequests = function() {
+    document.getElementById("all").removeAttribute("selected", true);
+    document.getElementById("pending").setAttribute("selected", true);
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -67,6 +69,8 @@ var loadRequests = function() {
 }
 
 var loadFriends = function() {
+    document.getElementById("pending").removeAttribute("selected", true);
+    document.getElementById("all").setAttribute("selected", true);
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -88,4 +92,35 @@ var loadFriends = function() {
     xhttp.open("POST", "friend-list");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send();
+}
+
+var search = function(str) {
+    //if all button is selected, search bar does something
+    //if the pending request button is selected, search bar does other thing
+    console.log(document.getElementById("all").getAttribute("selected"));
+    // console.log(str);
+    if (document.getElementById("all").getAttribute("selected")) {
+        console.log("asdl;fjas;lkdfjhaskl;dfjl;kasdjfl;asdjfl;k");
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            console.log(this.readyState);
+            if (this.readyState == 4 && this.status == 200) {
+                var response = JSON.parse(xhttp.responseText);
+                console.log(response);
+            }
+        }
+        xhttp.open("POST", "search-friends");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var postVars = "searchTerm=" + str;
+        xhttp.send(postVars);
+    } else if (document.getElementById("pending").getAttribute("selected") == true) {
+        console.log("asdf");
+    }
+}
+
+var search_friends = function(search_term, username) {
+    console.log(document.getElementById("all").getAttribute("selected"));
+    if (document.getElementById("all").getAttribute("selected") == true) {
+
+    }
 }
