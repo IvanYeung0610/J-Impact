@@ -31,7 +31,7 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px;" href="/friends">Friends</a>
+            <a class="nav-link" style="font-size: 20px;" href="/friends" id="nav_friends_link">Friends</a>
           </li>
 
           <li class="nav-item">
@@ -59,18 +59,19 @@
             <h5>Friends</h5>
           </div>
 
-         
-          <div class="d-grid gap-2">
-          <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
 
-             <!--button template-->
-            <div>
-              <!--image inside a button!-->
-            <button type="button" class="btn" style="background-color: #DEF2F1; width:32vh; text-align: left;">
-              <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg" class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
-              Friends and more text and even more text
-            </button>
-            </div>
+          <div class="d-grid gap-2">
+            <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
+
+              <!--button template-->
+              <div>
+                <!--image inside a button!-->
+                <button type="button" class="btn" style="background-color: #DEF2F1; width:32vh; text-align: left;">
+                  <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
+                    class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
+                  Friends and more text and even more text
+                </button>
+              </div>
 
             </div>
           </div>
@@ -98,8 +99,7 @@
         <form action="" method="POST" autocomplete="off" id="messageform"><!--auto complete removes inut suggestions-->
           <input type="text" name="message" minlength="1" class="form-control" id="messageinput"
             placeholder="Send a message..." style="bottom: 14px; width: 75%; left: 0%; right: 0; margin: auto;"
-            onchange="ajaxMessage(this.value)"
-            required><br>
+            onchange="ajaxMessage(this.value)" required><br>
           <input type="submit" style="display: none">
           <!--style makes form go to bottom of the page-->
         </form>
@@ -155,8 +155,7 @@
 
 
     </div>
-    <!-- SCRIPT -->
-    <script src="../static/js/home.js"></script>
 </body>
 <script src="static/js/home.js"></script>
+
 </html>

@@ -1,10 +1,19 @@
 // Get the form for submitting messages
-var messageform = document.getElementById("messageform");
 var socket = io();
+var messageform = document.getElementById("messageform");
+var nav_friends_link = document.getElementById("nav_friends_link")
 
 socket.on('message', function (message) {
     console.log(message);
 });
+
+// sets the users's current room to "all_friends_page" then sends them to the /friends route
+nav_friends_link.addEventListener('click', (e) => {
+    e.preventDefault()
+    socket.emit("select_group", "all_friends_page")
+    //  SENDS THE USER TO THE /friends page
+    window.location.replace("/friends");
+})
 
 messageform.addEventListener('submit', (e) => {
     // preventDefault stops the page from reloading
@@ -13,9 +22,9 @@ messageform.addEventListener('submit', (e) => {
 })
 
 //notes for future redesign: we don't need to wait for the request to be completed before showing the message?
-var ajaxMessage = function(str) {
+var ajaxMessage = function (str) {
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         console.log(this.readyState);
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(xhttp.responseText);

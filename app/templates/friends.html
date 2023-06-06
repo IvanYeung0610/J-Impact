@@ -31,11 +31,11 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/explore">Friends</a>
+            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/friends">Friends</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px;" href="/friends">Settings</a>
+            <a class="nav-link" style="font-size: 20px;" href="/settings">Settings</a>
           </li>
 
         </ul>
@@ -51,33 +51,35 @@
   <!-- header -->
   <div style="background-color: lightgray;">
     Friends |
-  <span>
-    <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;" id="all" onclick="loadFriends()">Friends</button>
-    <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;" id="pending" onclick="loadRequests()">Pending requests</button>
-  </span>
-</div>
+    <span>
+      <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;" id="all"
+        onclick="loadFriends()">Friends</button>
+      <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;"
+        id="pending" onclick="loadRequests()">Pending requests</button>
+    </span>
+  </div>
 
   <br>
   <br>
 
   <!--search bar-->
   <div style="width:75%; margin: auto;">
-  <form action="/search" method="POST" class="d-flex">
-    <input class="form-control me-2" type="search" name="search" placeholder="Add a friend" aria-label="Search">
-    <button class="btn btn-primary" type="submit" name="search" style="width: 17%">Send friend request</button>
-  </form>
-</div>
+    <form action="/search" method="POST" class="d-flex">
+      <input class="form-control me-2" type="search" name="search" placeholder="Add a friend" aria-label="Search">
+      <button class="btn btn-primary" type="submit" name="search" style="width: 17%">Send friend request</button>
+    </form>
+  </div>
 
-<br>
-<br>
+  <br>
+  <br>
 
-<!--friends list-->
-<h4 style="text-align: center;" id="title">All Friends</h4>
-<br>
+  <!--friends list-->
+  <h4 style="text-align: center;" id="title">All Friends</h4>
+  <br>
 
-<div id="friendslist" style="margin-left: 50px;"></div>
+  <div id="friendslist" style="margin-left: 50px;"></div>
 
-<script src="../static/js/friends.js"></script>
-  </body>
+  <script src="../static/js/friends.js"></script>
+</body>
 
-  </html>
+</html>

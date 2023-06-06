@@ -10,6 +10,8 @@ all.addEventListener("click", (e) => {
     all.style.backgroundColor = "gray";
     pending.style.backgroundColor = "lightgray";
     title.innerHTML = "All Friends";
+
+    socket.emit("select_group", "all_friends_page")
 }
 )
 
@@ -17,11 +19,13 @@ pending.addEventListener("click", (e) => {
     pending.style.backgroundColor = "gray";
     all.style.backgroundColor = "lightgray";
     title.innerHTML = "Pending Requests"
+
+    socket.emit("select_group", "pending_requests")
 }
 )
 
 //creates button with friend name/icon
-var friendRequest = function(sender, receiver) {
+var friendRequest = function (sender, receiver) {
     var newButton = document.createElement("button");
     newButton.type = "button";
     newButton.classList.add("btn");
@@ -30,7 +34,7 @@ var friendRequest = function(sender, receiver) {
     friends.appendChild(newButton);
 }
 
-var friendsList = function(friend) {
+var friendsList = function (friend) {
     var newButton = document.createElement("button");
     newButton.type = "button";
     newButton.classList.add("btn");
@@ -39,13 +43,13 @@ var friendsList = function(friend) {
     friends.appendChild(newButton);
 }
 
-var clearFriends = function() {
+var clearFriends = function () {
     document.getElementById("friendslist").innerHTML = "";
 }
 
-var loadRequests = function() {
+var loadRequests = function () {
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             clearFriends();
             var response = JSON.parse(xhttp.responseText);
@@ -64,11 +68,12 @@ var loadRequests = function() {
     xhttp.open("POST", "friend-request-ajax");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send();
+
 }
 
-var loadFriends = function() {
+var loadFriends = function () {
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             clearFriends();
             var response = JSON.parse(xhttp.responseText);

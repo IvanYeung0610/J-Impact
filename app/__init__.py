@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, request, redirect, url_for, jsonify
-from flask_socketio import SocketIO, send, emit, rooms
+from flask_socketio import SocketIO, send, emit, rooms, join_room, leave_room
 from db import *
 
 app = Flask(__name__)
@@ -76,10 +76,10 @@ def friend_request_ajax():
             requests["sent"].append(req)
         else:
             requests["received"].append(req)
-    #print(requests)
+    # print("+++++++++++++++++++: ", requests)
     if fr: 
         return jsonify(requests=requests)
-    return jsonify({"error", "error"})
+    return jsonify({"error": "error"})
 
 @app.route("/friend-list", methods=["POST"])
 def friends_list_ajax():
@@ -89,7 +89,7 @@ def friends_list_ajax():
     requests = {"friends": fr, "username": session.get("CLIENT")}
     if fr: 
         return jsonify(requests=requests)
-    return jsonify({"error", "error"})
+    return jsonify({"error": "error"})
 
 # @app.route("/explore")
 # def explore_page():
@@ -129,15 +129,17 @@ def select_group(group_id):
     Current_rooms = rooms(request.sid)
     if len(Current_rooms) == 2:
         leave_room(Current_rooms[1])
+        print("LEFT")
     join_room(group_id)
+    print("  JOINED:  ", group_id)
 
-# RECIEVES - info: [message, group_id]
+# RECIEVES - info: message
 # EMITS - "message" OR "ping": message is when they have the group selcted, otherwise they will be pinged
 #           A ping will contain the group_id that the message was recieved in
 @socketio.on('message')
 def handle_message(info):
     message = info[0]
-    group_id = info[1]
+    group_id = rooms(request.sid)[1]
     emit("message", message, to=group_id)
 
     users_recieving = get_all_users_by_group(group_id)
