@@ -108,3 +108,20 @@ ivanY -- 2023-06-04 19:00
 junW -- 2023-06-04 20:15
 --------------------------------------------------------------
 * Set up ajax functions for displaying friend requests and added friends
+
+jamesY -- 2023-06-05 22:56
+--------------------------------------------------------------
+* finished settings page 
+
+junW -- 2023-06-05 22:56
+--------------------------------------------------------------
+* Implementing search function for friend requests/ friends/ adding friends 
+
+joshuaL -- 2023-06-05 22:56
+--------------------------------------------------------------
+* Fixed component map and database map on design doc 
+* Linked friends page with websockets 
+
+ivanY -- 2023-06-05 22:56
+--------------------------------------------------------------
+* Worked on adding new Groups table along with additional accessor functions in database
