@@ -36,6 +36,7 @@ def get_all_users():
     c = db.cursor()
     c.execute("select * from Account")
     data = c.fetchall()
+    c.close()
     return [[user[0], user[2]] for user in data]
 
 # returns a list of all groups that a certain user is in.
@@ -59,6 +60,7 @@ def get_all_friend_requests(user):
     c = db.cursor()
     c.execute("select * from FriendRequests WHERE (username1 = ? OR username2 = ?)", (user, user))
     data = c.fetchall()
+    c.close()
     return data
 
 # Get all friends of the user. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
@@ -66,6 +68,7 @@ def get_all_friends(user):
     c = db.cursor()
     c.execute("select * from Friends WHERE (username1 = ? OR username2 = ?)", (user, user))
     data = c.fetchall()
+    c.close()
     return data
 
 # Gets all messages that were sent in a group
