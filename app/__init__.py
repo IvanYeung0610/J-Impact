@@ -158,7 +158,7 @@ def check_connect():
             connected_users[session.get("CLIENT")].append(request.sid)
         else:
             connected_users[session.get("CLIENT")] = [request.sid]
-    #print("CONNECTED: ", connected_users)
+    print("CONNECTED: ", connected_users)
 
 @socketio.on('disconnect')
 def disconnect():
