@@ -25,15 +25,21 @@ var getMessage = function (x) {
         .then(responseData => {
             // Handle the response from the Flask route
             messages.innerHTML = ""
-            for (let i = 0; i < responseData['username'].length; i++) {
+            for (let i = 0;i<responseData['username'].length;i++){
                 message = document.createElement("div");
+                label = document.createElement("div");//div with pfp, username, time
+                label.style = "display: flex";
                 img = document.createElement("img");
-                img.source = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
                 img.className = "rounded-circle";
-                img.height = "30px";
-                img.width = "30px";
-                message.innerHTML = responseData['username'][i] + ": " + responseData['message'][i];
-                messages.appendChild(img);
+                img.style.height = "30px";
+                img.style.width = "30px";
+                message.innerHTML = responseData['message'][i];
+                message.style = "margin-bottom: 20px";
+                
+                label.appendChild(img);
+                label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
+                messages.appendChild(label);
                 messages.appendChild(message);
             }
             console.log(responseData['username']);
