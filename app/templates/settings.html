@@ -51,9 +51,12 @@
   <!--icon and name of profile-->
   <div style="display: flex; align-items: center; justify-content: center;">
     <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg" class="rounded-circle" width="100px" height="100px" >
-    <h1 style="margin-left: 2%;">{{user}}</h1>
+    <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
     <form>
-        <input type="file" name="change"></input>
+      <div>
+      <label for="file" class="btn" style="">Upload Profile Picture</label>
+      <input type="file" id="file"  style="visibility:hidden;" name="change"></input>
+    </div>
     </form>
 </div>
 
