@@ -11,6 +11,34 @@ if (all_group_buttons.length != 0) {
     socket.emit("select_group", all_group_buttons[0].id)
 }
 
+//get messages from db
+var getMessage = function (x){
+    console.log(typeof JSON.stringify(all_group_buttons[x].id))
+    console.log(typeof JSON.stringify(all_group_buttons[x].id))
+    fetch('/messagesajax', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'text/plain', // Set the content type to indicate a plain text string
+            'Accept': 'application/json' // Set the Accept header to indicate acceptance of JSON response
+        },
+        body: JSON.stringify(all_group_buttons[x].id)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not OK');
+          }
+          return response.json();
+        })
+        .then(responseData => {
+          // Handle the response from the Flask route
+          console.log(responseData);
+        })
+        .catch(error => {
+          // Handle any errors that occurred during the request
+          console.error('Error:', error);
+        });
+}
+
 // Changes color of group buttons when clicked 
 // And sets the room of the user to that group in Websockets
 for (let x = 0; x < all_group_buttons.length; x++) {
@@ -19,12 +47,14 @@ for (let x = 0; x < all_group_buttons.length; x++) {
         selected_group.style.backgroundColor = "#DEF2F1"
         all_group_buttons[x].style.backgroundColor = "red"
         selected_group = all_group_buttons[x]
+        //messages.innerHTML = "";
+        getMessage(x);
     })
 }
 
 // info is: [sender, message]
 socket.on('message', function (info) {
-    console.log(info);
+    //console.log(info);
     document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
 });
 
@@ -74,6 +104,7 @@ var ajaxMessage = function (str) {
     socket.emit("message", textField.value);
     textField.value = "";
 }
+
 
 
 // fetch('/', {
