@@ -23,18 +23,16 @@ def home_page():
         return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, ACCOUNTS=accounts)
     return redirect( url_for("login_page") )
 
-@app.route("/homeajax", methods=["POST"])
-def home_ajax():
-    current = request.form.get("messageText")
-    group_id = request.form.get("group_id")
-    add_message(session.get("CLIENT"), group_id, current, -1)
-    if current:
-        return jsonify(value=current, user=session.get("CLIENT"))
-    return jsonify({"error" : "error"})
+# @app.route("/homeajax", methods=["POST"])
+# def home_ajax():
+#     current = request.form.get("messageText")
+#     if current:
+#         return jsonify(value=current, user=session.get("CLIENT"))
+#     return jsonify({"error" : "error"})
 
 @app.route("/messagesajax", methods=["POST"])
 def messages_ajax():
-    id = request.get_data(as_text=True) #group id
+    id = request.form.get("group_id") #group id
     messages = get_messages_from_group(id)
     messageData = {"username": [], "message": [], "time": []}
     for data in messages:

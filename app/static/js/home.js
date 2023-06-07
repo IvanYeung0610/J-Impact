@@ -13,13 +13,13 @@ if (all_group_buttons.length != 0) {
 
 //get messages from db
 var getMessage = function (x) {
-    console.log(typeof JSON.stringify(all_group_buttons[x].id))
-    console.log(typeof JSON.stringify(all_group_buttons[x].id))
+    // console.log(typeof JSON.stringify(all_group_buttons[x].id))
+    // console.log(typeof JSON.stringify(all_group_buttons[x].id))
     fetch('/messagesajax', {
         method: 'POST',
-        body: Body.json(JSON.stringify(all_group_buttons[x].id)),
+        body: "group_id=" + all_group_buttons[x].id,
         headers: {
-            'Content-Type': 'text/plain', // Set the content type to indicate a plain text string
+            'Content-Type': 'application/x-www-form-urlencoded', // Set the content type to indicate a plain text string
             'Accept': 'application/json' // Set the Accept header to indicate acceptance of JSON response
         }
     })
@@ -31,7 +31,7 @@ var getMessage = function (x) {
         })
         .then(responseData => {
             // Handle the response from the Flask route
-            console.log(responseData);
+            console.log(JSON.stringify(responseData));
         })
         .catch(error => {
             // Handle any errors that occurred during the request
@@ -70,50 +70,29 @@ nav_friends_link.addEventListener('click', (e) => {
 messageform.addEventListener('submit', (e) => {
     // preventDefault stops the page from reloading
     e.preventDefault();
-    console.log("Emitted message");
-    // socket.emit("message", textField.value);
-
-    // var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
-    // fetch('/homeajax', {
-    //     Method: 'POST',
-    //     Headers: {
-    //         Accept: 'application.json',
-    //         'Content-Type': 'application/x-www-form-urlencoded'
-    //     },
-    //     body: Body.formData(postVars),
-    //     Cache: 'default'
-    // }).then()
-})
-
-//notes for future redesign: we don't need to wait for the request to be completed before showing the message?
-var ajaxMessage = function (str) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        // console.log(this.readyState);
-        if (this.readyState == 4 && this.status == 200) {
-            var response = JSON.parse(xhttp.responseText);
-            // COMMENT THIS OUT FOR NOW CAUSE IT'S GONNA PUT IT ON THERE TWICE
-            // document.getElementById("messages").innerHTML += response.user + ": " + response.value + "<br>";
-        }
-    }
-    xhttp.open("POST", "/homeajax");
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
-    // console.log(postVars);
-    xhttp.send(postVars);
     var textField = document.getElementById("messageinput");
     socket.emit("message", textField.value);
     textField.value = "";
-}
+})
 
-
-
-// fetch('/', {
-//     Method: 'POST',
-//     Headers: {
-//         Accept: 'application.json',
-//         'Content-Type': 'application/json'
-//     },
-//     Body: body,
-//     Cache: 'default'
-// })
+//notes for future redesign: we don't need to wait for the request to be completed before showing the message?
+// var ajaxMessage = function (str) {
+//     var xhttp = new XMLHttpRequest();
+//     xhttp.onreadystatechange = function () {
+//         // console.log(this.readyState);
+//         if (this.readyState == 4 && this.status == 200) {
+//             var response = JSON.parse(xhttp.responseText);
+//             // COMMENT THIS OUT FOR NOW CAUSE IT'S GONNA PUT IT ON THERE TWICE
+//             // document.getElementById("messages").innerHTML += response.user + ": " + response.value + "<br>";
+//         }
+//     }
+//     xhttp.open("POST", "/homeajax");
+//     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//     var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
+//     // console.log(postVars);
+//     xhttp.send(postVars);
+//     var textField = document.getElementById("messageinput");
+//     // EMITTING HERE:
+//     socket.emit("message", textField.value);
+//     textField.value = "";
+// }
