@@ -36,7 +36,17 @@ def get_all_users():
     c = db.cursor()
     c.execute("select * from Account")
     data = c.fetchall()
-    return [[user[0], user[2]] for user in data]
+    # return [[user[0], user[2]] for user in data]
+    dict = {}
+    for user in data:
+        dict[user[0]] = user[2]
+    # returns dict:
+    # {
+    #     username1: pfp1 
+    #     username2: pfp2
+    # }
+    return dict
+
 
 # returns a list of all groups that a certain user is in.
 def get_all_groups_from_user(username):
@@ -54,6 +64,11 @@ def get_all_users_by_group(group_id):
     c.close()
     return [user[0] for user in info]
 
+def get_all_other_users_by_group(group_id, username):
+    users = get_all_users_by_group(group_id)
+    users.remove(username)
+    return users
+            
 # Get all requests that the user has sent or recieved. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
 def get_all_friend_requests(user):
     c = db.cursor()
