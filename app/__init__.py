@@ -183,6 +183,9 @@ def select_group(group_id):
     else:
         join_room(group_id)
         # print("  JOINED:  ", group_id)
+    if type(group_id) is int:
+        members = get_all_users_by_group(group_id)
+        emit("clicked_group", members, to=request.sid)
 
 # RECIEVES - info: message
 # EMITS - "message" OR "ping": message is when they have the group selcted, otherwise they will be pinged

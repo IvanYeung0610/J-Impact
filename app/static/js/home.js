@@ -59,6 +59,10 @@ socket.on('message', function (info) {
     document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
 });
 
+socket.on('clicked_group', function (info) {
+    console.log(info);
+});
+
 // sets the users's current room to "all_friends_page" then sends them to the /friends route
 nav_friends_link.addEventListener('click', (e) => {
     e.preventDefault()
