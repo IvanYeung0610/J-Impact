@@ -2,6 +2,7 @@ from flask import Flask, render_template, session, request, redirect, url_for, j
 from flask_socketio import SocketIO, send, emit, rooms, join_room, leave_room
 from db import *
 from search import search_friends
+import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "temp"
@@ -151,6 +152,10 @@ def handle_message(message):
     if rooms(request.sid)[0] == request.sid:
         group_id = rooms(request.sid)[1]
     info = [user, message]
+    local_time = time.localtime()
+    string_time = time.strftime("%c", local_time)
+    
+    add_message(user, group_id, message, string_time)
     emit("message", info, to=group_id)
 
     users_recieving = get_all_users_by_group(group_id)
