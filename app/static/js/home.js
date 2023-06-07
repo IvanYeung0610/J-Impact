@@ -3,6 +3,7 @@ var socket = io();
 var messageform = document.getElementById("messageform");
 var nav_friends_link = document.getElementById("nav_friends_link")
 var all_group_buttons = document.getElementsByName("group_button")
+var messages = document.getElementById("messages")
 
 //get messages from db
 var getMessage = function (x) {
@@ -41,6 +42,7 @@ var getMessage = function (x) {
                 label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
                 messages.appendChild(label);
                 messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight;
             }
             console.log(responseData['username']);
         })
