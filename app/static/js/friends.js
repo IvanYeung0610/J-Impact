@@ -1,30 +1,30 @@
 var socket = io();
-var all = document.getElementById("all"); //all button
+var explore = document.getElementById("explore"); //all button
 var pending = document.getElementById("pending"); //pending friend requests button
 var friends = document.getElementById("friendslist"); //friends list div
 var title = document.getElementById("title"); //friends list label
 var friend = document.getElementById("friends");//friends tab
 var search = document.getElementById("search"); //search bar in all
-var searchFriends = document.getElementById("searchFriends"); //search bar in friends
+// var searchFriends = document.getElementById("searchFriends"); //search bar in friends
 
 //all tab is selected by default
-all.style.backgroundColor = "gray";
+explore.style.backgroundColor = "gray";
 pending.style.backgroundColor = "lightgray";
 title.innerHTML = "All";
 friend.style.backgroundColor = "lightgray";
 search.hidden = false;
-searchFriends.hidden = true; 
+// searchFriends.hidden = true; 
 
 socket.emit("select_group", "all_friends_page");
 
 //changes background color to indicate which tab is selected
-all.addEventListener("click", (e) => {
-    all.style.backgroundColor = "gray";
+explore.addEventListener("click", (e) => {
+    explore.style.backgroundColor = "gray";
     pending.style.backgroundColor = "lightgray";
     title.innerHTML = "All";
     friend.style.backgroundColor = "lightgray";
     search.hidden = false;
-    searchFriends.hidden = true; 
+    // searchFriends.hidden = true; 
 
     socket.emit("select_group", "all_friends_page")
 }
@@ -32,11 +32,11 @@ all.addEventListener("click", (e) => {
 
 pending.addEventListener("click", (e) => {
     pending.style.backgroundColor = "gray";
-    all.style.backgroundColor = "lightgray";
+    explore.style.backgroundColor = "lightgray";
     friend.style.backgroundColor = "lightgray";
     title.innerHTML = "Pending Requests";
-    search.hidden = true;
-    searchFriends.hidden = true;
+    search.hidden = false;
+    // searchFriends.hidden = true;
 
     socket.emit("select_group", "pending_requests")
 }
@@ -44,11 +44,11 @@ pending.addEventListener("click", (e) => {
 
 friend.addEventListener("click", (e) => {
     friend.style.backgroundColor = "gray";
-    all.style.backgroundColor = "lightgray";
+    explore.style.backgroundColor = "lightgray";
     pending.style.backgroundColor = "lightgray";
     title.innerHTML = "All Friends";
-    search.hidden = true;
-    searchFriends.hidden = false;
+    search.hidden = false;
+    // searchFriends.hidden = false;
 
     socket.emit("select_group", "pending_requests")
 }
@@ -73,13 +73,51 @@ var friendsList = function (friend) {
     friends.appendChild(newButton);
 }
 
+var randos = function(rando) {
+    var newButton = document.createElement("button");
+    newButton.type = "button";
+    newButton.classList.add("btn");
+    newButton.style = "background-color: gray; width:32vh; text-align: left;";
+    newButton.innerHTML = "Would you like to be friends with " + rando + "?";
+    friends.appendChild(newButton);
+}
+
 var clearFriends = function () {
     document.getElementById("friendslist").innerHTML = "";
 }
 
+var loadFriends = function() {
+    document.getElementById("friends").setAttribute("selected", true);
+    document.getElementById("pending").removeAttribute("selected", true);
+    document.getElementById("explore").removeAttribute("selected", true);
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            clearFriends();
+            var response = JSON.parse(xhttp.responseText);
+            var f = response.requests.friends;
+            var username = response.requests.username;
+            // console.log(f);
+            for (let i = 0; i < f.length; i++) {
+                //console.log(friends[i]);
+                if (f[i][0] == username) {
+                    friendsList(f[i][1]);
+                } else {
+                    friendsList(f[i][0]);
+                }
+            }
+        }
+    }
+    xhttp.open("POST", "friend-list");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttp.send();
+}
+
+//this is for pending requests
 var loadRequests = function() {
-    document.getElementById("all").removeAttribute("selected", true);
     document.getElementById("pending").setAttribute("selected", true);
+    document.getElementById("friends").removeAttribute("selected", true);
+    document.getElementById("explore").removeAttribute("selected", true);
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
@@ -100,41 +138,41 @@ var loadRequests = function() {
     xhttp.open("POST", "friend-request-ajax");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttp.send();
-
 }
 
-var loadFriends = function() {
+var loadExplore = function(str) {
+    document.getElementById("explore").setAttribute("selected", true);
+    document.getElementById("friends").removeAttribute("selected", true);
     document.getElementById("pending").removeAttribute("selected", true);
-    document.getElementById("all").setAttribute("selected", true);
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
+    xhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
             clearFriends();
             var response = JSON.parse(xhttp.responseText);
-            var f = response.requests.friends;
-            var username = response.requests.username;
-            console.log(f);
-            for (let i = 0; i < f.length; i++) {
-                //console.log(friends[i]);
-                if (f[i][0] == username) {
-                    friendsList(f[i][1]);
-                } else {
-                    friendsList(f[i][0]);
-                }
+            var r = response.randos;
+            console.log(r);
+            for (let i = 0; i < r.length; i++) {
+                randos(r[i][0]);
             }
         }
     }
-    xhttp.open("POST", "friend-list");
+    xhttp.open("POST", "load-explore-ajax");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttp.send();
+    var postVars = "search=";
+    if (str == undefined) {
+        postVars += "";
+    } else {
+        postVars = "search=" + str;
+    }
+    console.log(str);
+    xhttp.send(postVars);
 }
 
-var search = function(str) {
+var searchBar = function(str) {
     //if all button is selected, search bar does something
     //if the pending request button is selected, search bar does other thing
     // console.log(str);
-    document.getElementById("pending").getAttribute("selected");
-    if (document.getElementById("all").getAttribute("selected")) {
+    if (document.getElementById("friends").getAttribute("selected")) {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function() {
             if (this.readyState == 4 && this.status == 200) {
@@ -151,6 +189,7 @@ var search = function(str) {
         xhttp.open("POST", "search-friends");
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         var postVars = "searchTerm=" + str;
+        console.log(str);
         xhttp.send(postVars);
     } else if (document.getElementById("pending").getAttribute("selected")) {
         var xhttp = new XMLHttpRequest();
@@ -169,6 +208,32 @@ var search = function(str) {
         xhttp.open("POST", "search-friend-requests");
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         postVars = "searchTerm=" + str;
+        console.log(str);
+        xhttp.send(postVars);
+    } else if (document.getElementById("explore").getAttribute("selected")) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                clearFriends();
+                var response = JSON.parse(xhttp.responseText);
+                var r = response.randos;
+                console.log(r);
+                for (let i = 0; i < r.length; i++) {
+                    randos(r[i][0]);
+                }
+            }
+        }
+        xhttp.open("POST", "explore-search-ajax");
+        xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var postVars = "search=";
+        if (str == undefined || str == "") {
+            //probably don't need to add an empty string
+            postVars += "";
+        } else {
+            // console.log("search term exists");
+            var postVars = "search=" + str;
+        }
+        // console.log(postVars);
         xhttp.send(postVars);
     }
 }

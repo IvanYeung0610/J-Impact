@@ -110,10 +110,16 @@ def search_friend_requests_ajax():
     # print(freqs)
     return jsonify(freqs=freqs)
 
+@app.route("/load-explore-ajax", methods=["POST"])
+def explore_ajax():
+    print(request.form["search"])
+    randos = search_new_friends(request.form["search"], session.get("CLIENT"))
+    return jsonify({"randos": randos})
 
-# @app.route("/explore")
-# def explore_page():
-#     return 0
+@app.route("/explore-search-ajax", methods=["POST"])
+def explore_search_ajax():
+    randos = search_new_friends(request.form["search"], session.get("CLIENT"))
+    return jsonify({"randos": randos})
 
 # ========================== SOCKETS ==========================
 

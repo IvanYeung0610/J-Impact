@@ -18,10 +18,18 @@ def check_association(user1, user2):
 def search_new_friends(search_term, username):
     data = get_all_users()
     searched = []
-    for user in data:
-        if ( ( not check_association(username, user[0]) ) and ( search_term.lower() in user[0].lower() )):
-            searched.append(user)
-    return searched
+    # print(type(search_term))
+    if (search_term == "" or search_term == None):
+        for user in data:
+            if ( not check_association(username, user[0])):
+                searched.append(user)
+        return searched
+    else:
+        for user in data:
+            if ( ( not check_association(username, user[0]) ) and ( search_term.lower() in user[0].lower() )):
+                # print(( not check_association(username, user[0]) ) and ( search_term.lower() in user[0].lower() ))
+                searched.append(user)
+        return searched
 
 #Returns friends based on search input in 2D ARRAY [[username, profile_picture],...]
 def search_friends(search_term, username):
@@ -40,6 +48,15 @@ def search_friends(search_term, username):
 def search_friend_requests(search_term, username):
     data = get_all_friend_requests(username)
     searched = []
+    if search_term == "":
+        for request in data:
+            if (username != request[0]):
+                searched.append([request[0], username, get_user(request[0])[2], "incoming"])
+            else:
+                print(request[1])
+                print(get_user(request[1])[2])
+                searched.append([request[1], username, get_user(request[1])[2], "outgoing"])
+        return searched
     for request in data:
         if (username != request[0]):
             if (( search_term.lower() in request[0].lower() )):
