@@ -4,13 +4,6 @@ var messageform = document.getElementById("messageform");
 var nav_friends_link = document.getElementById("nav_friends_link")
 var all_group_buttons = document.getElementsByName("group_button")
 
-// We need a default group
-if (all_group_buttons.length != 0) {
-    selected_group = all_group_buttons[0]
-    all_group_buttons[0].style.backgroundColor = "red"
-    socket.emit("select_group", all_group_buttons[0].id)
-}
-
 //get messages from db
 var getMessage = function (x) {
     // console.log(typeof JSON.stringify(all_group_buttons[x].id))
@@ -31,12 +24,33 @@ var getMessage = function (x) {
         })
         .then(responseData => {
             // Handle the response from the Flask route
-            console.log(JSON.stringify(responseData));
+            messages.innerHTML = ""
+            for (let i = 0; i < responseData['username'].length; i++) {
+                message = document.createElement("div");
+                img = document.createElement("img");
+                img.source = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                img.className = "rounded-circle";
+                img.height = "30px";
+                img.width = "30px";
+                message.innerHTML = responseData['username'][i] + ": " + responseData['message'][i];
+                messages.appendChild(img);
+                messages.appendChild(message);
+            }
+            console.log(responseData['username']);
         })
         .catch(error => {
             // Handle any errors that occurred during the request
             console.error('Error:', error);
         });
+}
+
+
+// We need a default group
+if (all_group_buttons.length != 0) {
+    selected_group = all_group_buttons[0]
+    all_group_buttons[0].style.backgroundColor = "red"
+    socket.emit("select_group", all_group_buttons[0].id)
+    getMessage(0);
 }
 
 // Changes color of group buttons when clicked 
@@ -57,6 +71,14 @@ for (let x = 0; x < all_group_buttons.length; x++) {
 socket.on('message', function (info) {
     //console.log(info);
     document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
+});
+
+socket.on('ping', function (group_id) {
+    console.log("pinged: ", group_id);
+});
+
+socket.on('clicked_group', function (info) {
+    console.log(info);
 });
 
 // sets the users's current room to "all_friends_page" then sends them to the /friends route

@@ -44,7 +44,7 @@ def messages_ajax():
         messageData["message"].append(data[2])
         messageData["time"].append(data[3])
     if id: 
-        return jsonify(messageData=messageData)
+        return jsonify(messageData)
     return jsonify({"error": "error"})
 
 @app.route("/login", methods=["GET", "POST"])
@@ -162,7 +162,7 @@ def check_connect():
             connected_users[session.get("CLIENT")].append(request.sid)
         else:
             connected_users[session.get("CLIENT")] = [request.sid]
-    #print("CONNECTED: ", connected_users)
+    print("CONNECTED: ", connected_users)
 
 @socketio.on('disconnect')
 def disconnect():
@@ -183,6 +183,9 @@ def select_group(group_id):
     else:
         join_room(group_id)
         # print("  JOINED:  ", group_id)
+    if type(group_id) is int:
+        members = get_all_users_by_group(group_id)
+        emit("clicked_group", members, to=request.sid)
 
 # RECIEVES - info: message
 # EMITS - "message" OR "ping": message is when they have the group selcted, otherwise they will be pinged
