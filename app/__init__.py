@@ -1,5 +1,5 @@
 from flask import Flask, render_template, session, request, redirect, url_for, jsonify
-from flask_socketio import SocketIO, send, emit, rooms
+from flask_socketio import SocketIO, send, emit, rooms, join_room, leave_room
 from db import *
 from search import search_friends
 
@@ -24,9 +24,9 @@ def home_page():
 
 @app.route("/homeajax", methods=["POST"])
 def home_ajax():
-    current = request.form["messageText"]
-    #first -1 is group id, second is time
-    add_message(session.get("CLIENT"), -1, current, -1)
+    current = request.form.get("messageText")
+    group_id = request.form.get("group_id")
+    add_message(session.get("CLIENT"), group_id, current, -1)
     if current:
         return jsonify(value=current, user=session.get("CLIENT"))
     return jsonify({"error" : "error"})
@@ -83,10 +83,10 @@ def friend_request_ajax():
             requests["sent"].append(req)
         else:
             requests["received"].append(req)
-    #print(requests)
+    # print("+++++++++++++++++++: ", requests)
     if fr: 
         return jsonify(requests=requests)
-    return jsonify({"error", "error"})
+    return jsonify({"error": "error"})
 
 @app.route("/friend-list", methods=["POST"])
 def friends_list_ajax():
@@ -96,11 +96,7 @@ def friends_list_ajax():
     requests = {"friends": fr, "username": session.get("CLIENT")}
     if fr: 
         return jsonify(requests=requests)
-    return jsonify({"error", "error"})
-
-# @app.route("/explore")
-# def explore_page():
-#     return 0
+    return jsonify({"error": "error"})
 
 # ========================== SOCKETS ==========================
 
@@ -123,7 +119,7 @@ def check_connect():
             connected_users[session.get("CLIENT")].append(request.sid)
         else:
             connected_users[session.get("CLIENT")] = [request.sid]
-    #print("CONNECTED: ", connected_users)
+    print("CONNECTED: ", connected_users)
 
 @socketio.on('disconnect')
 def disconnect():
@@ -135,22 +131,34 @@ def disconnect():
 def select_group(group_id):
     Current_rooms = rooms(request.sid)
     if len(Current_rooms) == 2:
-        leave_room(Current_rooms[1])
-    join_room(group_id)
+        if Current_rooms[0] == request.sid:
+            leave_room(Current_rooms[1])
+        else:
+            leave_room(Current_rooms[0])
+        # print("  JOINED:  ", group_id)
+        join_room(group_id)
+    else:
+        join_room(group_id)
+        # print("  JOINED:  ", group_id)
 
-# RECIEVES - info: [message, group_id]
+# RECIEVES - info: message
 # EMITS - "message" OR "ping": message is when they have the group selcted, otherwise they will be pinged
 #           A ping will contain the group_id that the message was recieved in
 @socketio.on('message')
-def handle_message(info):
-    message = info[0]
-    group_id = info[1]
-    emit("message", message, to=group_id)
+def handle_message(message):
+    user = session.get("CLIENT", " ")
+    group_id = rooms(request.sid)[0]
+    if rooms(request.sid)[0] == request.sid:
+        group_id = rooms(request.sid)[1]
+    info = [user, message]
+    emit("message", info, to=group_id)
 
     users_recieving = get_all_users_by_group(group_id)
+    # print("USERS: ", users_recieving)
     for user in users_recieving:                        # LOOPS THRU ALL RECIVEING USERS
         for socket in connected_users.get(user, []):    # LOOPS THRU EACH SOCKET FOR A RECIEVING USER
             if not (group_id in rooms(socket)):         # IF THE SOCKET IS NOT LOOKING AT THE GROUP, PING THEM
+                print("HEI")
                 emit("ping", group_id, to=socket)
 
 # Sends the friend request to the proper sockets.
