@@ -82,7 +82,7 @@ def add_user(username, password):
     if(get_user(username) != None):
         return False
     c = db.cursor()
-    c.execute("INSERT into Account values(?,?,?)", (username, password, "hello",))
+    c.execute("INSERT into Account values(?,?,?,?)", (username, password, "hello",""))
     db.commit()
     c.close()
     return True
