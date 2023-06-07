@@ -31,11 +31,11 @@
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/explore">Friends</a>
+            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/friends">Friends</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px;" href="/friends">Settings</a>
+            <a class="nav-link" style="font-size: 20px;" href="/settings">Settings</a>
           </li>
 
         </ul>
@@ -51,33 +51,44 @@
   <!-- header -->
   <div style="background-color: lightgray;">
     Friends |
-  <span>
-    <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;" id="all" onclick="loadFriends()">Friends</button>
-    <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;" id="pending" onclick="loadRequests()">Pending requests</button>
-  </span>
-</div>
+    <span>
+      <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;"
+        id="all" onclick="loadRequests()">All</button>
+      <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;"
+        id="pending" onclick="loadRequests()">Pending requests</button>
+      <button type="button" class="btn" style="background-color: lightgray; width:45vh; text-align: center;" id="friends"
+        onclick="loadFriends()">Friends</button>
+    </span>
+  </div>
 
   <br>
   <br>
 
   <!--search bar-->
-  <div style="width:75%; margin: auto;">
-  <form action="/search" method="POST" class="d-flex">
-    <input class="form-control me-2" type="search" name="search" placeholder="Add a friend" aria-label="Search">
-    <button class="btn btn-primary" type="submit" name="search" style="width: 17%">Send friend request</button>
-  </form>
-</div>
+  <div style="width:75%; margin: auto;" id="search">
+    <form action="/search" method="POST" class="d-flex">
+      <input class="form-control me-2" type="search" name="search" placeholder="Search Friends" aria-label="Search">
+      <button class="btn btn-primary" type="submit" name="search" style="width: 17%">Search</button>
+    </form>
+  </div>
 
-<br>
-<br>
+  <div style="width:75%; margin: auto;" id="searchFriends">
+    <form action="/search" method="POST" class="d-flex">
+      <input class="form-control me-2" type="search" name="search" placeholder="Search Users" aria-label="Search">
+      <button class="btn btn-primary" type="submit" name="search" style="width: 17%">Search</button>
+    </form>
+  </div>
 
-<!--friends list-->
-<h4 style="text-align: center;" id="title">All Friends</h4>
-<br>
+  <br>
+  <br>
 
-<div id="friendslist" style="margin-left: 50px;"></div>
+  <!--friends list-->
+  <h4 style="text-align: center;" id="title">All Friends</h4>
+  <br>
 
-<script src="../static/js/friends.js"></script>
-  </body>
+  <div id="friendslist" style="margin-left: 50px;"></div>
 
-  </html>
+  <script src="../static/js/friends.js"></script>
+</body>
+
+</html>
