@@ -125,3 +125,26 @@ joshuaL -- 2023-06-05 22:56
 ivanY -- 2023-06-05 22:56
 --------------------------------------------------------------
 * Worked on adding new Groups table along with additional accessor functions in database
+
+jamesY -- 2023-06-06 23:12
+--------------------------------------------------------------
+* Worked on loading past messages using AJAX to pull from database 
+
+junW -- 2023-06-06 23:12
+--------------------------------------------------------------
+* Completed dynamic search for friends page (friend requests, other users, friends)
+
+joshuaL -- 2023-06-06 23:12
+--------------------------------------------------------------
+* Got messages between two users when they are both connected 
+* Fixed the bug with Cloudinary file 
+* Worked on debugging AJAX code for loading messages from database 
+
+ivanY -- 2023-06-06 23:12
+--------------------------------------------------------------
+* Finihsed testing database and adding accessor/change functions 
+* Began implementing 
+
+joshuaL -- 2023-06-06 23:51
+--------------------------------------------------------------
+* Got the AJAX code working for getting past messages from the database onto html
