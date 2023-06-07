@@ -123,7 +123,7 @@ def search_friends_ajax():
 @app.route("/search-friend-requests", methods=["POST"])
 def search_friend_requests_ajax():
     freqs = search_friend_requests(request.form["searchTerm"], session.get("CLIENT"))
-    # print(freqs)
+    print(freqs)
     return jsonify(freqs=freqs)
 
 @app.route("/load-explore-ajax", methods=["POST"])
@@ -136,6 +136,10 @@ def explore_ajax():
 def explore_search_ajax():
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
     return jsonify({"randos": randos})
+
+@app.route("/settings")
+def settings():
+    return render_template("settings.html", about_me="about me goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this")
 
 # ========================== SOCKETS ==========================
 

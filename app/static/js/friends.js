@@ -55,12 +55,12 @@ friend.addEventListener("click", (e) => {
 )
 
 //creates button with friend name/icon
-var friendRequest = function (sender, receiver) {
+var friendRequest = function (sender, direction) {
     var newButton = document.createElement("button");
     newButton.type = "button";
     newButton.classList.add("btn");
     newButton.style = "background-color: gray; width:32vh; text-align: left;";
-    newButton.innerHTML = "sender: " + sender + "<br>" + "receiver: " + receiver;
+    newButton.innerHTML = "sender: " + sender + "<br>" + direction;
     friends.appendChild(newButton);
 }
 
@@ -127,11 +127,11 @@ var loadRequests = function() {
             var sent = response.requests.sent;
             for (let i = 0; i < received.length; i++) {
                 fr = received[i];
-                friendRequest(fr[0], fr[1]);
+                friendRequest(fr[0], "incoming");
             }
             for (let i = 0; i < sent.length; i++) {
                 fr = sent[i];
-                friendRequest(fr[0], fr[1]);
+                friendRequest(fr[0], "outgoing");
             }
         }
     }
@@ -150,7 +150,7 @@ var loadExplore = function(str) {
             clearFriends();
             var response = JSON.parse(xhttp.responseText);
             var r = response.randos;
-            console.log(r);
+            // console.log(r);
             for (let i = 0; i < r.length; i++) {
                 randos(r[i][0]);
             }
@@ -164,7 +164,7 @@ var loadExplore = function(str) {
     } else {
         postVars = "search=" + str;
     }
-    console.log(str);
+    // console.log(str);
     xhttp.send(postVars);
 }
 
@@ -180,7 +180,7 @@ var searchBar = function(str) {
                 var response = JSON.parse(xhttp.responseText);
                 // console.log(response);
                 f = response.friends;
-                console.log(f);
+                // console.log(f);
                 for (let i = 0; i < f.length; i++) {
                     friendsList(f[i][0]);
                 }
@@ -189,7 +189,7 @@ var searchBar = function(str) {
         xhttp.open("POST", "search-friends");
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         var postVars = "searchTerm=" + str;
-        console.log(str);
+        // console.log(str);
         xhttp.send(postVars);
     } else if (document.getElementById("pending").getAttribute("selected")) {
         var xhttp = new XMLHttpRequest();
@@ -199,16 +199,16 @@ var searchBar = function(str) {
                 var response = JSON.parse(xhttp.responseText);
                 // console.log(response);
                 f = response.freqs;
-                console.log(f);
+                // console.log(f);
                 for (let i = 0; i < f.length; i++) {
-                    friendRequest(f[i][0], f[i][1]);
+                    friendRequest(f[i][0], f[i][3]);
                 }
             }
         }
         xhttp.open("POST", "search-friend-requests");
         xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         postVars = "searchTerm=" + str;
-        console.log(str);
+        // console.log(str);
         xhttp.send(postVars);
     } else if (document.getElementById("explore").getAttribute("selected")) {
         var xhttp = new XMLHttpRequest();
@@ -217,7 +217,7 @@ var searchBar = function(str) {
                 clearFriends();
                 var response = JSON.parse(xhttp.responseText);
                 var r = response.randos;
-                console.log(r);
+                // console.log(r);
                 for (let i = 0; i < r.length; i++) {
                     randos(r[i][0]);
                 }
