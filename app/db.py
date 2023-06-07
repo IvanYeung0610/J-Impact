@@ -210,3 +210,25 @@ def delete_friend_request(user1,user2):
     c.execute("DELETE from FriendRequests WHERE (user1 = ? AND user2 = ?)", (user1, user2,))
     db.commit()
     c.close()
+
+# ================ POPULATING DATABASE (SAMPLE) ================
+# only run once
+def populate():
+    c = db.cursor()
+    c.execute("SELECT COUNT(*) FROM Account")
+    size = c.fetchone()[0]
+    if size == 0:
+        for x in range(26):
+            c.execute("INSERT INTO Account values(?, ?, ?, ?)", (chr(x + 97), chr(x + 97), "pfp url", "description"))
+        for x in range(26):
+            if x % 4 == 0:
+                if x == 0: 
+                    pass
+                else:
+                    c.execute("INSERT INTO Friends values(?, ?)", ("a", chr(x + 97)))
+        for x in range(26):
+            if (x + 2) % 4 == 0:
+                c.execute("INSERT INTO FriendRequests values(?, ?)", ("a", chr(x + 98)))
+    db.commit()
+    c.close
+    return

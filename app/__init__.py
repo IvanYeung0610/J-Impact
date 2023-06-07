@@ -11,6 +11,9 @@ socketio = SocketIO(app)
 
 connected_users = {}
 
+#sample populate
+populate()
+
 @app.route("/", methods=["GET", "POST"])
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):

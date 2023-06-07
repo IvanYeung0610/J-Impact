@@ -125,3 +125,7 @@ joshuaL -- 2023-06-05 22:56
 ivanY -- 2023-06-05 22:56
 --------------------------------------------------------------
 * Worked on adding new Groups table along with additional accessor functions in database
+
+junW -- 2023-06-6 20:40
+--------------------------------------------------------------
+* Made sure search bars don't break by fixing empty input edge case
