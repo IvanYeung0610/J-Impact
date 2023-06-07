@@ -41,7 +41,7 @@ def messages_ajax():
         messageData["message"].append(data[2])
         messageData["time"].append(data[3])
     if id: 
-        return jsonify(messageData=messageData)
+        return jsonify(messageData)
     return jsonify({"error": "error"})
 
 @app.route("/login", methods=["GET", "POST"])
