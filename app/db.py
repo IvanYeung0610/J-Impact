@@ -31,7 +31,7 @@ def match_account_info(username, password):
     c.close()
     return info != None
 
-# RETURNS 2D ARRAY: [ [username, pfp], . . . ]
+# RETURNS 2D ARRAY: [ [username, pfp, desc], . . . ]
 def get_all_users():
     c = db.cursor()
     c.execute("select * from Account")
@@ -92,23 +92,27 @@ def get_group_image(group_id):
     c.close()
     return data
 
+def get_group_size(group_id):
+    data = get_all_users_by_group(group_id)
+    return len(data)
+
 # ================ INSERTING INFORMATION ================
 
 # ADDS NEW USER: iff the username does not already exist. 
 # Returns True/False depending on the status of adding user. False means the username already exists.
-def add_user(username, password): 
+def add_user(username, password, desc): 
     if(get_user(username) != None):
         return False
     c = db.cursor()
-    c.execute("INSERT into Account values(?,?,?)", (username, password, "hello",))
+    c.execute("INSERT into Account values(?,?,?,?)", (username, password, "hello", desc))
     db.commit()
     c.close()
     return True
 
-def add_to_group(username, group_id):
+def add_to_group(group_id, username):
     c = db.cursor()
     try:
-        c.execute("INSERT into UserAssociation values(?,?)", (username, group_id))
+        c.execute("INSERT into UserAssociation values(?,?)", (group_id, username))
         db.commit()
     except:
         print("ALREADY PART OF GROUP")
@@ -156,26 +160,49 @@ def add_group(group_id, title, image):
         db.commit()
     except:
         print("GROUP ALREADY EXISTS")
+    c.close()
 
 # ================ CHANGING INFORMATION ================
 
-#Changes title of the group
-def change_group_title(group_id, title):
+#Changes pfp of user
+def change_pfp(username, new_pfp):
     c = db.cursor()
     try:
-        c.execute("UPDATE Groups SET (Title = ?) WHERE (group_id = ?)", (title, group_id,))
+        c.execute("UPDATE Account SET pfp = ? WHERE username = ?", (new_pfp, username))
+        db.commit()
+    except:
+        print("USER DOES NOT EXIST")
+    c.close()
+
+#Changes description of the user
+def change_desc(username, new_desc):
+    c = db.cursor()
+    try:
+        c.execute("UPDATE Account SET desc = ? WHERE username = ?", (new_desc, username))
+        db.commit()
+    except:
+        print("USER DOES NOT EXIST")
+    c.close()
+
+#Changes title of the group
+def change_group_title(group_id, new_title):
+    c = db.cursor()
+    try:
+        c.execute("UPDATE Groups SET Title = ? WHERE group_id = ?", (new_title, group_id,))
         db.commit()
     except:
         print("GROUP DOES NOT EXIST")
+    c.close()
 
 #Changes image(pfp) of the group
 def change_group_image(group_id, new_image):
     c = db.cursor()
     try:
-        c.execute("UPDATE Groups SET (image = ?) WHERE (group_id = ?)", (new_image, group_id,))
+        c.execute("UPDATE Groups SET image = ? WHERE group_id = ?", (new_image, group_id,))
         db.commit()
     except:
         print("GROUP DOES NOT EXIST")
+    c.close()
 # ================ DELETING INFORMATION ================
 # user1: Sender, user2: reciever
 def delete_friend_request(user1,user2):
