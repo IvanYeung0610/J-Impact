@@ -14,7 +14,7 @@ connected_users = {}
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         groups = get_all_groups_from_user(session.get("CLIENT"))
-        print(groups)
+        #print(groups)
         group_info = {}
         accounts = get_all_users()
         for group in groups:
@@ -30,6 +30,20 @@ def home_ajax():
     if current:
         return jsonify(value=current, user=session.get("CLIENT"))
     return jsonify({"error" : "error"})
+
+@app.route("/messagesajax", methods=["POST"])
+def messages_ajax():
+    id = request.get_data(as_text=True) #group id
+    messages = get_messages_from_group(id)
+    messageData = {"username": [], "message": [], "time": []}
+    for data in messages:
+        #print(data)
+        messageData["username"].append(data[0])
+        messageData["message"].append(data[2])
+        messageData["time"].append(data[3])
+    if id: 
+        return jsonify(messageData=messageData)
+    return jsonify({"error": "error"})
 
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
@@ -119,7 +133,7 @@ def check_connect():
             connected_users[session.get("CLIENT")].append(request.sid)
         else:
             connected_users[session.get("CLIENT")] = [request.sid]
-    print("CONNECTED: ", connected_users)
+    #print("CONNECTED: ", connected_users)
 
 @socketio.on('disconnect')
 def disconnect():
@@ -158,7 +172,7 @@ def handle_message(message):
     for user in users_recieving:                        # LOOPS THRU ALL RECIVEING USERS
         for socket in connected_users.get(user, []):    # LOOPS THRU EACH SOCKET FOR A RECIEVING USER
             if not (group_id in rooms(socket)):         # IF THE SOCKET IS NOT LOOKING AT THE GROUP, PING THEM
-                print("HEI")
+                #print("HEI")
                 emit("ping", group_id, to=socket)
 
 # Sends the friend request to the proper sockets.
