@@ -25,7 +25,7 @@ var getMessage = function (x) {
         .then(responseData => {
             // Handle the response from the Flask route
             messages.innerHTML = ""
-            for (let i = 0;i<responseData['username'].length;i++){
+            for (let i = 0; i < responseData['username'].length; i++) {
                 message = document.createElement("div");
                 img = document.createElement("img");
                 img.source = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
@@ -50,7 +50,7 @@ if (all_group_buttons.length != 0) {
     selected_group = all_group_buttons[0]
     all_group_buttons[0].style.backgroundColor = "red"
     socket.emit("select_group", all_group_buttons[0].id)
-    getMessage(all_group_buttons[0].id);
+    getMessage(0);
 }
 
 // Changes color of group buttons when clicked 
@@ -71,6 +71,10 @@ for (let x = 0; x < all_group_buttons.length; x++) {
 socket.on('message', function (info) {
     //console.log(info);
     document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
+});
+
+socket.on('ping', function (group_id) {
+    console.log("pinged: ", group_id);
 });
 
 socket.on('clicked_group', function (info) {
