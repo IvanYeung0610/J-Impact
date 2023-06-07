@@ -1,7 +1,7 @@
 from flask import Flask, render_template, session, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO, send, emit, rooms, join_room, leave_room
 from db import *
-from search import search_friends
+from search import *
 import time
 
 app = Flask(__name__)
@@ -10,6 +10,9 @@ app.secret_key = "temp"
 socketio = SocketIO(app)
 
 connected_users = {}
+
+#sample populate
+populate()
 
 @app.route("/", methods=["GET", "POST"])
 def home_page():
@@ -70,7 +73,7 @@ def logout():
     session.pop("CLIENT")
     return redirect( url_for("login_page") )
 
-@app.route("/friends", methods=["GET"])
+@app.route("/friends", methods=["GET", "POST"])
 def friends_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         unsortedf_list = get_all_friends(session.get("CLIENT"))
@@ -111,6 +114,33 @@ def friends_list_ajax():
         return jsonify(requests=requests)
     return jsonify({"error": "error"})
 
+@app.route("/search-friends", methods=["POST"])
+def search_friends_ajax():
+    friends = search_friends(request.form["searchTerm"], session.get("CLIENT"))
+    # print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    return jsonify(friends=friends)
+
+@app.route("/search-friend-requests", methods=["POST"])
+def search_friend_requests_ajax():
+    freqs = search_friend_requests(request.form["searchTerm"], session.get("CLIENT"))
+    print(freqs)
+    return jsonify(freqs=freqs)
+
+@app.route("/load-explore-ajax", methods=["POST"])
+def explore_ajax():
+    print(request.form["search"])
+    randos = search_new_friends(request.form["search"], session.get("CLIENT"))
+    return jsonify({"randos": randos})
+
+@app.route("/explore-search-ajax", methods=["POST"])
+def explore_search_ajax():
+    randos = search_new_friends(request.form["search"], session.get("CLIENT"))
+    return jsonify({"randos": randos})
+
+@app.route("/settings")
+def settings():
+    return render_template("settings.html", about_me="about me goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this")
+
 # ========================== SOCKETS ==========================
 
 # If the user logs in succesfully, they will be added to our connected users
@@ -132,7 +162,7 @@ def check_connect():
             connected_users[session.get("CLIENT")].append(request.sid)
         else:
             connected_users[session.get("CLIENT")] = [request.sid]
-    #print("CONNECTED: ", connected_users)
+    print("CONNECTED: ", connected_users)
 
 @socketio.on('disconnect')
 def disconnect():
