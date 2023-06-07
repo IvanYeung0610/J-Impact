@@ -3,3 +3,4 @@
 *.sock
 /app/jimpact
 /app/wsgi.py
+*.env
