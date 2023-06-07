@@ -65,8 +65,7 @@
 
               <!--button template-->
               <div>
-                <!--image inside a button!-->
-                {% for group in GROUPS %}
+                {% for group in GROUPS %} 
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
                   style="background-color: #DEF2F1; width:32vh; text-align: left;">
@@ -80,7 +79,7 @@
                     {% else %}
                       <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg" 
                       class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;"> <!-- When images work, the image link will be replaced by ACCOUNTS[GROUP_INFO[group][3]] -->
-                      {{ GROUP_INFO[group][3] }} "This should be the friend's name"
+                      {{ GROUP_INFO[group][3][0] }}
                     {% endif %}
                 </button>
                 {% endfor %}
