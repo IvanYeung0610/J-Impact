@@ -100,11 +100,11 @@ def get_group_size(group_id):
 
 # ADDS NEW USER: iff the username does not already exist. 
 # Returns True/False depending on the status of adding user. False means the username already exists.
-def add_user(username, password, desc): 
+def add_user(username, password): 
     if(get_user(username) != None):
         return False
     c = db.cursor()
-    c.execute("INSERT into Account values(?,?,?,?)", (username, password, "hello", desc))
+    c.execute("INSERT into Account values(?,?,?,?)", (username, password, "hello",""))
     db.commit()
     c.close()
     return True
