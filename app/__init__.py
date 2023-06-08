@@ -20,10 +20,14 @@ def home_page():
         groups = get_all_groups_from_user(session.get("CLIENT"))
         #print(groups)
         group_info = {}
-        accounts = get_all_users()
+        # accounts = get_all_users()
         for group in groups:
-            group_info[group] = ["name", "profile_picture", "number of group members"] #profile picture for groups
-        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, ACCOUNTS=accounts)
+            if get_group_size(group) > 2: #Checks if it is a chat between two friends or a group
+                group_info[group] = [get_group_title(group), get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
+            else:
+                friend_username = get_all_other_users_by_group(group, session.get("CLIENT"))[0]
+                group_info[group] = [friend_username, get_pfp(friend_username), get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
+        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info)
     return redirect( url_for("login_page") )
 
 @app.route("/homeajax", methods=["POST"])

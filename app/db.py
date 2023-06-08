@@ -36,8 +36,17 @@ def get_all_users():
     c = db.cursor()
     c.execute("select * from Account")
     data = c.fetchall()
-    c.close()
-    return [[user[0], user[2]] for user in data]
+    # return [[user[0], user[2]] for user in data]
+    dict = {}
+    for user in data:
+        dict[user[0]] = user[2]
+    # returns dict:
+    # {
+    #     username1: pfp1 
+    #     username2: pfp2
+    # }
+    return dict
+
 
 # returns a list of all groups that a certain user is in.
 def get_all_groups_from_user(username):
@@ -55,6 +64,13 @@ def get_all_users_by_group(group_id):
     c.close()
     return [user[0] for user in info]
 
+# Returns a list all users in a group other than the inputed username
+def get_all_other_users_by_group(group_id, username):
+    users = get_all_users_by_group(group_id)
+    users.remove(username)
+    return users
+
+            
 # Get all requests that the user has sent or recieved. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
 def get_all_friend_requests(user):
     c = db.cursor()
@@ -101,9 +117,18 @@ def get_group_image(group_id):
     c.close()
     return data
 
+# Gets the size of the group
 def get_group_size(group_id):
     data = get_all_users_by_group(group_id)
     return len(data)
+
+# Gets profile picture of a user
+def get_pfp(username):
+    c = db.cursor()
+    c.execute("SELECT pfp FROM Account WHERE (username = ?)", (username))
+    data = c.fetchone()
+    c.close()
+    return data
 
 # ================ INSERTING INFORMATION ================
 
@@ -169,6 +194,24 @@ def add_group(group_id, title, image):
         db.commit()
     except:
         print("GROUP ALREADY EXISTS")
+    c.close()
+
+# Creates a group without having add on to a friend group
+def create_group(title, image, members):
+    c = db.cursor()
+    try:
+        c.execute("select max(group_id) from UserAssociation")
+        max_id = c.fetchone()[0]
+        if max_id != None:
+            max_id += 1
+        else:
+            max_id = 0
+        add_group(max_id, title, image)
+        for member in members:
+            c.execute("INSERT into UserAssociation values(?, ?)", (max_id, member))
+        db.commit()
+    except:
+        print("GROUP CANNOT BE MADE")
     c.close()
 
 # ================ CHANGING INFORMATION ================
@@ -240,6 +283,8 @@ def populate():
                 add_friend_request("a", chr(x + 98))
         add_friend("a","b")
         add_friend("a","c")
-        add_to_group(0, "i")
+        add_group(1, "DA BEST IN DA WEST", "image")
+        add_to_group(1, "d")
+        create_group("Falling Dogs", "image", ["f", "h", "i", "j", "g"])
     db.commit()
-    c.close()
+    c.close
