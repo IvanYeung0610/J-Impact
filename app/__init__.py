@@ -212,7 +212,7 @@ def check_connect():
             connected_users[session.get("CLIENT")].append(request.sid)
         else:
             connected_users[session.get("CLIENT")] = [request.sid]
-    # print("CONNECTED: ", connected_users)
+    print("CONNECTED: ", connected_users)
 
 @socketio.on('disconnect')
 def disconnect():
@@ -250,13 +250,23 @@ def handle_message(message):
     add_message(user, group_id, message, string_time)
     emit("message", info, to=group_id)
 
+    group_info = get_all_group_info(int(group_id))
+    group_image = group_info[2]
+    # if its a 2 person group, then choose the other person's pfp
+    if (group_info[2] == "image"):
+        users = get_all_users_by_group(group_id)
+        if (users[0] == session.get("CLIENT", " ")):
+            group_image = get_pfp_from_user(users[1])
+        else:
+            group_image = get_pfp_from_user(users[0])
+    ping_info = [group_id, user, message, string_time, group_image]
     users_recieving = get_all_users_by_group(group_id)
     # print("USERS: ", users_recieving)
     for user in users_recieving:                        # LOOPS THRU ALL RECIVEING USERS
         for socket in connected_users.get(user, []):    # LOOPS THRU EACH SOCKET FOR A RECIEVING USER
             if not (group_id in rooms(socket)):         # IF THE SOCKET IS NOT LOOKING AT THE GROUP, PING THEM
                 #print("HEI")
-                emit("ping", group_id, to=socket)
+                emit("ping", ping_info, to=socket)
 
 # Sends the friend request to the proper sockets.
 # RECIEVES - users: [sender, reciever]
