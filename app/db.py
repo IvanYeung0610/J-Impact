@@ -233,7 +233,7 @@ def populate():
             if (x + 2) % 4 == 0:
                 c.execute("INSERT INTO FriendRequests values(?, ?)", ("a", chr(x + 98)))
     db.commit()
-    c.close
+    c.close()
     add_friend("a","b")
     add_friend("a","c")
     return
