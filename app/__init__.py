@@ -172,6 +172,8 @@ def explore_ajax():
 def explore_search_ajax():
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
     pfp = []
+    print(session.get("CLIENT"))
+    print(randos)
     for a in randos:
         pfp.append(get_pfp(a))
     return jsonify(randos=randos, pfp=pfp)
@@ -198,6 +200,13 @@ def create_group_search():
         return jsonify(users=users)
     return jsonify({"error": "error"})
 
+@app.route("/add-user-group-search", methods=["POST"])
+def add_user_to_group_search():
+    searchTerm = request.form["searchTerm"]
+    users = search_friends(searchTerm, session.get("CLIENT"))
+    if users:
+        return jsonify(users=users)
+    return jsonify({"error" : "error"})
 
 # ========================== SOCKETS ==========================
 
