@@ -23,6 +23,13 @@ def get_user(username):
     c.close()
     return user
 
+def get_pfp_from_user(username):
+    c = db.cursor()
+    c.execute("select pfp from Account WHERE username = ?", (username,))
+    user = c.fetchone()
+    c.close()
+    return user[0]
+
 # Returns True or False. True if a user exists with the given info, False if not.
 def match_account_info(username, password):
     c = db.cursor()
@@ -69,7 +76,6 @@ def get_all_other_users_by_group(group_id, username):
     users = get_all_users_by_group(group_id)
     users.remove(username)
     return users
-
             
 # Get all requests that the user has sent or recieved. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
 def get_all_friend_requests(user):
@@ -122,6 +128,13 @@ def get_group_size(group_id):
     data = get_all_users_by_group(group_id)
     return len(data)
 
+def get_all_group_info(group_id):
+    c = db.cursor()
+    c.execute("select * from Groups WHERE (group_id = ?)", (group_id,))
+    group = c.fetchone()
+    c.close()
+    return group
+
 # Gets profile picture of a user
 def get_pfp(username):
     c = db.cursor()
@@ -158,7 +171,7 @@ def add_message(username, group_id, message, time):
     db.commit()
     c.close()
 
-# WILL AUTOMATICALLY SET BOTH PEOPLE IN A GROUP
+# WILL AUTOMATICALLY SET BOTH PEOPLE IN A GROUP AND CREATE THAT GROUP 
 def add_friend(user1, user2):
     c = db.cursor()
     try:
@@ -172,6 +185,7 @@ def add_friend(user1, user2):
         c.execute("INSERT into UserAssociation values(?,?)", (max_id, user1,))
         c.execute("INSERT into UserAssociation values(?,?)", (max_id ,user2,))
         db.commit()
+        add_group(max_id, "name", "image")
     except:
         print("ALREADY FRIENDS")
     c.close()

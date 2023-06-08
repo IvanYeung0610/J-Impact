@@ -4,6 +4,8 @@ var messageform = document.getElementById("messageform");
 var nav_friends_link = document.getElementById("nav_friends_link")
 var all_group_buttons = document.getElementsByName("group_button")
 var messages = document.getElementById("messages")
+var toast = document.getElementById("message_toast")
+const message_toast = bootstrap.Toast.getOrCreateInstance(toast)
 
 var memberlist = []
 
@@ -29,6 +31,13 @@ var getMessage = function (x) {
             // Handle the response from the Flask route
             // console.log(responseData)
             document.getElementById("chat_name").innerHTML = responseData["title"];
+            if (responseData["group_id"].length > 2) {
+                document.getElementById("dropdown-menu-add").style.visibility = "visible";
+                document.getElementById("dropdown-button-add").style.visibility = "visible";
+            } else {
+                document.getElementById("dropdown-menu-add").style.visibility = "hidden";
+                document.getElementById("dropdown-button-add").style.visibility = "hidden";
+            }
             messages.innerHTML = ""
             document.getElementById("member_tab").innerHTML = "";
             for (let i = 0; i < responseData['username'].length; i++) {
@@ -83,19 +92,32 @@ var getMessage = function (x) {
         });
 }
 
-var toggleDropdown = function () {
-    var dropdownMenu = document.getElementById('dropdown-menu');
+var toggleDropdownCreate = function() {
+    var dropdownMenu = document.getElementById('dropdown-menu-create');
+    if (dropdownMenu.style.display === 'none') {
+      dropdownMenu.style.display = 'block';
+    } else {
+      dropdownMenu.style.display = 'none';
+    }
+  }
+
+  var toggleDropdownAdd = function() {
+    var dropdownMenu = document.getElementById('dropdown-menu-add');
     if (dropdownMenu.style.display === 'none') {
         dropdownMenu.style.display = 'block';
     } else {
         dropdownMenu.style.display = 'none';
     }
-}
-
-var createGroup = function () {
+  }
+  
+var createGroup = function() {
     var groupName = document.getElementById('group-name').value;
     // Perform further actions with the group name
     console.log('Creating group:', groupName);
+}
+
+var addUser = function() {
+    // action for add friends
 }
 
 var clear_ping = function (group_id) {
@@ -209,13 +231,20 @@ socket.on('message', function (info) {
     //document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
 });
 
-socket.on('ping', function (group_id) {
-    ping_bubble = document.getElementById("ping_bubble" + group_id)
+// info: [group_id, user, message, string_time, group_image]
+socket.on('ping', function (info) {
+    ping_bubble = document.getElementById("ping_bubble" + info[0])
     ping_number = ping_bubble.innerHTML
     if (ping_number == 0) {
         ping_bubble.style.visibility = "visible"
     }
     ping_bubble.innerHTML = parseInt(ping_bubble.innerHTML) + 1
+    // show toast
+    document.getElementById("toast_name").innerHTML = info[1]
+    document.getElementById("toast-message").innerHTML = info[2]
+    document.getElementById("toast-time").innerHTML = info[3]
+    document.getElementById("toast_pfp").innerHTML = info[4]
+    message_toast.show()
 });
 
 socket.on('clicked_group', function (info) {
