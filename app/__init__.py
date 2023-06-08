@@ -105,7 +105,7 @@ def friends_page():
             else:
                 f_list.append([pair[0], get_user(pair[0])[2] ])
         return render_template("friends.html", FRIENDS=f_list, USER=session.get("CLIENT"))  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
-    return render_template("home.html", USER=session.get("CLIENT"))
+    return redirect( url_for("home_page", USER=session.get("CLIENT")) )
     
 @app.route("/friend-request-ajax", methods=["POST"])
 def friend_request_ajax():
@@ -162,7 +162,7 @@ def search_friend_requests_ajax():
 def explore_ajax():
     #print(request.form["search"])
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
-    print(randos)
+    print(session.get("CLIENT"))
     pfp = []
     for n in randos:
         pfp.append(get_pfp(n))
@@ -172,6 +172,8 @@ def explore_ajax():
 def explore_search_ajax():
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
     pfp = []
+    print(session.get("CLIENT"))
+    print(randos)
     for a in randos:
         pfp.append(get_pfp(a))
     return jsonify(randos=randos, pfp=pfp)
@@ -222,7 +224,23 @@ def profile(username):
         mutualinfo = zip(list(mutual[0]), mutualpfp)
         return render_template("profile.html", user=info[0], url=info[2], bio=info[3], mutual=mutualinfo, USER=session.get("CLIENT"))
     else:
-        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], USER=session.get("CLIENT"))
+        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], USER=session.get("CLIENT"))@app.route("/create-group-search", methods=["POST"])
+
+def create_group_search():
+    searchTerm = request.form["searchTerm"]
+    users = search_friends(searchTerm, session.get("CLIENT"))
+    if users:
+        return jsonify(users=users)
+    return jsonify({"error": "error"})
+
+@app.route("/add-user-group-search", methods=["POST"])
+def add_user_to_group_search():
+    searchTerm = request.form["searchTerm"]
+    users = search_friends(searchTerm, session.get("CLIENT"))
+    if users:
+        return jsonify(users=users)
+    return jsonify({"error" : "error"})
+
 # ========================== SOCKETS ==========================
 
 # If the user logs in succesfully, they will be added to our connected users
@@ -250,6 +268,7 @@ def check_connect():
 def disconnect():
     connected_users[session.get("CLIENT")].remove(request.sid)
     #print("DISCONNECT: " + session.get("CLIENT"))
+    print("CONNECTED: ", connected_users)
 
 # Changes the group that the user is in
 @socketio.on('select_group')
