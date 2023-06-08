@@ -64,10 +64,12 @@ def get_all_users_by_group(group_id):
     c.close()
     return [user[0] for user in info]
 
+# Returns a list all users in a group other than the inputed username
 def get_all_other_users_by_group(group_id, username):
     users = get_all_users_by_group(group_id)
     users.remove(username)
     return users
+
             
 # Get all requests that the user has sent or recieved. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
 def get_all_friend_requests(user):
@@ -109,9 +111,18 @@ def get_group_image(group_id):
     c.close()
     return data
 
+# Gets the size of the group
 def get_group_size(group_id):
     data = get_all_users_by_group(group_id)
     return len(data)
+
+# Gets profile picture of a user
+def get_pfp(username):
+    c = db.cursor()
+    c.execute("SELECT pfp FROM Account WHERE (username = ?)", (username))
+    data = c.fetchone()
+    c.close()
+    return data
 
 # ================ INSERTING INFORMATION ================
 
