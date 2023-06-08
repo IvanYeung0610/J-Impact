@@ -25,6 +25,8 @@ var getMessage = function (x) {
     })
     .then(responseData => {
         // Handle the response from the Flask route
+        console.log(responseData)
+        document.getElementById("chat_name").innerHTML = responseData["title"];
         messages.innerHTML = ""
         document.getElementById("member_tab").innerHTML = "";
         for (let i = 0;i<responseData['username'].length;i++){

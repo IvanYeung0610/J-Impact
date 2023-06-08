@@ -84,6 +84,12 @@ def get_group_title(group_id):
     c = db.cursor()
     c.execute("SELECT Title FROM Groups WHERE (group_id = ?)", (group_id,))
     data = c.fetchone()
+    if data == "" or data == None:
+        data = ""
+        users = get_all_users_by_group(group_id)
+        for x in users:
+            data += x + ", "
+        data = data[:-2] + "'s chat"
     c.close()
     return data
 
@@ -234,5 +240,6 @@ def populate():
                 add_friend_request("a", chr(x + 98))
         add_friend("a","b")
         add_friend("a","c")
+        add_to_group(0, "i")
     db.commit()
     c.close()

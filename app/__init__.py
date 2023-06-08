@@ -40,7 +40,14 @@ def messages_ajax():
     id = request.form.get("group_id") #group id
     messages = get_messages_from_group(id)
     group = get_all_users_by_group(id)
-    messageData = {"username": [], "message": [], "time": [], "group_id": []}
+    messageData = {"username": [], "message": [], "time": [], "group_id": [], "title": ""}
+    if len(group) <= 2:
+        if group[0] == session.get("CLIENT"):
+            messageData["title"] = group[1]
+        else:
+            messageData["title"] = session.get("CLIENT")
+    else:
+        messageData["title"] = get_group_title(id)
     for data in messages:
         #print(data)
         messageData["username"].append(data[0])
