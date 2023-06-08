@@ -48,7 +48,7 @@ def messages_ajax():
     id = request.form.get("group_id") #group id
     messages = get_messages_from_group(id)
     group = get_all_users_by_group(id)
-    messageData = {"username": [], "message": [], "time": [], "group_id": [], "title": ""}
+    messageData = {"username": [], "message": [], "time": [], "group_id": [], "title": "", "pfp": []}
     if len(group) <= 2:
         if group[0] == session.get("CLIENT"):
             messageData["title"] = group[1]
@@ -61,6 +61,7 @@ def messages_ajax():
         messageData["username"].append(data[0])
         messageData["message"].append(data[2])
         messageData["time"].append(data[3])
+        messageData["pfp"].append(get_pfp(data[0]))
     messageData["group_id"] = group
     if id: 
         return jsonify(messageData)
@@ -245,7 +246,8 @@ def handle_message(message):
         group_id = rooms(request.sid)[1]
     local_time = time.localtime()
     string_time = time.strftime("%c", local_time)
-    info = [user, message, string_time]
+    pfp = get_pfp(user)
+    info = [user, message, string_time, pfp]
     
     add_message(user, group_id, message, string_time)
     emit("message", info, to=group_id)
