@@ -224,8 +224,9 @@ def profile(username):
         mutualinfo = zip(list(mutual[0]), mutualpfp)
         return render_template("profile.html", user=info[0], url=info[2], bio=info[3], mutual=mutualinfo, USER=session.get("CLIENT"))
     else:
-        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], USER=session.get("CLIENT"))@app.route("/create-group-search", methods=["POST"])
-
+        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], USER=session.get("CLIENT"))
+        
+@app.route("/create-group-search", methods=["POST"])
 def create_group_search():
     searchTerm = request.form["searchTerm"]
     users = search_friends(searchTerm, session.get("CLIENT"))
