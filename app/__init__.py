@@ -190,7 +190,39 @@ def desc_ajax():
     desc = request.form.get("desc")
     change_desc(session.get("CLIENT"), desc)
 
-
+@app.route("/profile/<username>")
+def profile(username):
+    info = get_user(username)
+    friend1 = [] #other user's friends
+    friend2 = [] #your friends
+    for f in get_all_friends(username):
+        if (f[0] == username):
+            friend1.append(f[1])
+        else:
+            friend1.append(f[0])
+    for f in get_all_friends(session.get("CLIENT")):
+        if (f[0] == session.get("CLIENT")):
+            friend2.append(f[1])
+        else:
+            friend2.append(f[0])
+    #print(friend1)
+    #print(friend2)
+    #print(get_all_friends(session.get("CLIENT")))
+    aset = set(friend1)
+    bset = set(friend2)
+    mutual = []
+    mutualpfp = []
+    if (aset & bset):
+        mutual.append(aset & bset)
+    print(list(mutual))
+    if len(list(mutual)) > 0:
+        for f in list(mutual[0]):
+            mutualpfp.append(get_pfp(f)[0])
+        #print(mutualpfp)
+        mutualinfo = zip(list(mutual[0]), mutualpfp)
+        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], mutual=mutualinfo, USER=session.get("CLIENT"))
+    else:
+        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], USER=session.get("CLIENT"))
 # ========================== SOCKETS ==========================
 
 # If the user logs in succesfully, they will be added to our connected users
