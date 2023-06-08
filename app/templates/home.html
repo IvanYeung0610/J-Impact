@@ -106,11 +106,11 @@
             <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
 
               <!--button template-->
-              <div>
+              <div style="width:100%;">
                 {% for group in GROUPS %}
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
-                  style="background-color: #DEF2F1; width:32vh; text-align: left;">
+                  style="background-color: #DEF2F1; width:100%; text-align: left;">
                   <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
                     class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
                   {{ GROUP_INFO[group][0] }} <!-- Group Title or Friend's name -->
@@ -118,7 +118,10 @@
                   {% if GROUP_INFO[group][2] > 2 %}
                   <div class="membersCount"> {{ GROUP_INFO[group][2] }} Members</div>
                   {% endif %}
-
+                  <div class="text-bg-secondary float-end mx-2 px-2 border border-info-subtle border-3 rounded-circle"
+                    style="visibility: hidden" id="ping_bubble{{ group }}">
+                    0
+                  </div>
                 </button>
                 {% endfor %}
               </div>

@@ -19,68 +19,68 @@ var getMessage = function (x) {
             'Accept': 'application/json' // Set the Accept header to indicate acceptance of JSON response
         }
     })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not OK');
-        }
-        return response.json();
-    })
-    .then(responseData => {
-        // Handle the response from the Flask route
-        console.log(responseData)
-        document.getElementById("chat_name").innerHTML = responseData["title"];
-        messages.innerHTML = ""
-        document.getElementById("member_tab").innerHTML = "";
-        for (let i = 0;i<responseData['username'].length;i++){
-            // console.log(responseData);
-            message = document.createElement("div");
-            label = document.createElement("div");//div with pfp, username, time
-            label.style = "display: flex";
-            img = document.createElement("img");
-            img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
-            img.className = "rounded-circle";
-            img.style.height = "30px";
-            img.style.width = "30px";
-            message.innerHTML = responseData['message'][i];
-            message.style = "margin-bottom: 20px";
-            
-            label.appendChild(img);
-            label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
-            messages.appendChild(label);
-            messages.appendChild(message);
-            messages.scrollTop = messages.scrollHeight;
-        }
-        for (let i = 0; i < responseData["group_id"].length; i++) {
-            // console.log(responseData["group_id"][i]);
-            member = document.getElementById("member_tab");
-            newButton = document.createElement("div");
-            newButton.type = "button";
-            newButton.classList.add("btn");
-            newButton.style = "width: 30vh; text-align: left";
-            newButton.setAttribute('name', 'memlist');
-            label = document.createElement("div");//div with pfp, username
-            label.style = "display: flex";
-            img = document.createElement("img");
-            img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
-            img.className = "rounded-circle";
-            img.style.height = "30px";
-            img.style.width = "30px";
-            member.style = "margin-bottom: 20px";
-            
-            label.appendChild(img);
-            label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData["group_id"][i];
-            memberlist.push(responseData["group_id"][i])
-            label.style = "margin-bottom: 5px";
-            newButton.appendChild(label);
-            member.appendChild(newButton);
-            // console.log(member);
-            member.scrollTop = member.scrollHeight;
-        }
-    })
-    .catch(error => {
-        // Handle any errors that occurred during the request
-        console.error('Error:', error);
-    });
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not OK');
+            }
+            return response.json();
+        })
+        .then(responseData => {
+            // Handle the response from the Flask route
+            // console.log(responseData)
+            document.getElementById("chat_name").innerHTML = responseData["title"];
+            messages.innerHTML = ""
+            document.getElementById("member_tab").innerHTML = "";
+            for (let i = 0; i < responseData['username'].length; i++) {
+                // console.log(responseData);
+                message = document.createElement("div");
+                label = document.createElement("div");//div with pfp, username, time
+                label.style = "display: flex";
+                img = document.createElement("img");
+                img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                img.className = "rounded-circle";
+                img.style.height = "30px";
+                img.style.width = "30px";
+                message.innerHTML = responseData['message'][i];
+                message.style = "margin-bottom: 20px";
+
+                label.appendChild(img);
+                label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
+                messages.appendChild(label);
+                messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight;
+            }
+            for (let i = 0; i < responseData["group_id"].length; i++) {
+                // console.log(responseData["group_id"][i]);
+                member = document.getElementById("member_tab");
+                newButton = document.createElement("div");
+                newButton.type = "button";
+                newButton.classList.add("btn");
+                newButton.style = "width: 30vh; text-align: left";
+                newButton.setAttribute('name', 'memlist');
+                label = document.createElement("div");//div with pfp, username
+                label.style = "display: flex";
+                img = document.createElement("img");
+                img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                img.className = "rounded-circle";
+                img.style.height = "30px";
+                img.style.width = "30px";
+                member.style = "margin-bottom: 20px";
+
+                label.appendChild(img);
+                label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData["group_id"][i];
+                memberlist.push(responseData["group_id"][i])
+                label.style = "margin-bottom: 5px";
+                newButton.appendChild(label);
+                member.appendChild(newButton);
+                // console.log(member);
+                member.scrollTop = member.scrollHeight;
+            }
+        })
+        .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error('Error:', error);
+        });
 }
 
 var toggleDropdown = function() {
@@ -97,6 +97,13 @@ var toggleDropdown = function() {
     // Perform further actions with the group name
     console.log('Creating group:', groupName);
   }
+var clear_ping = function (group_id) {
+    ping_bubble = document.getElementById("ping_bubble" + group_id)
+    ping_bubble.innerHTML = 0
+    if (ping_bubble.style.visibility == "visible") {
+        ping_bubble.style.visibility = "hidden"
+    }
+}
 
 // We need a default group
 if (all_group_buttons.length != 0) {
@@ -117,14 +124,14 @@ for (let x = 0; x < all_group_buttons.length; x++) {
         selected_group = all_group_buttons[x]
         //messages.innerHTML = "";
         getMessage(x);
+        clear_ping(all_group_buttons[x].id);
     })
 }
 
 var memlist = document.getElementsByName("memlist");
-console.log(memlist)
-//
-for (let x = 0; x< memlist.length; x++){
-    memlist[x].addEventListener('click', (e)=>{
+
+for (let x = 0; x < memlist.length; x++) {
+    memlist[x].addEventListener('click', (e) => {
         console.log(memberlist)
     })
 }
@@ -143,7 +150,7 @@ socket.on('message', function (info) {
     img.style.width = "30px";
     message.innerHTML = info[1];
     message.style = "margin-bottom: 20px";
-    
+
     label.appendChild(img);
     label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + info[0] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + info[2];
     messages.appendChild(label);
@@ -153,7 +160,12 @@ socket.on('message', function (info) {
 });
 
 socket.on('ping', function (group_id) {
-    console.log("pinged: ", group_id);
+    ping_bubble = document.getElementById("ping_bubble" + group_id)
+    ping_number = ping_bubble.innerHTML
+    if (ping_number == 0) {
+        ping_bubble.style.visibility = "visible"
+    }
+    ping_bubble.innerHTML = parseInt(ping_bubble.innerHTML) + 1
 });
 
 socket.on('clicked_group', function (info) {
