@@ -20,29 +20,44 @@ def home_page():
         groups = get_all_groups_from_user(session.get("CLIENT"))
         #print(groups)
         group_info = {}
-        accounts = get_all_users()
+        # accounts = get_all_users()
         for group in groups:
-            group_info[group] = ["name", "profile_picture", "number of group members"] #profile picture for groups
-        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, ACCOUNTS=accounts)
+            if get_group_size(group) > 2: #Checks if it is a chat between two friends or a group
+                group_info[group] = [get_group_title(group), get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
+            else:
+                friend_username = get_all_other_users_by_group(group, session.get("CLIENT"))[0]
+                group_info[group] = [friend_username, get_pfp(friend_username), get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
+        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info)
     return redirect( url_for("login_page") )
 
-# @app.route("/homeajax", methods=["POST"])
-# def home_ajax():
-#     current = request.form.get("messageText")
-#     if current:
-#         return jsonify(value=current, user=session.get("CLIENT"))
-#     return jsonify({"error" : "error"})
+@app.route("/homeajax", methods=["POST"])
+def home_ajax():
+    current = request.form.get("messageText")
+    local_time = time.localtime()
+    string_time = time.strftime("%c", local_time)
+    if current:
+        return jsonify(value=current, user=session.get("CLIENT"), time=string_time)
+    return jsonify({"error" : "error"})
 
 @app.route("/messagesajax", methods=["POST"])
 def messages_ajax():
     id = request.form.get("group_id") #group id
     messages = get_messages_from_group(id)
-    messageData = {"username": [], "message": [], "time": []}
+    group = get_all_users_by_group(id)
+    messageData = {"username": [], "message": [], "time": [], "group_id": [], "title": ""}
+    if len(group) <= 2:
+        if group[0] == session.get("CLIENT"):
+            messageData["title"] = group[1]
+        else:
+            messageData["title"] = session.get("CLIENT")
+    else:
+        messageData["title"] = get_group_title(id)
     for data in messages:
         #print(data)
         messageData["username"].append(data[0])
         messageData["message"].append(data[2])
         messageData["time"].append(data[3])
+    messageData["group_id"] = group
     if id: 
         return jsonify(messageData)
     return jsonify({"error": "error"})
@@ -85,7 +100,7 @@ def friends_page():
                 f_list.append([ pair[1], get_user(pair[1])[2] ])
             else:
                 f_list.append([pair[0], get_user(pair[0])[2] ])
-        return render_template("friends.html", FRIENDS=f_list)  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
+        return render_template("friends.html", FRIENDS=f_list, USER=session.get("CLIENT"))  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
     return render_template("home.html", USER=session.get("CLIENT"))
     
 @app.route("/friend-request-ajax", methods=["POST"])
@@ -99,7 +114,7 @@ def friend_request_ajax():
             requests["sent"].append(req)
         else:
             requests["received"].append(req)
-    # print("+++++++++++++++++++: ", requests)
+    print(requests)
     if fr: 
         return jsonify(requests=requests)
     return jsonify({"error": "error"})
@@ -139,7 +154,7 @@ def explore_search_ajax():
 
 @app.route("/settings")
 def settings():
-    return render_template("settings.html", about_me="about me goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this")
+    return render_template("settings.html", USER=session.get("CLIENT"), about_me="about me goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this")
 
 # ========================== SOCKETS ==========================
 
@@ -196,9 +211,9 @@ def handle_message(message):
     group_id = rooms(request.sid)[0]
     if rooms(request.sid)[0] == request.sid:
         group_id = rooms(request.sid)[1]
-    info = [user, message]
     local_time = time.localtime()
     string_time = time.strftime("%c", local_time)
+    info = [user, message, string_time]
     
     add_message(user, group_id, message, string_time)
     emit("message", info, to=group_id)

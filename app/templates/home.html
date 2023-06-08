@@ -65,16 +65,18 @@
 
               <!--button template-->
               <div>
-                <!--image inside a button!-->
-                {% for group in GROUPS %}
+                {% for group in GROUPS %} 
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
                   style="background-color: #DEF2F1; width:32vh; text-align: left;">
-                  <!-- There will be a condition to check if the group is between 2 people or a group to determine how profile picture is shown.
-                If the group is between 2 people we will look for pfp in ACCOUNTS variable -->
                   <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
-                    class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
-                  {{ group }}
+                  class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
+                  {{ GROUP_INFO[group][0][0] }} <!-- Group Title or Friend's name -->    
+
+                  {% if GROUP_INFO[group][2] > 2 %}
+                      <div class="membersCount"> {{ GROUP_INFO[group][2] }} Members</div>
+                  {% endif %}
+
                 </button>
                 {% endfor %}
               </div>
@@ -89,7 +91,7 @@
       <div class="col-sm-8 border-start border-end border-dark-subtle border-3" style="height: 100vh;">
 
         <div class="border-bottom border-dark-subtle border-3">
-          <h4 style="text-align: center;">chat name</h4> <!--chat name-->
+          <h4 style="text-align: center;" id="chat_name"></h4> <!--chat name-->
         </div>
 
         <!--message div-->
@@ -117,9 +119,10 @@
           <div>
             <h5>Members</h5>
           </div>
-          members<br>
-          members<br>
+          <div id="member_tab">
+          </div>
         </div>
+        
 
       </div>
 
