@@ -25,7 +25,7 @@ def home_page():
         # accounts = get_all_users()
         for group in groups:
             if get_group_size(group) > 2: #Checks if it is a chat between two friends or a group
-                group_info[group] = [get_group_title(group), get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
+                group_info[group] = [get_group_title(group)[0], get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
             else:
                 friend_username = get_all_other_users_by_group(group, session.get("CLIENT"))[0]
                 group_info[group] = [friend_username, get_pfp(friend_username), get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
@@ -116,7 +116,7 @@ def friend_request_ajax():
             requests["sent"].append(req)
         else:
             requests["received"].append(req)
-    print(requests)
+    #print(requests)
     if fr: 
         return jsonify(requests=requests)
     return jsonify({"error": "error"})
@@ -125,8 +125,15 @@ def friend_request_ajax():
 def friends_list_ajax():
     #usernames can be in any order
     fr = get_all_friends(session.get("CLIENT"))
+    pfp = []
+    for n in fr:
+        if (session.get("CLIENT") == n[0]):
+            pfp.append(get_pfp(n[1]))
+        else:
+            pfp.append(get_pfp(n[0]))
+    #print(pfp)
     #splits the requests into incoming and outgoing, but won't really matter for showing on browser
-    requests = {"friends": fr, "username": session.get("CLIENT")}
+    requests = {"friends": fr, "username": session.get("CLIENT"), "pfp": pfp}
     if fr: 
         return jsonify(requests=requests)
     return jsonify({"error": "error"})
@@ -134,25 +141,38 @@ def friends_list_ajax():
 @app.route("/search-friends", methods=["POST"])
 def search_friends_ajax():
     friends = search_friends(request.form["searchTerm"], session.get("CLIENT"))
-    # print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-    return jsonify(friends=friends)
+    pfp = []
+    for a in friends:
+        if (session.get("CLIENT") == a[0]):
+            pfp.append(get_pfp(a[1]))
+        else:
+            pfp.append(get_pfp(a[0]))
+    #print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    return jsonify(friends=friends, pfp=pfp)
 
 @app.route("/search-friend-requests", methods=["POST"])
 def search_friend_requests_ajax():
     freqs = search_friend_requests(request.form["searchTerm"], session.get("CLIENT"))
-    print(freqs)
+    #print(freqs)
     return jsonify(freqs=freqs)
 
 @app.route("/load-explore-ajax", methods=["POST"])
 def explore_ajax():
-    print(request.form["search"])
+    #print(request.form["search"])
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
-    return jsonify({"randos": randos})
+    print(randos)
+    pfp = []
+    for n in randos:
+        pfp.append(get_pfp(n))
+    return jsonify({"randos": randos, "pfp": pfp})
 
 @app.route("/explore-search-ajax", methods=["POST"])
 def explore_search_ajax():
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
-    return jsonify({"randos": randos})
+    pfp = []
+    for a in randos:
+        pfp.append(get_pfp(a))
+    return jsonify(randos=randos, pfp=pfp)
 
 @app.route("/settings")
 def settings():
@@ -162,6 +182,12 @@ def settings():
         desc = user_info[3]
         return render_template("settings.html", USER=session.get("CLIENT"), PICTURE_URL=pfp, about_me=desc)
     return redirect( url_for("login_page") )
+
+@app.route("/desc-ajax", methods=["POST"])
+def desc_ajax():
+    desc = request.form.get("desc")
+    change_desc(session.get("CLIENT"), desc)
+
 
 # ========================== SOCKETS ==========================
 
@@ -205,9 +231,6 @@ def select_group(group_id):
     else:
         join_room(group_id)
         # print("  JOINED:  ", group_id)
-    if type(group_id) is int:
-        members = get_all_users_by_group(group_id)
-        emit("clicked_group", members, to=request.sid)
 
 # RECIEVES - info: message
 # EMITS - "message" OR "ping": message is when they have the group selcted, otherwise they will be pinged
