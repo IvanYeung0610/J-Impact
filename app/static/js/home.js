@@ -29,6 +29,13 @@ var getMessage = function (x) {
             // Handle the response from the Flask route
             // console.log(responseData)
             document.getElementById("chat_name").innerHTML = responseData["title"];
+            if (responseData["group_id"].length > 2) {
+                document.getElementById("dropdown-menu-add").style.visibility = "visible";
+                document.getElementById("dropdown-button-add").style.visibility = "visible";
+            } else {
+                document.getElementById("dropdown-menu-add").style.visibility = "hidden";
+                document.getElementById("dropdown-button-add").style.visibility = "hidden";
+            }
             messages.innerHTML = ""
             document.getElementById("member_tab").innerHTML = "";
             for (let i = 0; i < responseData['username'].length; i++) {
@@ -83,8 +90,17 @@ var getMessage = function (x) {
         });
 }
 
-var toggleDropdown = function() {
-    var dropdownMenu = document.getElementById('dropdown-menu');
+var toggleDropdownCreate = function() {
+    var dropdownMenu = document.getElementById('dropdown-menu-create');
+    if (dropdownMenu.style.display === 'none') {
+      dropdownMenu.style.display = 'block';
+    } else {
+      dropdownMenu.style.display = 'none';
+    }
+  }
+
+  var toggleDropdownAdd = function() {
+    var dropdownMenu = document.getElementById('dropdown-menu-add');
     if (dropdownMenu.style.display === 'none') {
       dropdownMenu.style.display = 'block';
     } else {
@@ -92,11 +108,16 @@ var toggleDropdown = function() {
     }
   }
   
-   var createGroup = function() {
+var createGroup = function() {
     var groupName = document.getElementById('group-name').value;
     // Perform further actions with the group name
     console.log('Creating group:', groupName);
-  }
+}
+
+var addUser = function() {
+    // action for add friends
+}
+
 var clear_ping = function (group_id) {
     ping_bubble = document.getElementById("ping_bubble" + group_id)
     ping_bubble.innerHTML = 0
