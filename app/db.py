@@ -125,7 +125,7 @@ def get_group_size(group_id):
 # Gets profile picture of a user
 def get_pfp(username):
     c = db.cursor()
-    c.execute("SELECT pfp FROM Account WHERE (username = ?)", (username))
+    c.execute("SELECT pfp FROM Account WHERE (username = ?)", (username,))
     data = c.fetchone()
     c.close()
     return data

@@ -58,6 +58,30 @@ var editBio = () => {
         editarea.removeChild(cancel);
         edit.hidden = false;
         bio.hidden = false;
+
+        //ajax request to update db with new desc
+        fetch('/desc-ajax', {
+            method: 'POST',
+            body: "desc=" + textarea.value,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded', // Set the content type to indicate a plain text string
+                'Accept': 'application/json' // Set the Accept header to indicate acceptance of JSON response
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not OK');
+            }
+            return response.json();
+        })
+        .then(responseData => {
+            // Handle the response from the Flask route
+           
+        })
+        .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error('Error:', error);
+        });
     }
     )
 

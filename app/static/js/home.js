@@ -5,6 +5,8 @@ var nav_friends_link = document.getElementById("nav_friends_link")
 var all_group_buttons = document.getElementsByName("group_button")
 var messages = document.getElementById("messages")
 
+var memberlist = []
+
 //get messages from db
 var getMessage = function (x) {
     // console.log(typeof JSON.stringify(all_group_buttons[x].id))
@@ -51,6 +53,11 @@ var getMessage = function (x) {
         for (let i = 0; i < responseData["group_id"].length; i++) {
             // console.log(responseData["group_id"][i]);
             member = document.getElementById("member_tab");
+            newButton = document.createElement("div");
+            newButton.type = "button";
+            newButton.classList.add("btn");
+            newButton.style = "width: 30vh; text-align: left";
+            newButton.setAttribute('name', 'memlist');
             label = document.createElement("div");//div with pfp, username
             label.style = "display: flex";
             img = document.createElement("img");
@@ -61,8 +68,11 @@ var getMessage = function (x) {
             member.style = "margin-bottom: 20px";
             
             label.appendChild(img);
-            label.innerHTML += responseData["group_id"][i];
-            member.appendChild(label);
+            label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData["group_id"][i];
+            memberlist.push(responseData["group_id"][i])
+            label.style = "margin-bottom: 5px";
+            newButton.appendChild(label);
+            member.appendChild(newButton);
             // console.log(member);
             member.scrollTop = member.scrollHeight;
         }
@@ -84,6 +94,7 @@ if (all_group_buttons.length != 0) {
 
 // Changes color of group buttons when clicked 
 // And sets the room of the user to that group in Websockets
+console.log(all_group_buttons)
 for (let x = 0; x < all_group_buttons.length; x++) {
     all_group_buttons[x].addEventListener('click', (e) => {
         socket.emit("select_group", all_group_buttons[x].id)
@@ -92,6 +103,15 @@ for (let x = 0; x < all_group_buttons.length; x++) {
         selected_group = all_group_buttons[x]
         //messages.innerHTML = "";
         getMessage(x);
+    })
+}
+
+var memlist = document.getElementsByName("memlist");
+console.log(memlist)
+//
+for (let x = 0; x< memlist.length; x++){
+    memlist[x].addEventListener('click', (e)=>{
+        console.log(memberlist)
     })
 }
 

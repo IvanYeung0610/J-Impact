@@ -8,10 +8,10 @@ var search = document.getElementById("search"); //search bar in all
 // var searchFriends = document.getElementById("searchFriends"); //search bar in friends
 
 //all tab is selected by default
-explore.style.backgroundColor = "gray";
+explore.style.backgroundColor = "lightgray";
 pending.style.backgroundColor = "lightgray";
 title.innerHTML = "All";
-friend.style.backgroundColor = "lightgray";
+friend.style.backgroundColor = "gray";
 search.hidden = false;
 // searchFriends.hidden = true; 
 
@@ -89,17 +89,12 @@ var friendRequest = function (sender, direction) {
     else if (direction == "outgoing"){
         cardText.innerHTML = "Friend request to " + sender;//replace sender with person you are sending to
         var buttondiv = document.createElement("div");
-        buttondiv.className = "btn-group";
+        //buttondiv.className = "btn-group";
         //buttondiv.style = "margin: auto";
-        var accept = document.createElement("button");
-        accept.type = "button";
-        accept.classList.add("btn");
-        accept.innerHTML = "\u2705 Accept";
-        buttondiv.appendChild(accept);
         var deny = document.createElement("button");
         deny.type = "button";
         deny.classList.add("btn");
-        deny.innerHTML = "&#10006; Deny";
+        deny.innerHTML = "&#10006; Cancel";
         buttondiv.appendChild(deny);
         cardText.appendChild(buttondiv);
     }
@@ -112,21 +107,37 @@ var friendRequest = function (sender, direction) {
     // friends.appendChild(newButton);
 }
 
-var friendsList = function (friend) {
+var friendsList = function (friend, pfp) {
     var newButton = document.createElement("button");
+    var img = document.createElement("img");
+    img.src = pfp
+    //console.log(pfp)
+    img.style.height = "30px";
+    img.style.width = "30px";
+    img.style.marginRight = "10px";
+    newButton.appendChild(img);
     newButton.type = "button";
     newButton.classList.add("btn");
-    newButton.style = "background-color: gray; width:32vh; text-align: left;";
-    newButton.innerHTML = "You are friends with: " + friend;
+    newButton.classList.add("btn-outline-dark");
+    newButton.style = "background-color: #DEF2F1; width:32vh; text-align: left; margin-bottom: 20px; margin-left: 40px;";
+    newButton.innerHTML += friend;
     friends.appendChild(newButton);
 }
 
-var randos = function(rando) {
+var randos = function(rando, pfp) {
     var newButton = document.createElement("button");
+    var img = document.createElement("img");
+    img.src = pfp
+    //console.log(pfp)
+    img.style.height = "30px";
+    img.style.width = "30px";
+    img.style.marginRight = "10px";
+    newButton.appendChild(img);
     newButton.type = "button";
     newButton.classList.add("btn");
-    newButton.style = "background-color: gray; width:32vh; text-align: left;";
-    newButton.innerHTML = "Would you like to be friends with " + rando + "?";
+    newButton.classList.add("btn-outline-dark");
+    newButton.style = "background-color: #DEF2F1; width: 32vh; text-align: left; margin-bottom: 20px; margin-left: 40px;";
+    newButton.innerHTML += rando;
     friends.appendChild(newButton);
 }
 
@@ -145,13 +156,13 @@ var loadFriends = function() {
             var response = JSON.parse(xhttp.responseText);
             var f = response.requests.friends;
             var username = response.requests.username;
-            // console.log(f);
+            var pfp = response.requests.pfp;
+            console.log(pfp);
             for (let i = 0; i < f.length; i++) {
-                //console.log(friends[i]);
                 if (f[i][0] == username) {
-                    friendsList(f[i][1]);
+                    friendsList(f[i][1], pfp[i]);
                 } else {
-                    friendsList(f[i][0]);
+                    friendsList(f[i][0], pfp[i]);
                 }
             }
         }
@@ -199,9 +210,10 @@ var loadExplore = function(str) {
             clearFriends();
             var response = JSON.parse(xhttp.responseText);
             var r = response.randos;
-            // console.log(r);
+            var pfp = response.pfp;
+            //console.log(r[10]);
             for (let i = 0; i < r.length; i++) {
-                randos(r[i][0]);
+                randos(r[i], pfp[i]);
             }
         }
     }
@@ -229,9 +241,10 @@ var searchBar = function(str) {
                 var response = JSON.parse(xhttp.responseText);
                 // console.log(response);
                 f = response.friends;
-                // console.log(f);
+                pfp = response.pfp
+                //console.log(pfp);
                 for (let i = 0; i < f.length; i++) {
-                    friendsList(f[i][0]);
+                    friendsList(f[i][0], pfp[i]);
                 }
             }
         }
@@ -265,10 +278,11 @@ var searchBar = function(str) {
             if (this.readyState == 4 && this.status == 200) {
                 clearFriends();
                 var response = JSON.parse(xhttp.responseText);
-                var r = response.randos;
+                r = response.randos;
+                pfp = response.pfp;
                 // console.log(r);
                 for (let i = 0; i < r.length; i++) {
-                    randos(r[i][0]);
+                    randos(r[i], pfp[i]);
                 }
             }
         }
@@ -286,3 +300,5 @@ var searchBar = function(str) {
         xhttp.send(postVars);
     }
 }
+
+loadFriends();//load friends on reload
