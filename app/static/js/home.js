@@ -83,6 +83,20 @@ var getMessage = function (x) {
     });
 }
 
+var toggleDropdown = function() {
+    var dropdownMenu = document.getElementById('dropdown-menu');
+    if (dropdownMenu.style.display === 'none') {
+      dropdownMenu.style.display = 'block';
+    } else {
+      dropdownMenu.style.display = 'none';
+    }
+  }
+  
+   var createGroup = function() {
+    var groupName = document.getElementById('group-name').value;
+    // Perform further actions with the group name
+    console.log('Creating group:', groupName);
+  }
 
 // We need a default group
 if (all_group_buttons.length != 0) {
