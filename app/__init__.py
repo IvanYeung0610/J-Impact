@@ -26,12 +26,12 @@ def home_page():
         return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, ACCOUNTS=accounts)
     return redirect( url_for("login_page") )
 
-# @app.route("/homeajax", methods=["POST"])
-# def home_ajax():
-#     current = request.form.get("messageText")
-#     if current:
-#         return jsonify(value=current, user=session.get("CLIENT"))
-#     return jsonify({"error" : "error"})
+@app.route("/homeajax", methods=["POST"])
+def home_ajax():
+    current = request.form.get("messageText")
+    if current:
+        return jsonify(value=current, user=session.get("CLIENT"))
+    return jsonify({"error" : "error"})
 
 @app.route("/messagesajax", methods=["POST"])
 def messages_ajax():
@@ -139,7 +139,7 @@ def explore_search_ajax():
 
 @app.route("/settings")
 def settings():
-    return render_template("settings.html", about_me="about me goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this")
+    return render_template("settings.html", USER=session.get("CLIENT"), about_me="about me goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this")
 
 # ========================== SOCKETS ==========================
 

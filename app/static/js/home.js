@@ -106,23 +106,23 @@ messageform.addEventListener('submit', (e) => {
 })
 
 //notes for future redesign: we don't need to wait for the request to be completed before showing the message?
-// var ajaxMessage = function (str) {
-//     var xhttp = new XMLHttpRequest();
-//     xhttp.onreadystatechange = function () {
-//         // console.log(this.readyState);
-//         if (this.readyState == 4 && this.status == 200) {
-//             var response = JSON.parse(xhttp.responseText);
-//             // COMMENT THIS OUT FOR NOW CAUSE IT'S GONNA PUT IT ON THERE TWICE
-//             // document.getElementById("messages").innerHTML += response.user + ": " + response.value + "<br>";
-//         }
-//     }
-//     xhttp.open("POST", "/homeajax");
-//     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//     var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
-//     // console.log(postVars);
-//     xhttp.send(postVars);
-//     var textField = document.getElementById("messageinput");
-//     // EMITTING HERE:
-//     socket.emit("message", textField.value);
-//     textField.value = "";
-// }
+var ajaxMessage = function (str) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        // console.log(this.readyState);
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(xhttp.responseText);
+            // COMMENT THIS OUT FOR NOW CAUSE IT'S GONNA PUT IT ON THERE TWICE
+            // document.getElementById("messages").innerHTML += response.user + ": " + response.value + "<br>";
+        }
+    }
+    xhttp.open("POST", "/homeajax");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
+    // console.log(postVars);
+    xhttp.send(postVars);
+    var textField = document.getElementById("messageinput");
+    // EMITTING HERE:
+    socket.emit("message", textField.value);
+    textField.value = "";
+}
