@@ -236,3 +236,4 @@ def populate():
         add_friend("a","c")
     db.commit()
     c.close()
+
