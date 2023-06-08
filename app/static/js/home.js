@@ -26,6 +26,7 @@ var getMessage = function (x) {
     .then(responseData => {
         // Handle the response from the Flask route
         messages.innerHTML = ""
+        document.getElementById("member_tab").innerHTML = "";
         for (let i = 0;i<responseData['username'].length;i++){
             // console.log(responseData);
             message = document.createElement("div");
@@ -148,25 +149,6 @@ var ajaxMessage = function (str) {
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(xhttp.responseText);
             // console.log(response);
-            time = response["time"];
-            content = response["value"];
-            message = document.createElement("div");
-            label = document.createElement("div");//div with pfp, username, time
-            label.style = "display: flex";
-            img = document.createElement("img");
-            img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
-            img.className = "rounded-circle";
-            img.style.height = "30px";
-            img.style.width = "30px";
-
-            message.innerHTML = content;
-            message.style = "margin-bottom: 20px";
-            
-            label.appendChild(img);
-            label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + response["user"] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + time;
-            messages.appendChild(label);
-            messages.appendChild(message);
-            messages.scrollTop = messages.scrollHeight;
         }
     }
     xhttp.open("POST", "/homeajax");
