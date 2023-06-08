@@ -202,6 +202,7 @@ var loadFriends = function() {
                     friendsList(f[i][0], pfp[i]);
                 }
             }
+            profileButton();
         }
     }
     xhttp.open("POST", "friend-list");
