@@ -25,7 +25,7 @@ def home_page():
         # accounts = get_all_users()
         for group in groups:
             if get_group_size(group) > 2: #Checks if it is a chat between two friends or a group
-                group_info[group] = [get_group_title(group), get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
+                group_info[group] = [get_group_title(group)[0], get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
             else:
                 friend_username = get_all_other_users_by_group(group, session.get("CLIENT"))[0]
                 group_info[group] = [friend_username, get_pfp(friend_username), get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
