@@ -3,6 +3,7 @@ var socket = io();
 var messageform = document.getElementById("messageform");
 var nav_friends_link = document.getElementById("nav_friends_link")
 var all_group_buttons = document.getElementsByName("group_button")
+var messages = document.getElementById("messages")
 
 //get messages from db
 var getMessage = function (x) {
@@ -27,14 +28,21 @@ var getMessage = function (x) {
             messages.innerHTML = ""
             for (let i = 0;i<responseData['username'].length;i++){
                 message = document.createElement("div");
+                label = document.createElement("div");//div with pfp, username, time
+                label.style = "display: flex";
                 img = document.createElement("img");
-                img.source = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
                 img.className = "rounded-circle";
-                img.height = "30px";
-                img.width = "30px";
-                message.innerHTML = responseData['username'][i] + ": " + responseData['message'][i];
-                messages.appendChild(img);
+                img.style.height = "30px";
+                img.style.width = "30px";
+                message.innerHTML = responseData['message'][i];
+                message.style = "margin-bottom: 20px";
+                
+                label.appendChild(img);
+                label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
+                messages.appendChild(label);
                 messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight;
             }
             console.log(responseData['username']);
         })
@@ -50,7 +58,7 @@ if (all_group_buttons.length != 0) {
     selected_group = all_group_buttons[0]
     all_group_buttons[0].style.backgroundColor = "red"
     socket.emit("select_group", all_group_buttons[0].id)
-    getMessage(all_group_buttons[0].id);
+    getMessage(0);
 }
 
 // Changes color of group buttons when clicked 
@@ -71,6 +79,10 @@ for (let x = 0; x < all_group_buttons.length; x++) {
 socket.on('message', function (info) {
     //console.log(info);
     document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
+});
+
+socket.on('ping', function (group_id) {
+    console.log("pinged: ", group_id);
 });
 
 socket.on('clicked_group', function (info) {
