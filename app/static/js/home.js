@@ -83,6 +83,20 @@ var getMessage = function (x) {
     });
 }
 
+//eventlisteners for profile
+var profileButton = function(){
+    console.log(memberlist)
+    setTimeout(function() {
+        var memlist = document.getElementsByName("memlist");
+        console.log(memlist)
+        for (let x = 0; x < memlist.length; x++){
+            memlist[x].addEventListener('click', (e) =>{
+                e.preventDefault()
+                window.location.href = '/profile/' + memberlist[x];
+            })
+        }
+    }, 300); // Delay of .3 second
+}
 
 // We need a default group
 if (all_group_buttons.length != 0) {
@@ -102,16 +116,9 @@ for (let x = 0; x < all_group_buttons.length; x++) {
         all_group_buttons[x].style.backgroundColor = "red"
         selected_group = all_group_buttons[x]
         //messages.innerHTML = "";
+        memberlist = [];
         getMessage(x);
-    })
-}
-
-var memlist = document.getElementsByName("memlist");
-console.log(memlist)
-//
-for (let x = 0; x< memlist.length; x++){
-    memlist[x].addEventListener('click', (e)=>{
-        console.log(memberlist)
+        profileButton();
     })
 }
 
@@ -183,3 +190,31 @@ var ajaxMessage = function (str) {
     socket.emit("message", textField.value);
     textField.value = "";
 }
+/*
+var profile = function(x){
+    console.log(memberlist[x])
+    fetch('/profile', {
+        method: 'POST',
+        body: "username=" + memberlist[x],
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded', // Set the content type to indicate a plain text string
+            'Accept': 'application/json' // Set the Accept header to indicate acceptance of JSON response
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not OK');
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        // Handle the response from the Flask route
+        console.log(responseData)
+    })
+    .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error('Error:', error);
+    });
+}
+*/
+profileButton();

@@ -5,12 +5,13 @@ var friends = document.getElementById("friendslist"); //friends list div
 var title = document.getElementById("title"); //friends list label
 var friend = document.getElementById("friends");//friends tab
 var search = document.getElementById("search"); //search bar in all
+
 // var searchFriends = document.getElementById("searchFriends"); //search bar in friends
 
 //all tab is selected by default
 explore.style.backgroundColor = "lightgray";
 pending.style.backgroundColor = "lightgray";
-title.innerHTML = "All";
+title.innerHTML = "All Friends";
 friend.style.backgroundColor = "gray";
 search.hidden = false;
 // searchFriends.hidden = true; 
@@ -107,6 +108,20 @@ var friendRequest = function (sender, direction) {
     // friends.appendChild(newButton);
 }
 
+//eventlisteners for profile
+var profileButton = function(){
+    setTimeout(function() {
+        var memlist = document.getElementsByName("friend");
+        for (let x = 0; x < memlist.length; x++){
+            //console.log(memlist[x].innerHTML.split(">")[1])//gets username of friend
+            memlist[x].addEventListener('click', (e) =>{
+                e.preventDefault()
+                window.location.href = '/profile/' + memlist[x].innerHTML.split(">")[1];
+            })
+        }
+    }, 300); // Delay of .3 second
+}
+
 var friendsList = function (friend, pfp) {
     var newButton = document.createElement("button");
     var img = document.createElement("img");
@@ -119,7 +134,9 @@ var friendsList = function (friend, pfp) {
     newButton.type = "button";
     newButton.classList.add("btn");
     newButton.classList.add("btn-outline-dark");
+    newButton.classList.add("custom-button");
     newButton.style = "background-color: #DEF2F1; width:32vh; text-align: left; margin-bottom: 20px; margin-left: 40px;";
+    newButton.setAttribute('name', 'friend');
     newButton.innerHTML += friend;
     friends.appendChild(newButton);
 }
@@ -136,7 +153,9 @@ var randos = function(rando, pfp) {
     newButton.type = "button";
     newButton.classList.add("btn");
     newButton.classList.add("btn-outline-dark");
+    newButton.classList.add("custom-button");
     newButton.style = "background-color: #DEF2F1; width: 32vh; text-align: left; margin-bottom: 20px; margin-left: 40px;";
+    newButton.setAttribute('name', 'friend');
     newButton.innerHTML += rando;
     friends.appendChild(newButton);
 }
@@ -216,6 +235,7 @@ var loadExplore = function(str) {
                 randos(r[i], pfp[i]);
             }
         }
+        profileButton();
     }
     xhttp.open("POST", "load-explore-ajax");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -246,6 +266,7 @@ var searchBar = function(str) {
                 for (let i = 0; i < f.length; i++) {
                     friendsList(f[i][0], pfp[i]);
                 }
+                profileButton();
             }
         }
         xhttp.open("POST", "search-friends");
@@ -284,6 +305,7 @@ var searchBar = function(str) {
                 for (let i = 0; i < r.length; i++) {
                     randos(r[i], pfp[i]);
                 }
+                profileButton();
             }
         }
         xhttp.open("POST", "explore-search-ajax");
@@ -302,3 +324,6 @@ var searchBar = function(str) {
 }
 
 loadFriends();//load friends on reload
+var friendButton = document.getElementById("friend"); //buttons in friends
+//console.log(friendButton)
+profileButton();
