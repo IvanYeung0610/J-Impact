@@ -36,7 +36,6 @@ def get_all_users():
     c = db.cursor()
     c.execute("select * from Account")
     data = c.fetchall()
-<<<<<<< HEAD
     # return [[user[0], user[2]] for user in data]
     dict = {}
     for user in data:
@@ -48,10 +47,6 @@ def get_all_users():
     # }
     return dict
 
-=======
-    c.close()
-    return [[user[0], user[2]] for user in data]
->>>>>>> main
 
 # returns a list of all groups that a certain user is in.
 def get_all_groups_from_user(username):
