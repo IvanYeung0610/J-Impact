@@ -1,7 +1,8 @@
 from flask import Flask, render_template, session, request, redirect, url_for, jsonify
 from flask_socketio import SocketIO, send, emit, rooms, join_room, leave_room
 from db import *
-from search import search_friends
+from search import *
+import time
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "temp"
@@ -10,11 +11,14 @@ socketio = SocketIO(app)
 
 connected_users = {}
 
+#sample populate
+populate()
+
 @app.route("/", methods=["GET", "POST"])
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         groups = get_all_groups_from_user(session.get("CLIENT"))
-        print(groups)
+        #print(groups)
         group_info = {}
         accounts = get_all_users()
         for group in groups:
@@ -22,14 +26,26 @@ def home_page():
         return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, ACCOUNTS=accounts)
     return redirect( url_for("login_page") )
 
-@app.route("/homeajax", methods=["POST"])
-def home_ajax():
-    current = request.form.get("messageText")
-    group_id = request.form.get("group_id")
-    add_message(session.get("CLIENT"), group_id, current, -1)
-    if current:
-        return jsonify(value=current, user=session.get("CLIENT"))
-    return jsonify({"error" : "error"})
+# @app.route("/homeajax", methods=["POST"])
+# def home_ajax():
+#     current = request.form.get("messageText")
+#     if current:
+#         return jsonify(value=current, user=session.get("CLIENT"))
+#     return jsonify({"error" : "error"})
+
+@app.route("/messagesajax", methods=["POST"])
+def messages_ajax():
+    id = request.form.get("group_id") #group id
+    messages = get_messages_from_group(id)
+    messageData = {"username": [], "message": [], "time": []}
+    for data in messages:
+        #print(data)
+        messageData["username"].append(data[0])
+        messageData["message"].append(data[2])
+        messageData["time"].append(data[3])
+    if id: 
+        return jsonify(messageData)
+    return jsonify({"error": "error"})
 
 @app.route("/login", methods=["GET", "POST"])
 def login_page():
@@ -57,7 +73,7 @@ def logout():
     session.pop("CLIENT")
     return redirect( url_for("login_page") )
 
-@app.route("/friends", methods=["GET"])
+@app.route("/friends", methods=["GET", "POST"])
 def friends_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         unsortedf_list = get_all_friends(session.get("CLIENT"))
@@ -69,7 +85,7 @@ def friends_page():
                 f_list.append([ pair[1], get_user(pair[1])[2] ])
             else:
                 f_list.append([pair[0], get_user(pair[0])[2] ])
-        return render_template("friends.html", FRIENDS=f_list)  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
+        return render_template("friends.html", FRIENDS=f_list, USER=session.get("CLIENT"))  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
     return render_template("home.html", USER=session.get("CLIENT"))
     
 @app.route("/friend-request-ajax", methods=["POST"])
@@ -97,6 +113,33 @@ def friends_list_ajax():
     if fr: 
         return jsonify(requests=requests)
     return jsonify({"error": "error"})
+
+@app.route("/search-friends", methods=["POST"])
+def search_friends_ajax():
+    friends = search_friends(request.form["searchTerm"], session.get("CLIENT"))
+    # print("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+    return jsonify(friends=friends)
+
+@app.route("/search-friend-requests", methods=["POST"])
+def search_friend_requests_ajax():
+    freqs = search_friend_requests(request.form["searchTerm"], session.get("CLIENT"))
+    print(freqs)
+    return jsonify(freqs=freqs)
+
+@app.route("/load-explore-ajax", methods=["POST"])
+def explore_ajax():
+    print(request.form["search"])
+    randos = search_new_friends(request.form["search"], session.get("CLIENT"))
+    return jsonify({"randos": randos})
+
+@app.route("/explore-search-ajax", methods=["POST"])
+def explore_search_ajax():
+    randos = search_new_friends(request.form["search"], session.get("CLIENT"))
+    return jsonify({"randos": randos})
+
+@app.route("/settings")
+def settings():
+    return render_template("settings.html", about_me="about me goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this")
 
 # ========================== SOCKETS ==========================
 
@@ -140,6 +183,9 @@ def select_group(group_id):
     else:
         join_room(group_id)
         # print("  JOINED:  ", group_id)
+    if type(group_id) is int:
+        members = get_all_users_by_group(group_id)
+        emit("clicked_group", members, to=request.sid)
 
 # RECIEVES - info: message
 # EMITS - "message" OR "ping": message is when they have the group selcted, otherwise they will be pinged
@@ -151,6 +197,10 @@ def handle_message(message):
     if rooms(request.sid)[0] == request.sid:
         group_id = rooms(request.sid)[1]
     info = [user, message]
+    local_time = time.localtime()
+    string_time = time.strftime("%c", local_time)
+    
+    add_message(user, group_id, message, string_time)
     emit("message", info, to=group_id)
 
     users_recieving = get_all_users_by_group(group_id)
@@ -158,7 +208,7 @@ def handle_message(message):
     for user in users_recieving:                        # LOOPS THRU ALL RECIVEING USERS
         for socket in connected_users.get(user, []):    # LOOPS THRU EACH SOCKET FOR A RECIEVING USER
             if not (group_id in rooms(socket)):         # IF THE SOCKET IS NOT LOOKING AT THE GROUP, PING THEM
-                print("HEI")
+                #print("HEI")
                 emit("ping", group_id, to=socket)
 
 # Sends the friend request to the proper sockets.

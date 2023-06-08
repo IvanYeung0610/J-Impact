@@ -3,12 +3,62 @@ var socket = io();
 var messageform = document.getElementById("messageform");
 var nav_friends_link = document.getElementById("nav_friends_link")
 var all_group_buttons = document.getElementsByName("group_button")
+var messages = document.getElementById("messages")
+
+//get messages from db
+var getMessage = function (x) {
+    // console.log(typeof JSON.stringify(all_group_buttons[x].id))
+    // console.log(typeof JSON.stringify(all_group_buttons[x].id))
+    fetch('/messagesajax', {
+        method: 'POST',
+        body: "group_id=" + all_group_buttons[x].id,
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded', // Set the content type to indicate a plain text string
+            'Accept': 'application/json' // Set the Accept header to indicate acceptance of JSON response
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not OK');
+            }
+            return response.json();
+        })
+        .then(responseData => {
+            // Handle the response from the Flask route
+            messages.innerHTML = ""
+            for (let i = 0;i<responseData['username'].length;i++){
+                message = document.createElement("div");
+                label = document.createElement("div");//div with pfp, username, time
+                label.style = "display: flex";
+                img = document.createElement("img");
+                img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                img.className = "rounded-circle";
+                img.style.height = "30px";
+                img.style.width = "30px";
+                message.innerHTML = responseData['message'][i];
+                message.style = "margin-bottom: 20px";
+                
+                label.appendChild(img);
+                label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
+                messages.appendChild(label);
+                messages.appendChild(message);
+                messages.scrollTop = messages.scrollHeight;
+            }
+            console.log(responseData['username']);
+        })
+        .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error('Error:', error);
+        });
+}
+
 
 // We need a default group
 if (all_group_buttons.length != 0) {
     selected_group = all_group_buttons[0]
     all_group_buttons[0].style.backgroundColor = "red"
     socket.emit("select_group", all_group_buttons[0].id)
+    getMessage(0);
 }
 
 // Changes color of group buttons when clicked 
@@ -19,13 +69,24 @@ for (let x = 0; x < all_group_buttons.length; x++) {
         selected_group.style.backgroundColor = "#DEF2F1"
         all_group_buttons[x].style.backgroundColor = "red"
         selected_group = all_group_buttons[x]
+        //messages.innerHTML = "";
+        getMessage(x);
     })
 }
 
+
 // info is: [sender, message]
 socket.on('message', function (info) {
-    console.log(info);
+    //console.log(info);
     document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
+});
+
+socket.on('ping', function (group_id) {
+    console.log("pinged: ", group_id);
+});
+
+socket.on('clicked_group', function (info) {
+    console.log(info);
 });
 
 // sets the users's current room to "all_friends_page" then sends them to the /friends route
@@ -39,49 +100,29 @@ nav_friends_link.addEventListener('click', (e) => {
 messageform.addEventListener('submit', (e) => {
     // preventDefault stops the page from reloading
     e.preventDefault();
-    console.log("Emitted message");
-    // socket.emit("message", textField.value);
-
-    // var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
-    // fetch('/homeajax', {
-    //     Method: 'POST',
-    //     Headers: {
-    //         Accept: 'application.json',
-    //         'Content-Type': 'application/x-www-form-urlencoded'
-    //     },
-    //     body: Body.formData(postVars),
-    //     Cache: 'default'
-    // }).then()
-})
-
-//notes for future redesign: we don't need to wait for the request to be completed before showing the message?
-var ajaxMessage = function (str) {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        // console.log(this.readyState);
-        if (this.readyState == 4 && this.status == 200) {
-            var response = JSON.parse(xhttp.responseText);
-            // COMMENT THIS OUT FOR NOW CAUSE IT'S GONNA PUT IT ON THERE TWICE
-            // document.getElementById("messages").innerHTML += response.user + ": " + response.value + "<br>";
-        }
-    }
-    xhttp.open("POST", "/homeajax");
-    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
-    // console.log(postVars);
-    xhttp.send(postVars);
     var textField = document.getElementById("messageinput");
     socket.emit("message", textField.value);
     textField.value = "";
-}
+})
 
-
-// fetch('/', {
-//     Method: 'POST',
-//     Headers: {
-//         Accept: 'application.json',
-//         'Content-Type': 'application/json'
-//     },
-//     Body: body,
-//     Cache: 'default'
-// })
+//notes for future redesign: we don't need to wait for the request to be completed before showing the message?
+// var ajaxMessage = function (str) {
+//     var xhttp = new XMLHttpRequest();
+//     xhttp.onreadystatechange = function () {
+//         // console.log(this.readyState);
+//         if (this.readyState == 4 && this.status == 200) {
+//             var response = JSON.parse(xhttp.responseText);
+//             // COMMENT THIS OUT FOR NOW CAUSE IT'S GONNA PUT IT ON THERE TWICE
+//             // document.getElementById("messages").innerHTML += response.user + ": " + response.value + "<br>";
+//         }
+//     }
+//     xhttp.open("POST", "/homeajax");
+//     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+//     var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
+//     // console.log(postVars);
+//     xhttp.send(postVars);
+//     var textField = document.getElementById("messageinput");
+//     // EMITTING HERE:
+//     socket.emit("message", textField.value);
+//     textField.value = "";
+// }

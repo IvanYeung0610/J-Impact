@@ -36,6 +36,7 @@ def get_all_users():
     c = db.cursor()
     c.execute("select * from Account")
     data = c.fetchall()
+<<<<<<< HEAD
     # return [[user[0], user[2]] for user in data]
     dict = {}
     for user in data:
@@ -47,6 +48,10 @@ def get_all_users():
     # }
     return dict
 
+=======
+    c.close()
+    return [[user[0], user[2]] for user in data]
+>>>>>>> main
 
 # returns a list of all groups that a certain user is in.
 def get_all_groups_from_user(username):
@@ -74,6 +79,7 @@ def get_all_friend_requests(user):
     c = db.cursor()
     c.execute("select * from FriendRequests WHERE (username1 = ? OR username2 = ?)", (user, user))
     data = c.fetchall()
+    c.close()
     return data
 
 # Get all friends of the user. 2D ARRAY: [ [USER1, USER2], . . . ] USERS CAN BE IN ANY ORDER
@@ -81,6 +87,7 @@ def get_all_friends(user):
     c = db.cursor()
     c.execute("select * from Friends WHERE (username1 = ? OR username2 = ?)", (user, user))
     data = c.fetchall()
+    c.close()
     return data
 
 # Gets all messages that were sent in a group
@@ -225,3 +232,27 @@ def delete_friend_request(user1,user2):
     c.execute("DELETE from FriendRequests WHERE (user1 = ? AND user2 = ?)", (user1, user2,))
     db.commit()
     c.close()
+
+# ================ POPULATING DATABASE (SAMPLE) ================
+# only run once
+def populate():
+    c = db.cursor()
+    c.execute("SELECT COUNT(*) FROM Account")
+    size = c.fetchone()[0]
+    if size == 0:
+        for x in range(26):
+            c.execute("INSERT INTO Account values(?, ?, ?, ?)", (chr(x + 97), chr(x + 97), "pfp url", "description"))
+        for x in range(26):
+            if x % 4 == 0:
+                if x == 0: 
+                    pass
+                else:
+                    c.execute("INSERT INTO Friends values(?, ?)", ("a", chr(x + 97)))
+        for x in range(26):
+            if (x + 2) % 4 == 0:
+                c.execute("INSERT INTO FriendRequests values(?, ?)", ("a", chr(x + 98)))
+    db.commit()
+    c.close()
+    add_friend("a","b")
+    add_friend("a","c")
+    return
