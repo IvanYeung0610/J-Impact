@@ -65,18 +65,18 @@
 
               <!--button template-->
               <div>
-                {% for group in GROUPS %} 
+                {% for group in GROUPS %}
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
                   style="background-color: #DEF2F1; width:32vh; text-align: left;">
                   <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
-                  class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
-                  {{ GROUP_INFO[group][0][0] }} <!-- Group Title or Friend's name -->    
+                    class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
+                  {{ GROUP_INFO[group][0][0] }} <!-- Group Title or Friend's name -->
 
                   {% if GROUP_INFO[group][2] > 2 %}
-                      <div class="membersCount"> {{ GROUP_INFO[group][2] }} Members</div>
+                  <div class="membersCount"> {{ GROUP_INFO[group][2] }} Members</div>
                   {% endif %}
-
+                  <div class="float-start">1</div>
                 </button>
                 {% endfor %}
               </div>
@@ -96,8 +96,8 @@
 
         <!--message div-->
         <div class="h-75 scrollable overflow-auto" id="messages" style="height: 75vh; margin-bottom: 3%;">
-         
-          
+
+
         </div>
 
         <!--message input-->
@@ -122,7 +122,7 @@
           <div id="member_tab">
           </div>
         </div>
-        
+
 
       </div>
 
