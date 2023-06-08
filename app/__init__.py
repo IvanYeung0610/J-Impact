@@ -162,7 +162,7 @@ def search_friend_requests_ajax():
 def explore_ajax():
     #print(request.form["search"])
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
-    print(randos)
+    print(session.get("CLIENT"))
     pfp = []
     for n in randos:
         pfp.append(get_pfp(n))
