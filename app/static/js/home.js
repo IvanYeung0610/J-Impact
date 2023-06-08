@@ -83,20 +83,21 @@ var getMessage = function (x) {
         });
 }
 
-var toggleDropdown = function() {
+var toggleDropdown = function () {
     var dropdownMenu = document.getElementById('dropdown-menu');
     if (dropdownMenu.style.display === 'none') {
-      dropdownMenu.style.display = 'block';
+        dropdownMenu.style.display = 'block';
     } else {
-      dropdownMenu.style.display = 'none';
+        dropdownMenu.style.display = 'none';
     }
-  }
-  
-   var createGroup = function() {
+}
+
+var createGroup = function () {
     var groupName = document.getElementById('group-name').value;
     // Perform further actions with the group name
     console.log('Creating group:', groupName);
-  }
+}
+
 var clear_ping = function (group_id) {
     ping_bubble = document.getElementById("ping_bubble" + group_id)
     ping_bubble.innerHTML = 0
@@ -134,6 +135,55 @@ for (let x = 0; x < memlist.length; x++) {
     memlist[x].addEventListener('click', (e) => {
         console.log(memberlist)
     })
+}
+
+var searchBar = function (str) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            selectedUsers = response.users;
+            console.log(response);
+            document.getElementById("friends-checkboxes").innerHTML = "";
+            var dropdownMenu = document.getElementById('friends-checkboxes');
+            for (let i = 0; i < selectedUsers.length; i++) {
+                select = document.createElement("div");
+                select.classList.add("form-check");
+                checkbox = document.createElement("input");
+                checkbox.classList.add("form-check-input");
+                checkbox.type = "checkbox";
+                checkbox.id = selectedUsers[i][0];
+                console.log(checkbox);
+                formLabel = document.createElement("label");
+                formLabel.classList.add("form-check-label");
+                formLabel.setAttribute("for", "flexCheckDefault");
+                pfp = document.createElement("img");
+                //the cloudinary image is massive, but this would work
+                // pfp.src = selectedUsers[i][1];
+                pfp.classList.add("rounded-circle");
+                pfp.setAttribute("width", "30px");
+                pfp.setAttribute("height", "30px");
+                pfp.style = "margin-right: 3px;";
+                pfp.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                formLabel.appendChild(pfp);
+                formLabel.innerHTML += selectedUsers[i][0];
+                select.appendChild(checkbox);
+                select.appendChild(formLabel);
+                dropdownMenu.appendChild(select);
+
+                //append img to label
+                //add innerhtml to label
+                //append input to div
+                //append label to div
+                //append div to form
+            }
+        }
+    }
+    xhttp.open("POST", "create-group-search");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    postVars = "searchTerm=" + str;
+    console.log(postVars);
+    xhttp.send(postVars);
 }
 
 

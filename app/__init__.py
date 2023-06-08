@@ -190,6 +190,14 @@ def desc_ajax():
     desc = request.form.get("desc")
     change_desc(session.get("CLIENT"), desc)
 
+@app.route("/create-group-search", methods=["POST"])
+def create_group_search():
+    searchTerm = request.form["searchTerm"]
+    users = search_friends(searchTerm, session.get("CLIENT"))
+    if users:
+        return jsonify(users=users)
+    return jsonify({"error": "error"})
+
 
 # ========================== SOCKETS ==========================
 
