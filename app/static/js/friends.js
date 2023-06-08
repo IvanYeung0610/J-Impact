@@ -56,12 +56,60 @@ friend.addEventListener("click", (e) => {
 
 //creates button with friend name/icon
 var friendRequest = function (sender, direction) {
-    var newButton = document.createElement("button");
-    newButton.type = "button";
-    newButton.classList.add("btn");
-    newButton.style = "background-color: gray; width:32vh; text-align: left;";
-    newButton.innerHTML = "sender: " + sender + "<br>" + direction;
-    friends.appendChild(newButton);
+
+    var newCard = document.createElement("div");
+    newCard.className = "card";
+    newCard.style = "margin-left: 18px; margin-right: 10px; width: 18%; margin-bottom: 10px"
+    var cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+    cardBody.style = "text-align: center;";
+    newCard.appendChild(cardBody);
+    var cardText = document.createElement("div");
+    cardText.className = "card-text";
+    cardText.style = "justify-content: center";
+    cardBody.appendChild(cardText);
+    friends.style = "display: flex; flex-wrap: wrap; margin: auto";
+    friends.appendChild(newCard);
+
+    if (direction == "incoming"){
+        cardText.innerHTML = "Friend request from " + sender;
+        var buttondiv = document.createElement("div");
+        var accept = document.createElement("button");
+        accept.type = "button";
+        accept.classList.add("btn");
+        accept.innerHTML = "\u2705 Accept";
+        buttondiv.appendChild(accept);
+        var deny = document.createElement("button");
+        deny.type = "button";
+        deny.classList.add("btn");
+        deny.innerHTML = "&#10006; Deny";
+        buttondiv.appendChild(deny);
+        cardText.appendChild(buttondiv);
+    }
+    else if (direction == "outgoing"){
+        cardText.innerHTML = "Friend request to " + sender;//replace sender with person you are sending to
+        var buttondiv = document.createElement("div");
+        buttondiv.className = "btn-group";
+        //buttondiv.style = "margin: auto";
+        var accept = document.createElement("button");
+        accept.type = "button";
+        accept.classList.add("btn");
+        accept.innerHTML = "\u2705 Accept";
+        buttondiv.appendChild(accept);
+        var deny = document.createElement("button");
+        deny.type = "button";
+        deny.classList.add("btn");
+        deny.innerHTML = "&#10006; Deny";
+        buttondiv.appendChild(deny);
+        cardText.appendChild(buttondiv);
+    }
+    //cardText.innerHTML = "\u2705 &#10006;";
+    // var newButton = document.createElement("button");
+    // newButton.type = "button";
+    // newButton.classList.add("btn");
+    // newButton.style = "background-color: gray; width:32vh; text-align: left;";
+    // newButton.innerHTML = "sender: " + sender + "<br>" + direction;
+    // friends.appendChild(newButton);
 }
 
 var friendsList = function (friend) {
