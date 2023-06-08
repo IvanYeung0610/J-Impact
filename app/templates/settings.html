@@ -50,18 +50,19 @@
 
   <!--icon and name of profile-->
   <div style="display: flex; align-items: center; justify-content: center;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg" class="rounded-circle" width="100px" height="100px" >
+    <img id="pfp" src={{PICTURE_URL}} width="100px" height="100px">
     <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
-    <form>
+    <form action="\settings" method="POST" id="upload_profile_form">
       <div>
-      <label for="file" class="btn" style="">Upload Profile Picture</label>
-      <input type="file" id="file"  style="visibility:hidden;" name="change"></input>
-    </div>
+        <label for="file" class="btn">Upload Profile Picture</label>
+        <input type="file" id="file" style="visibility:hidden;" name="change" accept=".jpg, .jpeg, .png"></input>
+        <input type="submit">
+      </div>
     </form>
-</div>
+  </div>
 
-<h4 style="text-align: center; margin-top: 3%;">About me</h4>
-<div class="row">
+  <h4 style="text-align: center; margin-top: 3%;">About me</h4>
+  <div class="row">
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
       <div id="bio">
@@ -69,15 +70,16 @@
       </div>
       <div id="editarea"></div>
       <br>
-        <button type="button" class="btn" id="edit" style="background-color: lightgray;">Edit</button>
-      </div>
+      <button type="button" class="btn" id="edit" style="background-color: lightgray;">Edit</button>
+    </div>
     <div class="col-sm-4"></div>
-</div>
+  </div>
 
-<div id="test">
+  <div id="test">
 
-</div>
+  </div>
 
-<script src="../static/js/settings.js"></script>
-  </body>
-  </html>
+  <script src="../static/js/settings.js"></script>
+</body>
+
+</html>

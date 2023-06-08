@@ -1,9 +1,30 @@
+var socket = io();
 var edit = document.getElementById("edit");//edit button
 var bio = document.getElementById("bio")//about me section
 var editarea = document.getElementById("editarea")//where the textarea will appear
+var uploadform = document.getElementById("upload_profile_form")
+var pfp = document.getElementById("pfp")
+
+uploadform.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    // getting array buffer data from image file
+    const image_file = document.getElementById("file").files[0]
+    console.log(image_file)
+    const reader = new FileReader();
+    reader.addEventListener('load', (event) => {
+        socket.emit('updated_profile_picture', event.target.result);
+        // window.location.replace("/settings");
+    });
+    reader.readAsArrayBuffer(image_file);
+})
+
+socket.on('successfully_updated', (e) => {
+    pfp.src = e
+})
 
 //edit bio function
-var editBio = () =>{
+var editBio = () => {
     var current = bio.innerHTML; //current bio
     bio.hidden = true;
     var textarea = document.createElement("textarea"); //input where you edit bio
@@ -30,7 +51,7 @@ var editBio = () =>{
     cancel.style = "background-color: red; margin-left: 10px";
     editarea.appendChild(cancel);
 
-    submit.addEventListener("click", (e) =>{
+    submit.addEventListener("click", (e) => {
         bio.innerHTML = textarea.value;
         editarea.removeChild(textarea);
         editarea.removeChild(submit); //don't put the parameter in quotes

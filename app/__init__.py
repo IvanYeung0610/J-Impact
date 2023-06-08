@@ -2,7 +2,9 @@ from flask import Flask, render_template, session, request, redirect, url_for, j
 from flask_socketio import SocketIO, send, emit, rooms, join_room, leave_room
 from db import *
 from search import *
+from cloud import *
 import time
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = "temp"
@@ -154,7 +156,12 @@ def explore_search_ajax():
 
 @app.route("/settings")
 def settings():
-    return render_template("settings.html", USER=session.get("CLIENT"), about_me="about me goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this")
+    if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
+        user_info = get_user(session.get("CLIENT"))
+        pfp = user_info[2]
+        desc = user_info[3]
+        return render_template("settings.html", USER=session.get("CLIENT"), PICTURE_URL=pfp, about_me=desc)
+    return redirect( url_for("login_page") )
 
 # ========================== SOCKETS ==========================
 
@@ -177,7 +184,7 @@ def check_connect():
             connected_users[session.get("CLIENT")].append(request.sid)
         else:
             connected_users[session.get("CLIENT")] = [request.sid]
-    print("CONNECTED: ", connected_users)
+    # print("CONNECTED: ", connected_users)
 
 @socketio.on('disconnect')
 def disconnect():
@@ -258,6 +265,15 @@ def reject_friend_request(users):
     senders = connected_users[sender]
     for S in senders:
         emit("request_rejected", reciever, to=S)
+
+@socketio.on("updated_profile_picture")
+def updated_profile_picture(file_data):
+    # print("FILE DATA: ", file_data)
+    url = upload_image(file_data)['url']
+    # print("URL: ", url)
+    change_pfp(session.get("CLIENT"), url)
+    emit('successfully_updated', url)
+    
 
 if __name__ == "__main__":
     app.debug = True

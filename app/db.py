@@ -138,7 +138,7 @@ def add_user(username, password):
     if(get_user(username) != None):
         return False
     c = db.cursor()
-    c.execute("INSERT into Account values(?,?,?,?)", (username, password, "hello",""))
+    c.execute("INSERT into Account values(?,?,?,?)", (username, password, "http://res.cloudinary.com/dg13dndup/image/upload/v1686194492/mzhudjd56rpkqtkgrei0.png","ADD A DESCRIPTION . . ."))
     db.commit()
     c.close()
     return True
