@@ -259,7 +259,7 @@ def change_group_image(group_id, new_image):
 # user1: Sender, user2: reciever
 def delete_friend_request(user1,user2):
     c = db.cursor()
-    c.execute("DELETE from FriendRequests WHERE (user1 = ? AND user2 = ?)", (user1, user2,))
+    c.execute("DELETE from FriendRequests WHERE (username1 = ? AND username2 = ?)", (user1, user2,))
     db.commit()
     c.close()
 
