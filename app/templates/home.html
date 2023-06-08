@@ -199,7 +199,28 @@
 
 
     </div>
+
+    <!-- TOAST CARD -->
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div id="message_toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-header">
+          <img id="toast_pfp" src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
+            class="rounded me-2" alt="profile picture" class="rounded-circle" width="30px" height="30px">
+          <strong id="toast_name" class="me-auto">Username</strong>
+          <small id="toast-time">Time</small>
+          <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div id="toast-message" class="toast-body">
+          message
+        </div>
+      </div>
+    </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+  integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"
+  integrity="sha384-fbbOQedDUMZZ5KreZpsbe1LCZPVmfTnH7ois6mU1QK+m14rQ1l2bGBq41eYeM/fS" crossorigin="anonymous"></script>
+
 <script src="static/js/home.js"></script>
 
 </html>
