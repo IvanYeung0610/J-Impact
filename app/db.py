@@ -251,5 +251,4 @@ def populate():
         add_group(1, "DA BEST IN DA WEST", "image")
         add_to_group(1, "d")
     db.commit()
-    c.close()
-    return
+    c.close

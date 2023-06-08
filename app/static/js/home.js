@@ -78,7 +78,23 @@ for (let x = 0; x < all_group_buttons.length; x++) {
 // info is: [sender, message]
 socket.on('message', function (info) {
     //console.log(info);
-    document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
+    message = document.createElement("div");
+    label = document.createElement("div");//div with pfp, username, time
+    label.style = "display: flex";
+    img = document.createElement("img");
+    img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+    img.className = "rounded-circle";
+    img.style.height = "30px";
+    img.style.width = "30px";
+    message.innerHTML = info[1];
+    message.style = "margin-bottom: 20px";
+    
+    label.appendChild(img);
+    label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + info[0] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + info[2];
+    messages.appendChild(label);
+    messages.appendChild(message);
+    messages.scrollTop = messages.scrollHeight;
+    //document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
 });
 
 socket.on('ping', function (group_id) {
@@ -103,26 +119,27 @@ messageform.addEventListener('submit', (e) => {
     var textField = document.getElementById("messageinput");
     socket.emit("message", textField.value);
     textField.value = "";
+    //messages.scrollTop = messages.scrollHeight;
 })
 
 //notes for future redesign: we don't need to wait for the request to be completed before showing the message?
-// var ajaxMessage = function (str) {
-//     var xhttp = new XMLHttpRequest();
-//     xhttp.onreadystatechange = function () {
-//         // console.log(this.readyState);
-//         if (this.readyState == 4 && this.status == 200) {
-//             var response = JSON.parse(xhttp.responseText);
-//             // COMMENT THIS OUT FOR NOW CAUSE IT'S GONNA PUT IT ON THERE TWICE
-//             // document.getElementById("messages").innerHTML += response.user + ": " + response.value + "<br>";
-//         }
-//     }
-//     xhttp.open("POST", "/homeajax");
-//     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-//     var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
-//     // console.log(postVars);
-//     xhttp.send(postVars);
-//     var textField = document.getElementById("messageinput");
-//     // EMITTING HERE:
-//     socket.emit("message", textField.value);
-//     textField.value = "";
-// }
+var ajaxMessage = function (str) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        // console.log(this.readyState);
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(xhttp.responseText);
+            // COMMENT THIS OUT FOR NOW CAUSE IT'S GONNA PUT IT ON THERE TWICE
+            // document.getElementById("messages").innerHTML += response.user + ": " + response.value + "<br>";
+        }
+    }
+    xhttp.open("POST", "/homeajax");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var postVars = "messageText=" + str + "&group_id=" + selected_group.id;
+    // console.log(postVars);
+    xhttp.send(postVars);
+    var textField = document.getElementById("messageinput");
+    // EMITTING HERE:
+    socket.emit("message", textField.value);
+    textField.value = "";
+}
