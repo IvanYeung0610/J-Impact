@@ -96,7 +96,23 @@ for (let x = 0; x < all_group_buttons.length; x++) {
 // info is: [sender, message]
 socket.on('message', function (info) {
     //console.log(info);
-    document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
+    message = document.createElement("div");
+    label = document.createElement("div");//div with pfp, username, time
+    label.style = "display: flex";
+    img = document.createElement("img");
+    img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+    img.className = "rounded-circle";
+    img.style.height = "30px";
+    img.style.width = "30px";
+    message.innerHTML = info[1];
+    message.style = "margin-bottom: 20px";
+    
+    label.appendChild(img);
+    label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + info[0] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + info[2];
+    messages.appendChild(label);
+    messages.appendChild(message);
+    messages.scrollTop = messages.scrollHeight;
+    //document.getElementById("messages").innerHTML += info[0] + ": " + info[1] + "<br>";
 });
 
 socket.on('ping', function (group_id) {
@@ -121,6 +137,7 @@ messageform.addEventListener('submit', (e) => {
     var textField = document.getElementById("messageinput");
     socket.emit("message", textField.value);
     textField.value = "";
+    //messages.scrollTop = messages.scrollHeight;
 })
 
 //notes for future redesign: we don't need to wait for the request to be completed before showing the message?

@@ -200,9 +200,9 @@ def handle_message(message):
     group_id = rooms(request.sid)[0]
     if rooms(request.sid)[0] == request.sid:
         group_id = rooms(request.sid)[1]
-    info = [user, message]
     local_time = time.localtime()
     string_time = time.strftime("%c", local_time)
+    info = [user, message, string_time]
     
     add_message(user, group_id, message, string_time)
     emit("message", info, to=group_id)
