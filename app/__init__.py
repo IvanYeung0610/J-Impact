@@ -20,6 +20,8 @@ populate()
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         groups = get_all_groups_from_user(session.get("CLIENT"))
+        friends = search_friends("", session.get("CLIENT"))
+        print(friends)
         #print(groups)
         group_info = {}
         # accounts = get_all_users()
@@ -29,7 +31,7 @@ def home_page():
             else:
                 friend_username = get_all_other_users_by_group(group, session.get("CLIENT"))[0]
                 group_info[group] = [friend_username, get_pfp(friend_username), get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
-        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info)
+        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, FRIENDS=friends)
     return redirect( url_for("login_page") )
 
 @app.route("/homeajax", methods=["POST"])
