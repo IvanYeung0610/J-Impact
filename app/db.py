@@ -222,18 +222,17 @@ def populate():
     size = c.fetchone()[0]
     if size == 0:
         for x in range(26):
-            c.execute("INSERT INTO Account values(?, ?, ?, ?)", (chr(x + 97), chr(x + 97), "pfp url", "description"))
+            add_user(chr(x + 97), chr(x + 97))
         for x in range(26):
             if x % 4 == 0:
                 if x == 0: 
                     pass
                 else:
-                    c.execute("INSERT INTO Friends values(?, ?)", ("a", chr(x + 97)))
+                    add_friend("a", chr(x + 97))
         for x in range(26):
             if (x + 2) % 4 == 0:
-                c.execute("INSERT INTO FriendRequests values(?, ?)", ("a", chr(x + 98)))
+                add_friend_request("a", chr(x + 98))
         add_friend("a","b")
         add_friend("a","c")
     db.commit()
     c.close()
-
