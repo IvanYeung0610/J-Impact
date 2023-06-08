@@ -283,6 +283,7 @@ def populate():
                 add_friend_request("a", chr(x + 98))
         add_friend("a","b")
         add_friend("a","c")
+        add_friend_request("f", "a")
         add_group(1, "DA BEST IN DA WEST", "image")
         add_to_group(1, "d")
         create_group("Falling Dogs", "image", ["f", "h", "i", "j", "g"])

@@ -173,13 +173,14 @@ var loadRequests = function() {
             var response = JSON.parse(xhttp.responseText);
             var received = response.requests.received;
             var sent = response.requests.sent;
+            console.log(received);
             for (let i = 0; i < received.length; i++) {
                 fr = received[i];
                 friendRequest(fr[0], "incoming");
             }
             for (let i = 0; i < sent.length; i++) {
                 fr = sent[i];
-                friendRequest(fr[0], "outgoing");
+                friendRequest(fr[1], "outgoing");
             }
         }
     }

@@ -114,7 +114,7 @@ def friend_request_ajax():
             requests["sent"].append(req)
         else:
             requests["received"].append(req)
-    # print("+++++++++++++++++++: ", requests)
+    print(requests)
     if fr: 
         return jsonify(requests=requests)
     return jsonify({"error": "error"})
