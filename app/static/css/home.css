@@ -29,6 +29,14 @@
   margin-left: 40px;
 }
 
+.custom-button {
+  color: black; /* Set the default text color */
+}
+
+.custom-button:hover {
+  color: red; /* Set the text color on hover */
+}
+
 .dropdown-toggle {
   background-color: #7289da;
   color: #fff;

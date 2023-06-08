@@ -1,5 +1,6 @@
 var mutual = document.getElementById("mutual"); //mutual list div
 
+/*
 var mutualList = (i) => {
     var newButton = document.createElement("button");
     newButton.type = "button";
@@ -12,3 +13,4 @@ var mutualList = (i) => {
 for (let i = 0; i<20; i++){
     mutualList(i);
 }
+*/
