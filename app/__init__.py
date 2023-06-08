@@ -105,7 +105,7 @@ def friends_page():
             else:
                 f_list.append([pair[0], get_user(pair[0])[2] ])
         return render_template("friends.html", FRIENDS=f_list, USER=session.get("CLIENT"))  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
-    return render_template("home.html", USER=session.get("CLIENT"))
+    return redirect( url_for("home_page", USER=session.get("CLIENT")) )
     
 @app.route("/friend-request-ajax", methods=["POST"])
 def friend_request_ajax():
@@ -218,6 +218,7 @@ def check_connect():
 def disconnect():
     connected_users[session.get("CLIENT")].remove(request.sid)
     #print("DISCONNECT: " + session.get("CLIENT"))
+    print("CONNECTED: ", connected_users)
 
 # Changes the group that the user is in
 @socketio.on('select_group')
