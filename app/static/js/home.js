@@ -104,9 +104,9 @@ var toggleDropdownCreate = function() {
   var toggleDropdownAdd = function() {
     var dropdownMenu = document.getElementById('dropdown-menu-add');
     if (dropdownMenu.style.display === 'none') {
-      dropdownMenu.style.display = 'block';
+        dropdownMenu.style.display = 'block';
     } else {
-      dropdownMenu.style.display = 'none';
+        dropdownMenu.style.display = 'none';
     }
   }
   
@@ -175,6 +175,92 @@ for (let x = 0; x < memlist.length; x++) {
     })
 }
 
+var createGroupBar = function (str) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            selectedUsers = response.users;
+            // console.log(selectedUsers);
+            // console.log(response);
+            document.getElementById("friends-checkboxes-create").innerHTML = "";
+            var dropdownMenu = document.getElementById('friends-checkboxes');
+            for (let i = 0; i < selectedUsers.length; i++) {
+                select = document.createElement("div");
+                select.classList.add("form-check");
+                checkbox = document.createElement("input");
+                checkbox.classList.add("form-check-input");
+                checkbox.type = "checkbox";
+                checkbox.id = selectedUsers[i][0];
+                formLabel = document.createElement("label");
+                formLabel.classList.add("form-check-label");
+                formLabel.setAttribute("for", "flexCheckDefault");
+                pfp = document.createElement("img");
+                //the cloudinary image is massive, but this would work
+                // pfp.src = selectedUsers[i][1];
+                pfp.classList.add("rounded-circle");
+                pfp.setAttribute("width", "30px");
+                pfp.setAttribute("height", "30px");
+                pfp.style = "margin-right: 3px;";
+                pfp.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                formLabel.appendChild(pfp);
+                formLabel.innerHTML += selectedUsers[i][0];
+                select.appendChild(checkbox);
+                select.appendChild(formLabel);
+                dropdownMenu.appendChild(select);
+            }
+        }
+    }
+    xhttp.open("POST", "create-group-search");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    postVars = "searchTerm=" + str;
+    console.log(postVars);
+    xhttp.send(postVars);
+}
+
+//only reason why this is different is to account for removing members?
+//also accesses different place
+var addUserToGroupSearch = function(str) {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            response = JSON.parse(this.responseText);
+            selectedUsers = response.users;
+            console.log(selectedUsers);
+            document.getElementById("friends-checkboxes-add").innerHTML = "";
+            var dropdownMenu = document.getElementById('friends-checkboxes-add');
+            for (let i = 0; i < selectedUsers.length; i++) {
+                select = document.createElement("div");
+                select.classList.add("form-check");
+                checkbox = document.createElement("input");
+                checkbox.classList.add("form-check-input");
+                checkbox.type = "checkbox";
+                checkbox.id = selectedUsers[i][0];
+                formLabel = document.createElement("label");
+                formLabel.classList.add("form-check-label");
+                formLabel.setAttribute("for", "flexCheckDefault");
+                pfp = document.createElement("img");
+                //the cloudinary image is massive, but this would work
+                // pfp.src = selectedUsers[i][1];
+                pfp.classList.add("rounded-circle");
+                pfp.setAttribute("width", "30px");
+                pfp.setAttribute("height", "30px");
+                pfp.style = "margin-right: 3px;";
+                pfp.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                formLabel.appendChild(pfp);
+                formLabel.innerHTML += selectedUsers[i][0];
+                select.appendChild(checkbox);
+                select.appendChild(formLabel);
+                dropdownMenu.appendChild(select);
+                console.log(dropdownMenu);
+            }
+        }
+    }
+    xhttp.open("POST", "add-user-group-search");
+    xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    postVars = "searchTerm=" + str;
+    xhttp.send(postVars);
+}
 
 // info is: [sender, message]
 socket.on('message', function (info) {

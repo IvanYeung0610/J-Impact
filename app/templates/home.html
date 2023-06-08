@@ -84,10 +84,10 @@
 
               <form action="" method="POST" class="d-flex">
                 <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search"
-                  onkeyup="searchBar(this.value)">
+                  onkeyup="createGroupBar(this.value)">
               </form>
 
-              <form id="friends-checkboxes">
+              <form id="friends-checkboxes-create">
                 {% for friend in FRIENDS %}
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}">
@@ -144,11 +144,11 @@
             <form>
               <form action="" method="POST" class="d-flex">
                 <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search"
-                  onkeyup="searchBar(this.value)">
+                  onkeyup="addUserToGroupSearch(this.value)">
               </form>
               <button type="submit" onclick="addUser()">Create</button>
 
-              <form id="friends-checkboxes">
+              <form id="friends-checkboxes-add">
                 {% for friend in FRIENDS %}
                 <div class="form-check">
                   <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}">
