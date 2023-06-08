@@ -190,6 +190,24 @@ def add_group(group_id, title, image):
         print("GROUP ALREADY EXISTS")
     c.close()
 
+# Creates a group without having add on to a friend group
+def create_group(title, image, members):
+    c = db.cursor()
+    try:
+        c.execute("select max(group_id) from UserAssociation")
+        max_id = c.fetchone()[0]
+        if max_id != None:
+            max_id += 1
+        else:
+            max_id = 0
+        add_group(max_id, title, image)
+        for member in members:
+            c.execute("INSERT into UserAssociation values(?, ?)", (max_id, member))
+        db.commit()
+    except:
+        print("GROUP CANNOT BE MADE")
+    c.close()
+
 # ================ CHANGING INFORMATION ================
 
 #Changes pfp of user
@@ -261,5 +279,6 @@ def populate():
         add_friend("a","c")
         add_group(1, "DA BEST IN DA WEST", "image")
         add_to_group(1, "d")
+        create_group("Falling Dogs", "image", ["f", "h", "i", "j", "g"])
     db.commit()
     c.close
