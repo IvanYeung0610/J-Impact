@@ -29,20 +29,24 @@ def home_page():
 @app.route("/homeajax", methods=["POST"])
 def home_ajax():
     current = request.form.get("messageText")
+    local_time = time.localtime()
+    string_time = time.strftime("%c", local_time)
     if current:
-        return jsonify(value=current, user=session.get("CLIENT"))
+        return jsonify(value=current, user=session.get("CLIENT"), time=string_time)
     return jsonify({"error" : "error"})
 
 @app.route("/messagesajax", methods=["POST"])
 def messages_ajax():
     id = request.form.get("group_id") #group id
     messages = get_messages_from_group(id)
-    messageData = {"username": [], "message": [], "time": []}
+    group = get_all_users_by_group(id)
+    messageData = {"username": [], "message": [], "time": [], "group_id": []}
     for data in messages:
         #print(data)
         messageData["username"].append(data[0])
         messageData["message"].append(data[2])
         messageData["time"].append(data[3])
+    messageData["group_id"] = group
     if id: 
         return jsonify(messageData)
     return jsonify({"error": "error"})

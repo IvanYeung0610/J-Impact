@@ -17,39 +17,57 @@ var getMessage = function (x) {
             'Accept': 'application/json' // Set the Accept header to indicate acceptance of JSON response
         }
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not OK');
-            }
-            return response.json();
-        })
-        .then(responseData => {
-            // Handle the response from the Flask route
-            messages.innerHTML = ""
-            for (let i = 0;i<responseData['username'].length;i++){
-                message = document.createElement("div");
-                label = document.createElement("div");//div with pfp, username, time
-                label.style = "display: flex";
-                img = document.createElement("img");
-                img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
-                img.className = "rounded-circle";
-                img.style.height = "30px";
-                img.style.width = "30px";
-                message.innerHTML = responseData['message'][i];
-                message.style = "margin-bottom: 20px";
-                
-                label.appendChild(img);
-                label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
-                messages.appendChild(label);
-                messages.appendChild(message);
-                messages.scrollTop = messages.scrollHeight;
-            }
-            console.log(responseData['username']);
-        })
-        .catch(error => {
-            // Handle any errors that occurred during the request
-            console.error('Error:', error);
-        });
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not OK');
+        }
+        return response.json();
+    })
+    .then(responseData => {
+        // Handle the response from the Flask route
+        messages.innerHTML = ""
+        for (let i = 0;i<responseData['username'].length;i++){
+            // console.log(responseData);
+            message = document.createElement("div");
+            label = document.createElement("div");//div with pfp, username, time
+            label.style = "display: flex";
+            img = document.createElement("img");
+            img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+            img.className = "rounded-circle";
+            img.style.height = "30px";
+            img.style.width = "30px";
+            message.innerHTML = responseData['message'][i];
+            message.style = "margin-bottom: 20px";
+            
+            label.appendChild(img);
+            label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
+            messages.appendChild(label);
+            messages.appendChild(message);
+            messages.scrollTop = messages.scrollHeight;
+        }
+        for (let i = 0; i < responseData["group_id"].length; i++) {
+            // console.log(responseData["group_id"][i]);
+            member = document.getElementById("member_tab");
+            label = document.createElement("div");//div with pfp, username
+            label.style = "display: flex";
+            img = document.createElement("img");
+            img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+            img.className = "rounded-circle";
+            img.style.height = "30px";
+            img.style.width = "30px";
+            member.style = "margin-bottom: 20px";
+            
+            label.appendChild(img);
+            label.innerHTML += responseData["group_id"][i];
+            member.appendChild(label);
+            // console.log(member);
+            member.scrollTop = member.scrollHeight;
+        }
+    })
+    .catch(error => {
+        // Handle any errors that occurred during the request
+        console.error('Error:', error);
+    });
 }
 
 
@@ -112,8 +130,26 @@ var ajaxMessage = function (str) {
         // console.log(this.readyState);
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(xhttp.responseText);
-            // COMMENT THIS OUT FOR NOW CAUSE IT'S GONNA PUT IT ON THERE TWICE
-            // document.getElementById("messages").innerHTML += response.user + ": " + response.value + "<br>";
+            // console.log(response);
+            time = response["time"];
+            content = response["value"];
+            message = document.createElement("div");
+            label = document.createElement("div");//div with pfp, username, time
+            label.style = "display: flex";
+            img = document.createElement("img");
+            img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+            img.className = "rounded-circle";
+            img.style.height = "30px";
+            img.style.width = "30px";
+
+            message.innerHTML = content;
+            message.style = "margin-bottom: 20px";
+            
+            label.appendChild(img);
+            label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + response["user"] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + time;
+            messages.appendChild(label);
+            messages.appendChild(message);
+            messages.scrollTop = messages.scrollHeight;
         }
     }
     xhttp.open("POST", "/homeajax");
