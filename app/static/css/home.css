@@ -24,3 +24,7 @@
     background-color: gray;    /* color of the scroll thumb */
     border-radius: 30px;       /* roundness of the scroll thumb */
   }
+
+.membersCount {
+  margin-left: 40px;
+}
