@@ -27,7 +27,7 @@ var getMessage = function (x) {
         })
         .then(responseData => {
             // Handle the response from the Flask route
-            // console.log(responseData)
+            console.log(responseData)
             document.getElementById("chat_name").innerHTML = responseData["title"];
             if (responseData["group_id"].length > 2) {
                 document.getElementById("dropdown-menu-add").style.visibility = "visible";
