@@ -36,3 +36,38 @@
 .custom-button:hover {
   color: red; /* Set the text color on hover */
 }
+
+.dropdown-toggle {
+  background-color: #7289da;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  background-color: #fff;
+  padding: 10px;
+  border: 1px solid #ddd;
+}
+
+.dropdown-menu form {
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdown-menu label,
+.dropdown-menu input,
+.dropdown-menu button {
+  margin-bottom: 10px;
+}
+
+.dropdown-menu button {
+  background-color: #7289da;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+}

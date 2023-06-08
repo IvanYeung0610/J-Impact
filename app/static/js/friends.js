@@ -56,9 +56,10 @@ friend.addEventListener("click", (e) => {
 )
 
 //creates button with friend name/icon
-var friendRequest = function (sender, direction) {
+var friendRequest = function (sender, direction, id) {
 
     var newCard = document.createElement("div");
+    newCard.id = id;
     newCard.className = "card";
     newCard.style = "margin-left: 18px; margin-right: 10px; width: 18%; margin-bottom: 10px"
     var cardBody = document.createElement("div");
@@ -86,8 +87,20 @@ var friendRequest = function (sender, direction) {
         deny.innerHTML = "&#10006; Deny";
         buttondiv.appendChild(deny);
         cardText.appendChild(buttondiv);
+        accept.addEventListener("click", function() {
+            //reason why i used this function syntax is so i could pass in sender
+            // console.log(sender);
+            socket.emit("accepted_request", sender);
+            document.getElementById(id).remove();
+        });
+        deny.addEventListener("click", function() {
+            // console.log(sender);
+            socket.emit("rejected_request", sender);
+            document.getElementById(id).remove();
+        });
     }
     else if (direction == "outgoing"){
+        //deny here is actually cancel, but it kinda works like deny
         cardText.innerHTML = "Friend request to " + sender;//replace sender with person you are sending to
         var buttondiv = document.createElement("div");
         //buttondiv.className = "btn-group";
@@ -98,6 +111,11 @@ var friendRequest = function (sender, direction) {
         deny.innerHTML = "&#10006; Cancel";
         buttondiv.appendChild(deny);
         cardText.appendChild(buttondiv);
+        deny.addEventListener("click", function() {
+            // console.log(sender);
+            socket.emit("request_canceled", sender);
+            document.getElementById(id).remove();
+        });
     }
     //cardText.innerHTML = "\u2705 &#10006;";
     // var newButton = document.createElement("button");
@@ -200,17 +218,16 @@ var loadRequests = function() {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             clearFriends();
-            var response = JSON.parse(xhttp.responseText);
-            var received = response.requests.received;
+            var response = JSON.parse(xhttp.responseText);            var received = response.requests.received;
             var sent = response.requests.sent;
             console.log(received);
-            for (let i = 0; i < received.length; i++) {
+            for (var i = 0; i < received.length; i++) {
                 fr = received[i];
-                friendRequest(fr[0], "incoming");
+                friendRequest(fr[0], "incoming", i);
             }
-            for (let i = 0; i < sent.length; i++) {
-                fr = sent[i];
-                friendRequest(fr[1], "outgoing");
+            for (let j = 0; j < sent.length; j++) {
+                fr = sent[j];
+                friendRequest(fr[1], "outgoing", j + i);
             }
         }
     }
@@ -322,6 +339,7 @@ var searchBar = function(str) {
         xhttp.send(postVars);
     }
 }
+
 
 loadFriends();//load friends on reload
 var friendButton = document.getElementById("friend"); //buttons in friends

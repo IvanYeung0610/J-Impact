@@ -20,16 +20,18 @@ populate()
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         groups = get_all_groups_from_user(session.get("CLIENT"))
+        friends = search_friends("", session.get("CLIENT"))
+        print(friends)
         #print(groups)
         group_info = {}
         # accounts = get_all_users()
         for group in groups:
             if get_group_size(group) > 2: #Checks if it is a chat between two friends or a group
-                group_info[group] = [get_group_title(group), get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
+                group_info[group] = [get_group_title(group)[0], get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
             else:
                 friend_username = get_all_other_users_by_group(group, session.get("CLIENT"))[0]
                 group_info[group] = [friend_username, get_pfp(friend_username), get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
-        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info)
+        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, FRIENDS=friends)
     return redirect( url_for("login_page") )
 
 @app.route("/homeajax", methods=["POST"])
@@ -242,7 +244,7 @@ def check_connect():
             connected_users[session.get("CLIENT")].append(request.sid)
         else:
             connected_users[session.get("CLIENT")] = [request.sid]
-    # print("CONNECTED: ", connected_users)
+    print("CONNECTED: ", connected_users)
 
 @socketio.on('disconnect')
 def disconnect():
@@ -263,9 +265,6 @@ def select_group(group_id):
     else:
         join_room(group_id)
         # print("  JOINED:  ", group_id)
-    if type(group_id) is int:
-        members = get_all_users_by_group(group_id)
-        emit("clicked_group", members, to=request.sid)
 
 # RECIEVES - info: message
 # EMITS - "message" OR "ping": message is when they have the group selcted, otherwise they will be pinged
@@ -283,13 +282,23 @@ def handle_message(message):
     add_message(user, group_id, message, string_time)
     emit("message", info, to=group_id)
 
+    group_info = get_all_group_info(int(group_id))
+    group_image = group_info[2]
+    # if its a 2 person group, then choose the other person's pfp
+    if (group_info[2] == "image"):
+        users = get_all_users_by_group(group_id)
+        if (users[0] == session.get("CLIENT", " ")):
+            group_image = get_pfp_from_user(users[1])
+        else:
+            group_image = get_pfp_from_user(users[0])
+    ping_info = [group_id, user, message, string_time, group_image]
     users_recieving = get_all_users_by_group(group_id)
     # print("USERS: ", users_recieving)
     for user in users_recieving:                        # LOOPS THRU ALL RECIVEING USERS
         for socket in connected_users.get(user, []):    # LOOPS THRU EACH SOCKET FOR A RECIEVING USER
             if not (group_id in rooms(socket)):         # IF THE SOCKET IS NOT LOOKING AT THE GROUP, PING THEM
                 #print("HEI")
-                emit("ping", group_id, to=socket)
+                emit("ping", ping_info, to=socket)
 
 # Sends the friend request to the proper sockets.
 # RECIEVES - users: [sender, reciever]
@@ -303,26 +312,39 @@ def send_friend_request(users):
     for R in recievers:
         emit('request_recieved', sender, to=R)
 
+#the next 3 functions, users is array of 1, containing the other user
 @socketio.on('accepted_request')
 def accept_friend_request(users):
+    print(users)
     sender = users[0]
-    reciever = users[1]
-    delete_friend_request(sender, reciever)
-    add_friend(sender,reciever)
+    receiver = session.get("CLIENT")
+    delete_friend_request(sender, receiver)
+    add_friend(sender,receiver)
 
     senders = connected_users[sender]
     for S in senders:
-        emit("request_accepted", reciever, to=S)
+        emit("request_accepted", receiver, to=S)
 
 @socketio.on('rejected_request')
 def reject_friend_request(users):
     sender = users[0]
-    reciever = users[1]
-    delete_friend_request(sender, reciever)
+    receiver = session.get("CLIENT")
+    delete_friend_request(sender, receiver)
 
     senders = connected_users[sender]
     for S in senders:
-        emit("request_rejected", reciever, to=S)
+        emit("request_rejected", receiver, to=S)
+
+@socketio.on("request_canceled")
+def cancel_friend_request(users):
+    sender = session.get("CLIENT")
+    receiver = users[0]
+    delete_friend_request(sender, receiver)
+
+    senders = connected_users[sender]
+    for S in senders:
+        emit("request_canceled", receiver, to=S)
+
 
 @socketio.on("updated_profile_picture")
 def updated_profile_picture(file_data):

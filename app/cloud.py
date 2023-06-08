@@ -22,3 +22,11 @@ def upload_image(image_data):
     gravity = "center", width = 200, height = 200, crop = "scale", 
     radius = 50, border="7px_solid_red", fetch_format="png")
     return result
+
+def upload_emoji(image_data):
+    # print("UPLOADED ONTO CLOUDINARY")
+    result = cloudinary.uploader\
+    .upload(image_data, 
+    gravity = "center", width = 200, height = 200, crop = "scale", 
+    radius = 50, border="2px_solid_black", fetch_format="png")
+    return result
