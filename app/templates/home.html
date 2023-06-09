@@ -56,8 +56,14 @@
 
         <div class="h-100 scrollable overflow-auto" id="scroll"> <!--scrollable div-->
           <div>
-            <h5>Friends</h5>
-            <button class="dropdown-toggle" onclick="toggleDropdownCreate()">Create Group</button>
+            <div class="row">
+              <div class="col-sm-6" style="text-align: center; padding-right: 0px; margin-bottom: 0px;">
+            <h5 style="padding-right: 0px;">Friends</h5>
+          </div>
+          <div class="col-sm-6" style="padding-left: 0px;">
+            <button class="dropdown-toggle" onclick="toggleDropdownCreate()" style="padding: 5px">Create Group</button>
+          </div>
+          </div>
             <div id="dropdown-menu-create" class="dropdown-menu">
               <form>
                 <label for="group-name">Group Name:</label>
@@ -137,9 +143,16 @@
       <div class="col-sm-8 border-start border-end border-dark-subtle border-3" style="height: 100vh;">
 
         <div class="border-bottom border-dark-subtle border-3">
-          <h4 style="text-align: center;" id="chat_name"></h4> <!--chat name-->
+          <div class="row">
+          <div class="col-sm-4"></div>
 
+          <div class="col-sm-4" style="text-align: center;">
+          <h4 style="text-align: center;" id="chat_name"></h4> <!--chat name-->
+          </div>
+
+          <div class="col-sm-4" style="text-align: end;">
           <button id="dropdown-button-add" class="dropdown-toggle" onclick="toggleDropdownAdd()">Add User</button>
+        </div>
           <div id="dropdown-menu-add" class="dropdown-menu">
             <form>
               <form action="" method="POST" class="d-flex">
@@ -162,7 +175,7 @@
               </form>
             </form>
           </div>
-
+        </div>
         </div>
 
         <!--message div-->
