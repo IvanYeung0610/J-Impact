@@ -22,14 +22,19 @@ def search_new_friends(search_term, username):
     # print(type(search_term))
     if (search_term == "" or search_term == None):
         for user in data:
-            if ( not check_association(username, user[0])):
+            if ( not check_association(username, user)):
                 searched.append(user)
         return searched
     else:
         for user in data:
+<<<<<<< HEAD
             print(user)
             print(( not check_association(username, user[0]) ) and ( search_term.lower() in user[0].lower() ))
             if ( ( not check_association(username, user[0]) ) and ( search_term.lower() in user[0].lower() )):
+=======
+            if ( ( not check_association(username, user) ) and ( search_term.lower() in user.lower() )):
+                # print(( not check_association(username, user[0]) ) and ( search_term.lower() in user[0].lower() ))
+>>>>>>> 15623f309e283bd45d14cb5b6bf117814c861e85
                 searched.append(user)
         return searched
 
