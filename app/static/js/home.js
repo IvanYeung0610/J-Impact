@@ -92,31 +92,25 @@ var getMessage = function (x) {
         });
 }
 
-var toggleDropdownCreate = function() {
+var toggleDropdownCreate = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-create');
     if (dropdownMenu.style.display === 'none') {
-      dropdownMenu.style.display = 'block';
+        dropdownMenu.style.display = 'block';
     } else {
-      dropdownMenu.style.display = 'none';
+        dropdownMenu.style.display = 'none';
     }
-  }
+}
 
-  var toggleDropdownAdd = function() {
+var toggleDropdownAdd = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-add');
     if (dropdownMenu.style.display === 'none') {
         dropdownMenu.style.display = 'block';
     } else {
         dropdownMenu.style.display = 'none';
     }
-  }
-  
-var createGroup = function() {
-    var groupName = document.getElementById('group-name').value;
-    // Perform further actions with the group name
-    console.log('Creating group:', groupName);
 }
 
-var addUser = function() {
+var addUser = function () {
     // action for add friends
 }
 
@@ -128,13 +122,13 @@ var clear_ping = function (group_id) {
     }
 }
 //eventlisteners for profile
-var profileButton = function(){
-    console.log(memberlist)
-    setTimeout(function() {
+var profileButton = function () {
+    // console.log(memberlist)
+    setTimeout(function () {
         var memlist = document.getElementsByName("memlist");
-        console.log(memlist)
-        for (let x = 0; x < memlist.length; x++){
-            memlist[x].addEventListener('click', (e) =>{
+        // console.log(memlist)
+        for (let x = 0; x < memlist.length; x++) {
+            memlist[x].addEventListener('click', (e) => {
                 e.preventDefault()
                 window.location.href = '/profile/' + memberlist[x];
             })
@@ -152,7 +146,7 @@ if (all_group_buttons.length != 0) {
 
 // Changes color of group buttons when clicked 
 // And sets the room of the user to that group in Websockets
-console.log(all_group_buttons)
+// console.log(all_group_buttons)
 for (let x = 0; x < all_group_buttons.length; x++) {
     all_group_buttons[x].addEventListener('click', (e) => {
         socket.emit("select_group", all_group_buttons[x].id)
@@ -181,10 +175,8 @@ var createGroupBar = function (str) {
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
             selectedUsers = response.users;
-            // console.log(selectedUsers);
-            // console.log(response);
             document.getElementById("friends-checkboxes-create").innerHTML = "";
-            var dropdownMenu = document.getElementById('friends-checkboxes');
+            var dropdownMenu = document.getElementById('friends-checkboxes-create');
             for (let i = 0; i < selectedUsers.length; i++) {
                 select = document.createElement("div");
                 select.classList.add("form-check");
@@ -192,9 +184,18 @@ var createGroupBar = function (str) {
                 checkbox.classList.add("form-check-input");
                 checkbox.type = "checkbox";
                 checkbox.id = selectedUsers[i][0];
+                checkbox.name = "createCheckbox";
+                checkbox.addEventListener("change", function() {
+                    if (this.checked) {
+                        this.setAttribute("checked", "");
+                    } else {
+                        this.removeAttribute("checked");
+                    }
+                })
                 formLabel = document.createElement("label");
                 formLabel.classList.add("form-check-label");
                 formLabel.setAttribute("for", "flexCheckDefault");
+                
                 pfp = document.createElement("img");
                 //the cloudinary image is massive, but this would work
                 // pfp.src = selectedUsers[i][1];
@@ -218,11 +219,47 @@ var createGroupBar = function (str) {
     xhttp.send(postVars);
 }
 
+var setChecked = function(element) {
+    if (element.checked) {
+        element.setAttribute("checked", "checked");
+    } else {
+        element.removeAttribute("checked");
+    }
+    console.log(element);
+}
+
+var createGroup = function () {
+    var groupName = document.getElementById('group-name').value;
+    var people = document.getElementsByName("createCheckbox");
+    var selected = [];
+    // Perform further actions with the group name
+    for (let i = 0; i < people.length; i++) {
+        if (people[i].getAttribute("checked")) {
+            selected.push(people[i].id);
+        }
+    }
+    if (selected.length >= 2) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = JSON.parse(this.responseText);
+                console.log(response);
+            }
+        }
+        xhttp.open("POST", "adding-to-group");
+        var postVars = JSON.stringify({"selected=": selected});
+        console.log(postVars);
+        xhttp.send(postVars);
+    } else {
+        console.log("select at least 2 people, dummy");
+    }
+}
+
 //only reason why this is different is to account for removing members?
 //also accesses different place
-var addUserToGroupSearch = function(str) {
+var addUserToGroupSearch = function (str) {
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             response = JSON.parse(this.responseText);
             selectedUsers = response.users;

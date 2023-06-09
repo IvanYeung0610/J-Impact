@@ -18,6 +18,7 @@ def check_association(user1, user2):
 def search_new_friends(search_term, username):
     data = get_all_users()
     searched = []
+    print(search_term)
     # print(type(search_term))
     if (search_term == "" or search_term == None):
         for user in data:
@@ -26,8 +27,9 @@ def search_new_friends(search_term, username):
         return searched
     else:
         for user in data:
+            print(user)
+            print(( not check_association(username, user[0]) ) and ( search_term.lower() in user[0].lower() ))
             if ( ( not check_association(username, user[0]) ) and ( search_term.lower() in user[0].lower() )):
-                # print(( not check_association(username, user[0]) ) and ( search_term.lower() in user[0].lower() ))
                 searched.append(user)
         return searched
 

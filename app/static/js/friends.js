@@ -317,6 +317,7 @@ var searchBar = function(str) {
             if (this.readyState == 4 && this.status == 200) {
                 clearFriends();
                 var response = JSON.parse(xhttp.responseText);
+                console.log(response);
                 r = response.randos;
                 pfp = response.pfp;
                 // console.log(r);

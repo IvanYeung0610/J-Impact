@@ -242,6 +242,12 @@ def add_user_to_group_search():
         return jsonify(users=users)
     return jsonify({"error" : "error"})
 
+@app.route("/adding-to-group", methods=["POST"])
+def add_to_group():
+    users = request.form.items()
+    print(users)
+    return jsonify({"created_group", "created group"})
+
 # ========================== SOCKETS ==========================
 
 # If the user logs in succesfully, they will be added to our connected users
