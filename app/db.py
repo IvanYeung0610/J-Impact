@@ -299,8 +299,7 @@ def populate():
         add_friend("a","b")
         add_friend("a","c")
         add_friend_request("f", "a")
-        add_group(1, "DA BEST IN DA WEST", "image")
-        add_to_group(1, "d")
+        create_group("DA BEST IN DA WEST", "image", ["a", "b", "c"])
         create_group("Falling Dogs", "image", ["f", "h", "i", "j", "g"])
     db.commit()
     c.close
