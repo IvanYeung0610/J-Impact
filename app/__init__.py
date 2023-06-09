@@ -239,11 +239,15 @@ def add_user_to_group_search():
         return jsonify(users=users)
     return jsonify({"error" : "error"})
 
-@app.route("/adding-to-group", methods=["POST"])
+@app.route("/creating-group", methods=["POST"])
 def add_to_group():
-    users = request.form.items()
-    print(users)
-    return jsonify({"created_group", "created group"})
+    posted = request.json
+    users = posted.get("selected").append(session.get("CLIENT"))
+    image = posted.get("image")
+    groupName = posted.get("name")
+    id = create_group(groupName, image, users)
+    print(id)
+    return jsonify({"group_id": id})
 
 # ========================== SOCKETS ==========================
 

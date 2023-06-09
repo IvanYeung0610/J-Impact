@@ -175,3 +175,7 @@ ivanY -- 2023-06-08 19:26
 * Showed correct pfp for users on home page
 * fixed bug with names between friends 
 * create dropdown for creating groups and adding members to a group
+
+junW -- 2023-06-09 16:40
+--------------------------------------------------------------
+* Worked on creating group functionality

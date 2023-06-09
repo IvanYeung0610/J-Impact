@@ -253,15 +253,37 @@ var createGroup = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var response = JSON.parse(this.responseText);
                 console.log(response);
+                //not really sure what to put here
+                var chatList = document.getElementById("friendsScroll");
+                img = document.createElement("img");
+                img.src = image;
+                img.setAttribute("width", "30px");
+                img.setAttribute("height", "30px");
+                img.style.marginRight = "3px";
+                button = document.createElement("button");
+                button.id = response.group_id;
+                button.type = "button"
+                button.classList.add("btn");
+                button.name = "group_button";
+                button.style.backgroundColor = "#DEF2F1";
+                button.style.width = "100%";
+                button.style.textAlight = "left";
+
+                button.appendChild(img, name);
+
             }
         }
-        xhttp.open("POST", "adding-to-group");
-        var postVars = JSON.stringify({"selected=": selected});
+        xhttp.open("POST", "creating-group");
+        xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        var name = document.getElementById("group-name").value;
+        var image = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+        var postVars = JSON.stringify({"selected" : selected, "name" : name, "image" : image});
         console.log(postVars);
         xhttp.send(postVars);
     } else {
         console.log("select at least 2 people, dummy");
     }
+    // return false;
 }
 
 //only reason why this is different is to account for removing members?

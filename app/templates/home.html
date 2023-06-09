@@ -54,7 +54,7 @@
       <div class="col-sm-2" style="height: 91vh; padding-right: 5px;">
         <!--100vh makes column fill the page, padding makes scrollbar closer to the border-->
 
-        <div class="h-100 scrollable overflow-auto" id="scroll"> <!--scrollable div-->
+        <div class="h-100 scrollable overflow-auto" > <!--scrollable div-->
           <div>
             <div class="row">
               <div class="col-sm-6" style="text-align: center; padding-right: 0px; margin-bottom: 0px;">
@@ -68,7 +68,7 @@
               <form>
                 <label for="group-name">Group Name:</label>
                 <input type="text" id="group-name" name="group-name" required>
-                <button type="submit" onclick="createGroup()">Create</button>
+                <button type="submit" onsubmit="createGroup()">Create</button>
               </form>
 
               <br>
@@ -79,7 +79,7 @@
               <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
               <form action="\settings" method="POST" id="upload_profile_form">
                 <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
-                  <label for="file" class="btn">Upload Profile Picture</label>
+                  <label id="uploadGroupImage" for="file" class="btn">Upload Profile Picture</label>
                   <input type="file" id="file" style="visibility:hidden; margin-right: 5px;" name="change"
                     accept=".jpg, .jpeg, .png" hidden></input>
                   <input style="display: inline-block;" type="submit" value="Change">
@@ -113,7 +113,7 @@
             <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
 
               <!--button template-->
-              <div style="width:100%;">
+              <div style="width:100%;" id="friendsScroll">
                 {% for group in GROUPS %}
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
