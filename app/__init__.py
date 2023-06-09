@@ -143,6 +143,7 @@ def friends_list_ajax():
 @app.route("/search-friends", methods=["POST"])
 def search_friends_ajax():
     friends = search_friends(request.form["searchTerm"], session.get("CLIENT"))
+    # print("SEARCH TERM: ", request.form["searchTerm"])
     pfp = []
     for a in friends:
         if (session.get("CLIENT") == a[0]):
