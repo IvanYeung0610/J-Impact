@@ -96,6 +96,9 @@ var toggleDropdownCreate = function() {
     var dropdownMenu = document.getElementById('dropdown-menu-create');
     if (dropdownMenu.style.display === 'none') {
       dropdownMenu.style.display = 'block';
+      dropdownMenu.style.maxHeight = '400px';
+      dropdownMenu.style.overflowY = 'auto';
+      dropdownMenu.style.marginLeft = '10px';
     } else {
       dropdownMenu.style.display = 'none';
     }
@@ -105,6 +108,12 @@ var toggleDropdownCreate = function() {
     var dropdownMenu = document.getElementById('dropdown-menu-add');
     if (dropdownMenu.style.display === 'none') {
         dropdownMenu.style.display = 'block';
+        dropdownMenu.style.maxHeight = '400px';
+        dropdownMenu.style.maxWidth = '300px';
+        dropdownMenu.style.overflowY = 'auto';
+        dropdownMenu.style.marginLeft = '47%';
+        dropdownMenu.style.marginTop = '3%';
+        //dropdownMenu.style.justifyContent = 'end';
     } else {
         dropdownMenu.style.display = 'none';
     }
