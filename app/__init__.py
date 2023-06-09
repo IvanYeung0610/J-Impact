@@ -21,7 +21,6 @@ def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         groups = get_all_groups_from_user(session.get("CLIENT"))
         friends = search_friends("", session.get("CLIENT"))
-        print(friends)
         #print(groups)
         group_info = {}
         # accounts = get_all_users()
@@ -163,7 +162,6 @@ def search_friend_requests_ajax():
 def explore_ajax():
     #print(request.form["search"])
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
-    print(session.get("CLIENT"))
     pfp = []
     for n in randos:
         pfp.append(get_pfp(n))
@@ -173,8 +171,6 @@ def explore_ajax():
 def explore_search_ajax():
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
     pfp = []
-    print(session.get("CLIENT"))
-    print(randos)
     for a in randos:
         pfp.append(get_pfp(a))
     return jsonify(randos=randos, pfp=pfp)
@@ -258,7 +254,6 @@ def check_login():
         connected_users[session.get("CLIENT")].append(request.sid)
     else:
         connected_users[session.get("CLIENT")] = [request.sid]
-    #print("LOGIN: ", connected_users)
 
 # Adds to our list of all conneceted users. IFF their cookies information is correct.
 @socketio.on('connect')
@@ -342,7 +337,6 @@ def send_friend_request(users):
 #the next 3 functions, users is array of 1, containing the other user
 @socketio.on('accepted_request')
 def accept_friend_request(users):
-    print(users)
     sender = users[0]
     receiver = session.get("CLIENT")
     delete_friend_request(sender, receiver)

@@ -52,7 +52,6 @@ def get_all_users():
     #     username1: pfp1 
     #     username2: pfp2
     # }
-    print(dict)
     return dict
 
 
