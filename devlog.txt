@@ -154,3 +154,24 @@ joshuaL -- 2023-06-06 23:51
 --------------------------------------------------------------
 * Got the AJAX code working for getting past messages from the database onto html
 
+jamesY -- 2023-06-08 19:26
+--------------------------------------------------------------
+* Worked profile page 
+* Created cards for friends
+
+junW -- 2023-06-08 19:26
+--------------------------------------------------------------
+* Linked up the accept and decline buttons to websockets code 
+* Implemented creating groups
+
+joshuaL -- 2023-06-08 19:26
+--------------------------------------------------------------
+* Got cloudinary working for uploading images
+* Pings
+* Toasts
+
+ivanY -- 2023-06-08 19:26
+--------------------------------------------------------------
+* Showed correct pfp for users on home page
+* fixed bug with names between friends 
+* create dropdown for creating groups and adding members to a group

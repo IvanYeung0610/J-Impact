@@ -5,12 +5,13 @@ var friends = document.getElementById("friendslist"); //friends list div
 var title = document.getElementById("title"); //friends list label
 var friend = document.getElementById("friends");//friends tab
 var search = document.getElementById("search"); //search bar in all
+
 // var searchFriends = document.getElementById("searchFriends"); //search bar in friends
 
 //all tab is selected by default
 explore.style.backgroundColor = "lightgray";
 pending.style.backgroundColor = "lightgray";
-title.innerHTML = "All";
+title.innerHTML = "All Friends";
 friend.style.backgroundColor = "gray";
 search.hidden = false;
 // searchFriends.hidden = true; 
@@ -72,7 +73,7 @@ var friendRequest = function (sender, direction, id) {
     friends.style = "display: flex; flex-wrap: wrap; margin: auto";
     friends.appendChild(newCard);
 
-    if (direction == "incoming"){
+    if (direction == "incoming") {
         cardText.innerHTML = "Friend request from " + sender;
         var buttondiv = document.createElement("div");
         var accept = document.createElement("button");
@@ -86,19 +87,19 @@ var friendRequest = function (sender, direction, id) {
         deny.innerHTML = "&#10006; Deny";
         buttondiv.appendChild(deny);
         cardText.appendChild(buttondiv);
-        accept.addEventListener("click", function() {
+        accept.addEventListener("click", function () {
             //reason why i used this function syntax is so i could pass in sender
             // console.log(sender);
             socket.emit("accepted_request", sender);
             document.getElementById(id).remove();
         });
-        deny.addEventListener("click", function() {
+        deny.addEventListener("click", function () {
             // console.log(sender);
             socket.emit("rejected_request", sender);
             document.getElementById(id).remove();
         });
     }
-    else if (direction == "outgoing"){
+    else if (direction == "outgoing") {
         //deny here is actually cancel, but it kinda works like deny
         cardText.innerHTML = "Friend request to " + sender;//replace sender with person you are sending to
         var buttondiv = document.createElement("div");
@@ -110,7 +111,7 @@ var friendRequest = function (sender, direction, id) {
         deny.innerHTML = "&#10006; Cancel";
         buttondiv.appendChild(deny);
         cardText.appendChild(buttondiv);
-        deny.addEventListener("click", function() {
+        deny.addEventListener("click", function () {
             // console.log(sender);
             socket.emit("request_canceled", sender);
             document.getElementById(id).remove();
@@ -125,6 +126,20 @@ var friendRequest = function (sender, direction, id) {
     // friends.appendChild(newButton);
 }
 
+//eventlisteners for profile
+var profileButton = function () {
+    setTimeout(function () {
+        var memlist = document.getElementsByName("friend");
+        for (let x = 0; x < memlist.length; x++) {
+            //console.log(memlist[x].innerHTML.split(">")[1])//gets username of friend
+            memlist[x].addEventListener('click', (e) => {
+                e.preventDefault()
+                window.location.href = '/profile/' + memlist[x].innerHTML.split(">")[1];
+            })
+        }
+    }, 300); // Delay of .3 second
+}
+
 var friendsList = function (friend, pfp) {
     var newButton = document.createElement("button");
     var img = document.createElement("img");
@@ -137,12 +152,14 @@ var friendsList = function (friend, pfp) {
     newButton.type = "button";
     newButton.classList.add("btn");
     newButton.classList.add("btn-outline-dark");
+    newButton.classList.add("custom-button");
     newButton.style = "background-color: #DEF2F1; width:32vh; text-align: left; margin-bottom: 20px; margin-left: 40px;";
+    newButton.setAttribute('name', 'friend');
     newButton.innerHTML += friend;
     friends.appendChild(newButton);
 }
 
-var randos = function(rando, pfp) {
+var randos = function (rando, pfp) {
     var newButton = document.createElement("button");
     var img = document.createElement("img");
     img.src = pfp
@@ -154,8 +171,10 @@ var randos = function(rando, pfp) {
     newButton.type = "button";
     newButton.classList.add("btn");
     newButton.classList.add("btn-outline-dark");
+    newButton.classList.add("custom-button");
     newButton.style = "background-color: #DEF2F1; width: 32vh; text-align: left; margin-bottom: 20px; margin-left: 40px;";
-    newButton.innerHTML += rando;
+    newButton.setAttribute('name', 'friend');
+    newButton.innerHTML += "" + rando;
     friends.appendChild(newButton);
 }
 
@@ -163,7 +182,7 @@ var clearFriends = function () {
     document.getElementById("friendslist").innerHTML = "";
 }
 
-var loadFriends = function() {
+var loadFriends = function () {
     document.getElementById("friends").setAttribute("selected", true);
     document.getElementById("pending").removeAttribute("selected", true);
     document.getElementById("explore").removeAttribute("selected", true);
@@ -183,6 +202,7 @@ var loadFriends = function() {
                     friendsList(f[i][0], pfp[i]);
                 }
             }
+            profileButton();
         }
     }
     xhttp.open("POST", "friend-list");
@@ -191,7 +211,7 @@ var loadFriends = function() {
 }
 
 //this is for pending requests
-var loadRequests = function() {
+var loadRequests = function () {
     document.getElementById("pending").setAttribute("selected", true);
     document.getElementById("friends").removeAttribute("selected", true);
     document.getElementById("explore").removeAttribute("selected", true);
@@ -199,7 +219,7 @@ var loadRequests = function() {
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             clearFriends();
-            var response = JSON.parse(xhttp.responseText);            var received = response.requests.received;
+            var response = JSON.parse(xhttp.responseText); var received = response.requests.received;
             var sent = response.requests.sent;
             console.log(received);
             for (var i = 0; i < received.length; i++) {
@@ -217,12 +237,12 @@ var loadRequests = function() {
     xhttp.send();
 }
 
-var loadExplore = function(str) {
+var loadExplore = function (str) {
     document.getElementById("explore").setAttribute("selected", true);
     document.getElementById("friends").removeAttribute("selected", true);
     document.getElementById("pending").removeAttribute("selected", true);
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             clearFriends();
             var response = JSON.parse(xhttp.responseText);
@@ -233,6 +253,7 @@ var loadExplore = function(str) {
                 randos(r[i], pfp[i]);
             }
         }
+        profileButton();
     }
     xhttp.open("POST", "load-explore-ajax");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -246,13 +267,13 @@ var loadExplore = function(str) {
     xhttp.send(postVars);
 }
 
-var searchBar = function(str) {
+var searchBar = function (str) {
     //if all button is selected, search bar does something
     //if the pending request button is selected, search bar does other thing
     // console.log(str);
     if (document.getElementById("friends").getAttribute("selected")) {
         var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
+        xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 clearFriends();
                 var response = JSON.parse(xhttp.responseText);
@@ -263,6 +284,7 @@ var searchBar = function(str) {
                 for (let i = 0; i < f.length; i++) {
                     friendsList(f[i][0], pfp[i]);
                 }
+                profileButton();
             }
         }
         xhttp.open("POST", "search-friends");
@@ -272,7 +294,7 @@ var searchBar = function(str) {
         xhttp.send(postVars);
     } else if (document.getElementById("pending").getAttribute("selected")) {
         var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
+        xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 clearFriends();
                 var response = JSON.parse(xhttp.responseText);
@@ -291,7 +313,7 @@ var searchBar = function(str) {
         xhttp.send(postVars);
     } else if (document.getElementById("explore").getAttribute("selected")) {
         var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
+        xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 clearFriends();
                 var response = JSON.parse(xhttp.responseText);
@@ -301,6 +323,7 @@ var searchBar = function(str) {
                 for (let i = 0; i < r.length; i++) {
                     randos(r[i], pfp[i]);
                 }
+                profileButton();
             }
         }
         xhttp.open("POST", "explore-search-ajax");
@@ -320,3 +343,6 @@ var searchBar = function(str) {
 
 
 loadFriends();//load friends on reload
+var friendButton = document.getElementById("friend"); //buttons in friends
+//console.log(friendButton)
+profileButton();
