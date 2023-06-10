@@ -29,9 +29,9 @@ var getMessage = function (x) {
         })
         .then(responseData => {
             // Handle the response from the Flask route
-            console.log(responseData)
+            // console.log(responseData)
             document.getElementById("chat_name").innerHTML = responseData["title"];
-            if (responseData["group_id"].length > 2) {
+            if (responseData["member_names"].length > 2) {
                 document.getElementById("dropdown-menu-add").style.visibility = "visible";
                 document.getElementById("dropdown-button-add").style.visibility = "visible";
             } else {
@@ -41,13 +41,12 @@ var getMessage = function (x) {
             messages.innerHTML = ""
             document.getElementById("member_tab").innerHTML = "";
             for (let i = 0; i < responseData['username'].length; i++) {
-                // console.log(responseData);
+                console.log("first response data: ", responseData);
                 message = document.createElement("div");
                 label = document.createElement("div");//div with pfp, username, time
                 label.style = "display: flex";
                 img = document.createElement("img");
                 img.src = responseData["pfp"][i];
-                img.className = "rounded-circle";
                 img.style.height = "30px";
                 img.style.width = "30px";
                 message.innerHTML = responseData['message'][i];
@@ -59,8 +58,8 @@ var getMessage = function (x) {
                 messages.appendChild(message);
                 messages.scrollTop = messages.scrollHeight;
             }
-            for (let i = 0; i < responseData["group_id"].length; i++) {
-                // console.log(responseData["group_id"][i]);
+            for (let i = 0; i < responseData["member_names"].length; i++) {
+                //console.log(responseData["member_names"][i]);
                 member = document.getElementById("member_tab");
                 newButton = document.createElement("div");
                 newButton.type = "button";
@@ -70,14 +69,14 @@ var getMessage = function (x) {
                 label = document.createElement("div");//div with pfp, username
                 label.style = "display: flex";
                 img = document.createElement("img");
-                img.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                img.src = responseData["member_pfps"][i];
                 img.style.height = "30px";
                 img.style.width = "30px";
                 member.style = "margin-bottom: 20px";
 
                 label.appendChild(img);
-                label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData["group_id"][i];
-                memberlist.push(responseData["group_id"][i])
+                label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData["member_names"][i];
+                memberlist.push(responseData["member_names"][i])
                 label.style = "margin-bottom: 5px";
                 newButton.appendChild(label);
                 member.appendChild(newButton);

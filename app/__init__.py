@@ -48,7 +48,7 @@ def messages_ajax():
     id = request.form.get("group_id") #group id
     messages = get_messages_from_group(id)
     group = get_all_users_by_group(id)
-    messageData = {"username": [], "message": [], "time": [], "group_id": [], "title": "", "pfp": []}
+    messageData = {"username": [], "message": [], "time": [], "member_names": [], "member_pfps": [], "title": "", "pfp": []}
     if len(group) <= 2:
         if group[0] == session.get("CLIENT"):
             messageData["title"] = group[1]
@@ -62,7 +62,9 @@ def messages_ajax():
         messageData["message"].append(data[2])
         messageData["time"].append(data[3])
         messageData["pfp"].append(get_pfp(data[0]))
-    messageData["group_id"] = group
+    messageData["member_names"] = group
+    for member in group:
+        messageData["member_pfps"].append(get_pfp(member))
     if id: 
         return jsonify(messageData)
     return jsonify({"error": "error"})
