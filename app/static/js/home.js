@@ -152,7 +152,7 @@ var profileButton = function(){
 // We need a default group
 if (all_group_buttons.length != 0) {
     selected_group = all_group_buttons[0]
-    all_group_buttons[0].style.backgroundColor = "red"
+    all_group_buttons[0].style.backgroundColor = "968FB9"
     socket.emit("select_group", all_group_buttons[0].id)
     getMessage(0);
 }
@@ -163,8 +163,8 @@ console.log(all_group_buttons)
 for (let x = 0; x < all_group_buttons.length; x++) {
     all_group_buttons[x].addEventListener('click', (e) => {
         socket.emit("select_group", all_group_buttons[x].id)
-        selected_group.style.backgroundColor = "#DEF2F1"
-        all_group_buttons[x].style.backgroundColor = "red"
+        selected_group.style.backgroundColor = "#645E9D"
+        all_group_buttons[x].style.backgroundColor = "#968FB9"
         selected_group = all_group_buttons[x]
         //messages.innerHTML = "";
         memberlist = [];

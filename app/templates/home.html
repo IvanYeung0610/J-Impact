@@ -14,9 +14,9 @@
   <link rel="stylesheet" href="../static/css/home.css">
 </head>
 
-<body style="background-color:  #DEF2F1; overflow-y: hidden; height: 100%; overflow-x: hidden; width: 100%;">
+<body style="background-color:  #645E9D; overflow-y: hidden; height: 100%; overflow-x: hidden; width: 100%;">
   <!--background color, overflow removes scrollbar (fixes page overflow)-->
-  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2B7A78;"><!--nav bar color-->
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #392B58;"><!--nav bar color-->
     <div class="container-fluid">
 
       <div class="navbar-header">
@@ -54,7 +54,7 @@
 
       </div>
       <form action="/logout">
-        <button class="btn btn-info btn-sm" style="margin-left: 50px;" type="submit">Log out</button>
+        <button class="btn btn-info btn-sm" style="margin-left: 50px;" type="submit" >Log out</button>
       </form>
     </div>
   </nav>
@@ -128,7 +128,7 @@
                 {% for group in GROUPS %}
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
-                  style="background-color: #DEF2F1; width:100%; text-align: left;">
+                  style="background-color: #645E9D; width:100%; text-align: left;">
                   <img src= "{{ GROUP_INFO[group][1][0] }}"
                     width="30px" height="30px" style="margin-right: 3px;">
                   {{ GROUP_INFO[group][0] }} <!-- Group Title or Friend's name -->
@@ -153,7 +153,7 @@
       <!--chat-->
       <div class="col-sm-8 border-start border-end border-dark-subtle border-3" style="height: 100vh;">
 
-        <div class="border-bottom border-dark-subtle border-3">
+        <div class="border-bottom border-dark-subtle border-3" style="margin-bottom: 20px;">
           <div class="row">
           <div class="col-sm-4"></div>
 
