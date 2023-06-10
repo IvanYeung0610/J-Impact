@@ -6,8 +6,14 @@ var all_group_buttons = document.getElementsByName("group_button")
 var messages = document.getElementById("messages")
 var toast = document.getElementById("message_toast")
 const message_toast = bootstrap.Toast.getOrCreateInstance(toast)
+var emoji_dropdown = document.getElementById("emoji_dropdown_button")
+
 
 var memberlist = []
+
+emoji_dropdown.addEventListener('click', (e) => {
+    e.preventDefault()
+})
 
 //get messages from db
 var getMessage = function (x) {
@@ -90,19 +96,19 @@ var getMessage = function (x) {
         });
 }
 
-var toggleDropdownCreate = function() {
+var toggleDropdownCreate = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-create');
     if (dropdownMenu.style.display === 'none') {
-      dropdownMenu.style.display = 'block';
-      dropdownMenu.style.maxHeight = '400px';
-      dropdownMenu.style.overflowY = 'auto';
-      dropdownMenu.style.marginLeft = '10px';
+        dropdownMenu.style.display = 'block';
+        dropdownMenu.style.maxHeight = '400px';
+        dropdownMenu.style.overflowY = 'auto';
+        dropdownMenu.style.marginLeft = '10px';
     } else {
-      dropdownMenu.style.display = 'none';
+        dropdownMenu.style.display = 'none';
     }
-  }
+}
 
-  var toggleDropdownAdd = function() {
+var toggleDropdownAdd = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-add');
     if (dropdownMenu.style.display === 'none') {
         dropdownMenu.style.display = 'block';
@@ -115,15 +121,15 @@ var toggleDropdownCreate = function() {
     } else {
         dropdownMenu.style.display = 'none';
     }
-  }
-  
-var createGroup = function() {
+}
+
+var createGroup = function () {
     var groupName = document.getElementById('group-name').value;
     // Perform further actions with the group name
     console.log('Creating group:', groupName);
 }
 
-var addUser = function() {
+var addUser = function () {
     // action for add friends
 }
 
@@ -135,13 +141,13 @@ var clear_ping = function (group_id) {
     }
 }
 //eventlisteners for profile
-var profileButton = function(){
+var profileButton = function () {
     console.log(memberlist)
-    setTimeout(function() {
+    setTimeout(function () {
         var memlist = document.getElementsByName("memlist");
         console.log(memlist)
-        for (let x = 0; x < memlist.length; x++){
-            memlist[x].addEventListener('click', (e) =>{
+        for (let x = 0; x < memlist.length; x++) {
+            memlist[x].addEventListener('click', (e) => {
                 e.preventDefault()
                 window.location.href = '/profile/' + memberlist[x];
             })
@@ -227,9 +233,9 @@ var createGroupBar = function (str) {
 
 //only reason why this is different is to account for removing members?
 //also accesses different place
-var addUserToGroupSearch = function(str) {
+var addUserToGroupSearch = function (str) {
     var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
+    xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             response = JSON.parse(this.responseText);
             selectedUsers = response.users;

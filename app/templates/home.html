@@ -69,12 +69,13 @@
           <div>
             <div class="row">
               <div class="col-sm-6" style="text-align: center; padding-right: 0px; margin-bottom: 0px;">
-            <h5 style="padding-right: 0px;">Friends</h5>
-          </div>
-          <div class="col-sm-6" style="padding-left: 0px;">
-            <button class="dropdown-toggle" onclick="toggleDropdownCreate()" style="padding: 5px">Create Group</button>
-          </div>
-          </div>
+                <h5 style="padding-right: 0px;">Friends</h5>
+              </div>
+              <div class="col-sm-6" style="padding-left: 0px;">
+                <button class="dropdown-toggle" onclick="toggleDropdownCreate()" style="padding: 5px">Create
+                  Group</button>
+              </div>
+            </div>
             <div id="dropdown-menu-create" class="dropdown-menu">
               <form>
                 <label for="group-name">Group Name:</label>
@@ -155,38 +156,38 @@
 
         <div class="border-bottom border-dark-subtle border-3" style="margin-bottom: 20px;">
           <div class="row">
-          <div class="col-sm-4"></div>
+            <div class="col-sm-4"></div>
 
-          <div class="col-sm-4" style="text-align: center;">
-          <h4 style="text-align: center;" id="chat_name"></h4> <!--chat name-->
-          </div>
+            <div class="col-sm-4" style="text-align: center;">
+              <h4 style="text-align: center;" id="chat_name"></h4> <!--chat name-->
+            </div>
 
-          <div class="col-sm-4" style="text-align: end;">
-          <button id="dropdown-button-add" class="dropdown-toggle" onclick="toggleDropdownAdd()">Add User</button>
-        </div>
-          <div id="dropdown-menu-add" class="dropdown-menu">
-            <form>
-              <form action="" method="POST" class="d-flex">
-                <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search"
-                  onkeyup="addUserToGroupSearch(this.value)">
+            <div class="col-sm-4" style="text-align: end;">
+              <button id="dropdown-button-add" class="dropdown-toggle" onclick="toggleDropdownAdd()">Add User</button>
+            </div>
+            <div id="dropdown-menu-add" class="dropdown-menu">
+              <form>
+                <form action="" method="POST" class="d-flex">
+                  <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search"
+                    onkeyup="addUserToGroupSearch(this.value)">
+                </form>
+                <button type="submit" onclick="addUser()">Create</button>
+
+                <form id="friends-checkboxes-add">
+                  {% for friend in FRIENDS %}
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}">
+                    <label class="form-check-label" for="flexCheckDefault">
+                      <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
+                        class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
+                      {{ friend[0] }}
+                    </label>
+                  </div>
+                  {% endfor %}
+                </form>
               </form>
-              <button type="submit" onclick="addUser()">Create</button>
-
-              <form id="friends-checkboxes-add">
-                {% for friend in FRIENDS %}
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}">
-                  <label class="form-check-label" for="flexCheckDefault">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
-                      class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
-                    {{ friend[0] }}
-                  </label>
-                </div>
-                {% endfor %}
-              </form>
-            </form>
+            </div>
           </div>
-        </div>
         </div>
 
         <!--message div-->
@@ -196,13 +197,22 @@
         </div>
 
         <!--message input-->
-        <form action="" method="POST" autocomplete="off" id="messageform"><!--auto complete removes inut suggestions-->
+        <form action="" method="POST" autocomplete="off" id="messageform" style="width:75%" class="d-inline-flex">
+          <!--auto complete removes inut suggestions-->
           <input type="text" name="message" minlength="1" class="form-control" id="messageinput"
-            placeholder="Send a message..." style="bottom: 14px; width: 75%; left: 0%; right: 0; margin: auto;"
+            placeholder="Send a message..." style="bottom: 14px; width: 100%; left: 0%; right: 0; margin: auto;"
             onchange="ajaxMessage(this.value)" required><br>
           <input type="submit" style="display: none">
           <!--style makes form go to bottom of the page-->
         </form>
+
+        <!-- EMOJI BUTTON -->
+        <div class="d-inline-flex">
+          <button type="button" class="btn btn-info btn-circle p-1" id="emoji_dropdown_button">
+            <img src="https://res.cloudinary.com/dg13dndup/image/upload/v1686362344/ypjprqoslgpozmlrnv0h.png"
+              alt="emoji button" style="width: 25px;">
+          </button>
+        </div>
 
       </div>
 
