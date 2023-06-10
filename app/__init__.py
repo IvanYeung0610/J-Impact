@@ -54,7 +54,7 @@ def messages_ajax():
         if group[0] == session.get("CLIENT"):
             messageData["title"] = group[1]
         else:
-            messageData["title"] = session.get("CLIENT")
+            messageData["title"] = group[0]
     else:
         messageData["title"] = get_group_title(id)
     for data in messages:
@@ -168,7 +168,6 @@ def search_friend_requests_ajax():
 def explore_ajax():
     #print(request.form["search"])
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
-    print(session.get("CLIENT"))
     pfp = []
     for n in randos:
         pfp.append(get_pfp(n))
@@ -178,8 +177,6 @@ def explore_ajax():
 def explore_search_ajax():
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
     pfp = []
-    print(session.get("CLIENT"))
-    print(randos)
     for a in randos:
         pfp.append(get_pfp(a))
     return jsonify(randos=randos, pfp=pfp)
@@ -249,6 +246,46 @@ def add_user_to_group_search():
         return jsonify(users=users)
     return jsonify({"error" : "error"})
 
+@app.route("/creating-group-ajax", methods=["POST"])
+def create_group_ajax():
+    posted = request.get_json()
+    users = posted["selected"]
+    users.append(session.get("CLIENT"))
+    print((users))
+    # image = posted.get("image")
+    image = "image"
+    groupName = posted["name"]
+    id = create_group(groupName, image, users)
+    return jsonify({"title": groupName, "image": image, "users" : users})
+
+@app.route("/add-users-to-group-ajax", methods=["POST"])
+def add_to_group_ajax():
+    posted = request.get_json()
+    users = posted["selected"]
+    chatID = posted["group_id"]
+    for user in users:
+        print(user)
+        add_to_group(chatID, user)
+    return jsonify({"success" : "success"})
+
+@app.route("/addUserDropdown", methods=["POST"])
+def addUserDropdown():
+    chatMembers = get_all_users_by_group(request.form.get("groupID"))
+    friends = get_all_friends(session.get("CLIENT"))
+    addable = []
+    print(friends)
+    for i in range(len(friends)):
+        appendable = True
+        for j in range(len(chatMembers)):
+            if friends[i][1] == chatMembers[j]:
+                appendable = False
+        if appendable:
+            addable.append(friends[i][1])
+
+    if chatMembers:
+        return jsonify({"addable" : addable})
+    return jsonify({"error" : "error"})
+
 # ========================== SOCKETS ==========================
 
 # If the user logs in succesfully, they will be added to our connected users
@@ -258,7 +295,6 @@ def check_login():
         connected_users[session.get("CLIENT")].append(request.sid)
     else:
         connected_users[session.get("CLIENT")] = [request.sid]
-    #print("LOGIN: ", connected_users)
 
 # Adds to our list of all conneceted users. IFF their cookies information is correct.
 @socketio.on('connect')
@@ -335,15 +371,17 @@ def send_friend_request(user):
     sender = session.get("CLIENT")
     reciever = user
     add_friend_request(sender,reciever)
+    try: 
+        recievers = connected_users[reciever]
+        for R in recievers:
+            emit('request_recieved', sender, to=R)
+    except:
+        emit("error", "error")
 
-    recievers = connected_users[reciever]
-    for R in recievers:
-        emit('request_recieved', sender, to=R)
 
 #the next 3 functions, users is array of 1, containing the other user
 @socketio.on('accepted_request')
 def accept_friend_request(users):
-    print(users)
     sender = users[0]
     receiver = session.get("CLIENT")
     delete_friend_request(sender, receiver)

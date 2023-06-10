@@ -61,7 +61,6 @@ def get_all_users():
     #     username1: pfp1 
     #     username2: pfp2
     # }
-    print(dict)
     return dict
 
 
@@ -234,9 +233,11 @@ def create_group(title, image, members):
         for member in members:
             c.execute("INSERT into UserAssociation values(?, ?)", (max_id, member))
         db.commit()
+        print("group successfully made")
     except:
         print("GROUP CANNOT BE MADE")
     c.close()
+    return max_id
 
 def add_default_emoji(emoji):
     c = db.cursor()

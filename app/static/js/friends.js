@@ -113,18 +113,10 @@ var friendRequest = function (sender, direction, id) {
         buttondiv.appendChild(deny);
         cardText.appendChild(buttondiv);
         deny.addEventListener("click", function () {
-            // console.log(sender);
             socket.emit("request_canceled", sender);
             document.getElementById(id).remove();
         });
     }
-    //cardText.innerHTML = "\u2705 &#10006;";
-    // var newButton = document.createElement("button");
-    // newButton.type = "button";
-    // newButton.classList.add("btn");
-    // newButton.style = "background-color: gray; width:32vh; text-align: left;";
-    // newButton.innerHTML = "sender: " + sender + "<br>" + direction;
-    // friends.appendChild(newButton);
 }
 
 //eventlisteners for profile
@@ -151,20 +143,23 @@ var profileButtonExplore = function () {
             memlist[x].addEventListener('click', (e) => {
                 e.preventDefault()
                 window.location.href = '/profile/' + memlist[x].parentNode.parentNode.innerHTML.split(">")[1].split("<")[0];
-                
+
             })
         }
     }, 300); // Delay of .3 second
 }
 
 //eventlisteners for send friend request
-var sendRequest = function(){
+//also no longer needed
+var sendRequestListener = function () {
     setTimeout(function () {
         var friendrequest = document.getElementsByName("sendrequest")//send friend request button
         for (let x = 0; x < friendrequest.length; x++) {
             //console.log(friendrequest[x].parentNode.parentNode.innerHTML.split(">")[1].split("<")[0])//gets username of friend
             friendrequest[x].addEventListener('click', (e) => {
-                e.preventDefault()
+                e.preventDefault();
+                console.log(x);
+                console.log(document.getElementById(x));
                 var receiver = friendrequest[x].parentNode.parentNode.innerHTML.split(">")[1].split("<")[0]; //person you send the request to
                 socket.emit("send_request", receiver);
                 document.getElementById(x).remove();
@@ -227,6 +222,13 @@ var randos = function (rando, pfp, id) {
     sendRequest.classList.add("btn-success");
     sendRequest.classList.add("btn-sm");
     sendRequest.innerHTML = "Send Friend Request";
+    sendRequest.addEventListener("click", function (e) {
+        var receiver = this.parentNode.parentNode.innerHTML.split(">")[1].split("<")[0];
+        e.preventDefault();
+        var x = this.parentNode.parentNode.parentNode.parentNode.id;
+        socket.emit("send_request", receiver)
+        document.getElementById(x).remove();
+    });
     var profile = document.createElement("button");
     profile.type = "button";
     profile.setAttribute('name', 'randos');
@@ -235,27 +237,11 @@ var randos = function (rando, pfp, id) {
     profile.classList.add("btn-sm");
     profile.style = "margin-left: 7px";
     profile.innerHTML = 'View Profile';
+    profile.addEventListener("click", profileButtonExplore());
     newDiv.style = "margin-top: 10px";
     newDiv.appendChild(sendRequest);
     newDiv.appendChild(profile);
     cardText.appendChild(newDiv);
-
-    // var newButton = document.createElement("button");
-    // var img = document.createElement("img");
-    // img.src = pfp
-    // console.log(pfp)
-    // img.style.height = "30px";
-    // img.style.width = "30px";
-    // img.style.marginRight = "10px";
-    // newButton.appendChild(img);
-    // newButton.type = "button";
-    // newButton.classList.add("btn");
-    // newButton.classList.add("btn-outline-dark");
-    // newButton.classList.add("custom-button");
-    // newButton.style = "background-color: #DEF2F1; width: 32vh; text-align: left; margin-bottom: 20px; margin-left: 40px;";
-    // newButton.setAttribute('name', 'friend');
-    // newButton.innerHTML += "" + rando;
-    // friends.appendChild(newButton);
 }
 
 var clearFriends = function () {
@@ -301,7 +287,8 @@ var loadRequests = function () {
             clearFriends();
             var response = JSON.parse(xhttp.responseText); var received = response.requests.received;
             var sent = response.requests.sent;
-            console.log(received);
+            var received = response.requests.received;
+            // console.log(response);
             for (var i = 0; i < received.length; i++) {
                 fr = received[i];
                 friendRequest(fr[0], "incoming", i);
@@ -332,9 +319,9 @@ var loadExplore = function (str) {
             for (let i = 0; i < r.length; i++) {
                 randos(r[i], pfp[i], i);
             }
+            // profileButtonExplore();
+            // sendRequest();
         }
-        profileButtonExplore();
-        sendRequest();
     }
     xhttp.open("POST", "load-explore-ajax");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -398,6 +385,7 @@ var searchBar = function (str) {
             if (this.readyState == 4 && this.status == 200) {
                 clearFriends();
                 var response = JSON.parse(xhttp.responseText);
+                console.log(response);
                 r = response.randos;
                 pfp = response.pfp;
                 // console.log(r);

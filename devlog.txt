@@ -176,6 +176,9 @@ ivanY -- 2023-06-08 19:26
 * fixed bug with names between friends 
 * create dropdown for creating groups and adding members to a group
 
+junW -- 2023-06-09 16:40
+--------------------------------------------------------------
+* Worked on creating group functionality
 jamesY -- 2023-06-09 23:16
 --------------------------------------------------------------
 * Created buttons and functionality for viewing the profile of other users and adding to friends
@@ -195,3 +198,7 @@ ivanY -- 2023-06-09 23:16
 * Added profile pictures to members 
 * Added client's username and profile picture on the nav bar 
 * Updated readme with corrected instructions
+
+junW -- 2023-06-10 00:20
+--------------------------------------------------------------
+* Add to group functionality working

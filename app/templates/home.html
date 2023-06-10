@@ -65,7 +65,7 @@
       <div class="col-sm-2" style="height: 91vh; padding-right: 5px;">
         <!--100vh makes column fill the page, padding makes scrollbar closer to the border-->
 
-        <div class="h-100 scrollable overflow-auto" id="scroll"> <!--scrollable div-->
+        <div class="h-100 scrollable overflow-auto" > <!--scrollable div-->
           <div>
             <div class="row">
               <div class="col-sm-6" style="text-align: center; padding-right: 0px; margin-bottom: 0px;">
@@ -77,7 +77,7 @@
               </div>
             </div>
             <div id="dropdown-menu-create" class="dropdown-menu">
-              <form>
+              <form action="" method="POST">
                 <label for="group-name">Group Name:</label>
                 <input type="text" id="group-name" name="group-name" required>
                 <button type="submit" onclick="createGroup()">Create</button>
@@ -91,7 +91,7 @@
               <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
               <form action="\settings" method="POST" id="upload_profile_form">
                 <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
-                  <label for="file" class="btn">Upload Profile Picture</label>
+                  <label id="uploadGroupImage" for="file" class="btn">Upload Profile Picture</label>
                   <input type="file" id="file" style="visibility:hidden; margin-right: 5px;" name="change"
                     accept=".jpg, .jpeg, .png" hidden></input>
                   <input style="display: inline-block;" type="submit" value="Change">
@@ -108,7 +108,7 @@
               <form id="friends-checkboxes-create">
                 {% for friend in FRIENDS %}
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}">
+                  <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}" onchange="setChecked(this)" name="createCheckbox">
                   <label class="form-check-label" for="flexCheckDefault">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
                       class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
@@ -125,7 +125,7 @@
             <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
 
               <!--button template-->
-              <div style="width:100%;">
+              <div style="width:100%;" id="friendsScroll">
                 {% for group in GROUPS %}
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
@@ -162,32 +162,22 @@
               <h4 style="text-align: center;" id="chat_name"></h4> <!--chat name-->
             </div>
 
-            <div class="col-sm-4" style="text-align: end;">
-              <button id="dropdown-button-add" class="dropdown-toggle" onclick="toggleDropdownAdd()">Add User</button>
-            </div>
-            <div id="dropdown-menu-add" class="dropdown-menu">
-              <form>
-                <form action="" method="POST" class="d-flex">
-                  <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search"
-                    onkeyup="addUserToGroupSearch(this.value)">
-                </form>
-                <button type="submit" onclick="addUser()">Create</button>
-
-                <form id="friends-checkboxes-add">
-                  {% for friend in FRIENDS %}
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}">
-                    <label class="form-check-label" for="flexCheckDefault">
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
-                        class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
-                      {{ friend[0] }}
-                    </label>
-                  </div>
-                  {% endfor %}
-                </form>
+          <div class="col-sm-4" style="text-align: end;">
+          <button id="dropdown-button-add" class="dropdown-toggle" onclick="toggleDropdownAdd()">Add User</button>
+        </div>
+          <div id="dropdown-menu-add" class="dropdown-menu">
+            <form>
+              <form action="" method="POST" class="d-flex">
+                <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search"
+                  onkeyup="addUserToGroupSearch(this.value)">
               </form>
-            </div>
+              <button type="submit" onclick="addUser()">Add to group</button>
+
+              <form id="friends-checkboxes-add">
+              </form>
+            </form>
           </div>
+        </div>
         </div>
 
         <!--message div-->
