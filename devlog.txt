@@ -179,3 +179,26 @@ ivanY -- 2023-06-08 19:26
 junW -- 2023-06-09 16:40
 --------------------------------------------------------------
 * Worked on creating group functionality
+jamesY -- 2023-06-09 23:16
+--------------------------------------------------------------
+* Created buttons and functionality for viewing the profile of other users and adding to friends
+
+junW -- 2023-06-09 23:16
+--------------------------------------------------------------
+* Got create group button working
+    * searches for users + checks for creating group
+* working on adding members to group
+    * searches
+joshuaL -- 2023-06-09 23:16
+--------------------------------------------------------------
+* Created emoji and uploaded default ones
+
+ivanY -- 2023-06-09 23:16
+--------------------------------------------------------------
+* Added profile pictures to members 
+* Added client's username and profile picture on the nav bar 
+* Updated readme with corrected instructions
+
+junW -- 2023-06-10 00:20
+--------------------------------------------------------------
+* Add to group functionality working
