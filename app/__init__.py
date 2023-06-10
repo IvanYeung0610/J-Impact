@@ -324,9 +324,9 @@ def handle_message(message):
 # Sends the friend request to the proper sockets.
 # RECIEVES - users: [sender, reciever]
 @socketio.on('send_request')
-def send_friend_request(users): 
-    sender = users[0]
-    reciever = users[1]
+def send_friend_request(user): 
+    sender = session.get("CLIENT")
+    reciever = user
     add_friend_request(sender,reciever)
 
     recievers = connected_users[reciever]
