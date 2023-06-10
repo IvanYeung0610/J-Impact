@@ -95,13 +95,73 @@ var getMessage = function (x) {
 var toggleDropdownCreate = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-create');
     if (dropdownMenu.style.display === 'none') {
-      dropdownMenu.style.display = 'block';
-      dropdownMenu.style.maxHeight = '400px';
-      dropdownMenu.style.overflowY = 'auto';
-      dropdownMenu.style.marginLeft = '10px';
+        dropdownMenu.style.display = 'block';
+        dropdownMenu.style.maxHeight = '400px';
+        dropdownMenu.style.overflowY = 'auto';
+        dropdownMenu.style.marginLeft = '10px';
     } else {
         dropdownMenu.style.display = 'none';
     }
+}
+
+var chatList = document.getElementsByName("group_button");
+for (let i = 0; i < chatList.length; i++) {
+    chatList[i].addEventListener("click", function () {
+        var chats = document.getElementsByName("group_button");
+        for (let i = 0; i < chats.length; i++) {
+            chats[i].removeAttribute("selected");
+        }
+        this.setAttribute("selected", "");
+    })
+}
+
+var createDropdownAdd = function (element) {
+    addFriendsCheckboxes = document.getElementById("friends-checkboxes-add");
+    addFriendsCheckboxes.innerHTML = "";
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            console.log(response);
+            var addable = response.addable;
+            for (let i = 0; i < addable.length; i++) {
+                let formCheck = document.createElement("div");
+                formCheck.classList.add("form-check");
+                let formInput = document.createElement("input");
+                formInput.classList.add("form-check-input");
+                formInput.type = "checkbox";
+                formInput.id = addable[i];
+                formInput.name = "addCheckbox";
+                formInput.addEventListener("change", function () {
+                    if (this.checked) {
+                        this.setAttribute("checked", "");
+                    } else {
+                        this.removeAttribute("checked");
+                    }
+                })
+                var formLabel = document.createElement("label");
+                formLabel.classList.add("form-check-label");
+                formLabel.for = "flexCheckDefault";
+                var pfp = document.createElement("img");
+                pfp.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                pfp.classList.add("rounded-circle");
+                pfp.style.width = "30px";
+                pfp.style.height = "30px";
+                pfp.style.marginRight = "3px";
+                formLabel.appendChild(pfp);
+                formLabel.innerHTML += addable[i];
+                formCheck.appendChild(formInput);
+                formCheck.appendChild(formLabel);
+                addFriendsCheckboxes.appendChild(formCheck);
+                // console.log(addFriendsCheckboxes);
+            }
+        }
+    }
+    xhr.open("POST", "addUserDropdown");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var groupID = element.getAttribute("id");
+    var postVars = "groupID=" + groupID;
+    xhr.send(postVars);
 }
 
 var toggleDropdownAdd = function () {
@@ -119,9 +179,52 @@ var toggleDropdownAdd = function () {
     }
 }
 
-var addUser = function () {
-    // action for add friends
+var selectedChat = function () {
+
 }
+
+var addUser = function () {
+    var people = document.getElementsByName("addCheckbox");
+    var usersAdded = [];
+    // Perform further actions with the group name
+    for (let i = 0; i < people.length; i++) {
+        if (people[i].checked) {
+            usersAdded.push(people[i].id);
+        }
+    }
+    if (usersAdded.length > 0) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = JSON.parse(this.responseText);
+                console.log(response);
+                refreshPage();
+            }
+        }
+        xhttp.open("POST", "add-users-to-group-ajax");
+        xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        var group_buttons = document.getElementsByName("group_button");
+        console.log(group_buttons);
+        var groupID = 0;
+        for (let i = 0; i < group_buttons.length; i++) {
+            console.log(group_buttons[i].getAttribute("selected", "true"));
+            if (group_buttons[i].getAttribute("selected", "true") == "") {
+                groupID = group_buttons[i].id;
+            }
+        }
+
+        var postVars = JSON.stringify({ "selected": usersAdded, "group_id": groupID });
+        console.log(postVars);
+        xhttp.send(postVars);
+    } else {
+        console.log("select at least 2 people, dummy");
+    }
+}
+
+//test refresh page so that changes load
+var refreshPage = function() {
+    window.location.reload();
+} 
 
 var clear_ping = function (group_id) {
     ping_bubble = document.getElementById("ping_bubble" + group_id)
@@ -178,6 +281,8 @@ for (let x = 0; x < memlist.length; x++) {
     })
 }
 
+
+
 var createGroupBar = function (str) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
@@ -194,7 +299,7 @@ var createGroupBar = function (str) {
                 checkbox.type = "checkbox";
                 checkbox.id = selectedUsers[i][0];
                 checkbox.name = "createCheckbox";
-                checkbox.addEventListener("change", function() {
+                checkbox.addEventListener("change", function () {
                     if (this.checked) {
                         this.setAttribute("checked", "");
                     } else {
@@ -204,7 +309,7 @@ var createGroupBar = function (str) {
                 formLabel = document.createElement("label");
                 formLabel.classList.add("form-check-label");
                 formLabel.setAttribute("for", "flexCheckDefault");
-                
+
                 pfp = document.createElement("img");
                 //the cloudinary image is massive, but this would work
                 // pfp.src = selectedUsers[i][1];
@@ -228,7 +333,7 @@ var createGroupBar = function (str) {
     xhttp.send(postVars);
 }
 
-var setChecked = function(element) {
+var setChecked = function (element) {
     if (element.checked) {
         element.setAttribute("checked", "checked");
     } else {
@@ -238,7 +343,6 @@ var setChecked = function(element) {
 }
 
 var createGroup = function () {
-    var groupName = document.getElementById('group-name').value;
     var people = document.getElementsByName("createCheckbox");
     var selected = [];
     // Perform further actions with the group name
@@ -247,14 +351,14 @@ var createGroup = function () {
             selected.push(people[i].id);
         }
     }
-    if (selected.length >= 2) {
+    console.log(selected);
+    if (selected.length >= 2 && document.getElementById("group-name").value != "") {
         var xhttp = new XMLHttpRequest();
-        xhttp.onreadystatechange = function() {
+        xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var response = JSON.parse(this.responseText);
                 console.log(response);
                 //not really sure what to put here
-                var chatList = document.getElementById("friendsScroll");
                 img = document.createElement("img");
                 img.src = image;
                 img.setAttribute("width", "30px");
@@ -268,22 +372,19 @@ var createGroup = function () {
                 button.style.backgroundColor = "#DEF2F1";
                 button.style.width = "100%";
                 button.style.textAlight = "left";
-
                 button.appendChild(img, name);
-
             }
         }
-        xhttp.open("POST", "creating-group");
+        xhttp.open("POST", "creating-group-ajax");
         xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
         var name = document.getElementById("group-name").value;
         var image = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
-        var postVars = JSON.stringify({"selected" : selected, "name" : name, "image" : image});
+        var postVars = JSON.stringify({ "selected": selected, "name": name, "image": image });
         console.log(postVars);
         xhttp.send(postVars);
     } else {
         console.log("select at least 2 people, dummy");
     }
-    // return false;
 }
 
 //only reason why this is different is to account for removing members?
@@ -304,6 +405,13 @@ var addUserToGroupSearch = function (str) {
                 checkbox.classList.add("form-check-input");
                 checkbox.type = "checkbox";
                 checkbox.id = selectedUsers[i][0];
+                checkbox.addEventListener("change", function () {
+                    if (this.checked) {
+                        this.setAttribute("checked", "");
+                    } else {
+                        this.removeAttribute("checked");
+                    }
+                })
                 formLabel = document.createElement("label");
                 formLabel.classList.add("form-check-label");
                 formLabel.setAttribute("for", "flexCheckDefault");

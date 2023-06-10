@@ -239,15 +239,45 @@ def add_user_to_group_search():
         return jsonify(users=users)
     return jsonify({"error" : "error"})
 
-@app.route("/creating-group", methods=["POST"])
-def add_to_group():
-    posted = request.json
-    users = posted.get("selected").append(session.get("CLIENT"))
-    image = posted.get("image")
-    groupName = posted.get("name")
+@app.route("/creating-group-ajax", methods=["POST"])
+def create_group_ajax():
+    posted = request.get_json()
+    users = posted["selected"]
+    users.append(session.get("CLIENT"))
+    print((users))
+    # image = posted.get("image")
+    image = "image"
+    groupName = posted["name"]
     id = create_group(groupName, image, users)
-    print(id)
-    return jsonify({"group_id": id})
+    return jsonify({"title": groupName, "image": image, "users" : users})
+
+@app.route("/add-users-to-group-ajax", methods=["POST"])
+def add_to_group_ajax():
+    posted = request.get_json()
+    users = posted["selected"]
+    chatID = posted["group_id"]
+    for user in users:
+        print(user)
+        add_to_group(chatID, user)
+    return jsonify({"success" : "success"})
+
+@app.route("/addUserDropdown", methods=["POST"])
+def addUserDropdown():
+    chatMembers = get_all_users_by_group(request.form.get("groupID"))
+    friends = get_all_friends(session.get("CLIENT"))
+    addable = []
+    print(friends)
+    for i in range(len(friends)):
+        appendable = True
+        for j in range(len(chatMembers)):
+            if friends[i][1] == chatMembers[j]:
+                appendable = False
+        if appendable:
+            addable.append(friends[i][1])
+
+    if chatMembers:
+        return jsonify({"addable" : addable})
+    return jsonify({"error" : "error"})
 
 # ========================== SOCKETS ==========================
 
