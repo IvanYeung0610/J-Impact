@@ -97,22 +97,15 @@ var getMessage = function (x) {
 }
 
 var toggleDropdownCreate = function () {
-var toggleDropdownCreate = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-create');
     if (dropdownMenu.style.display === 'none') {
         dropdownMenu.style.display = 'block';
         dropdownMenu.style.maxHeight = '400px';
         dropdownMenu.style.overflowY = 'auto';
         dropdownMenu.style.marginLeft = '10px';
-        dropdownMenu.style.display = 'block';
-        dropdownMenu.style.maxHeight = '400px';
-        dropdownMenu.style.overflowY = 'auto';
-        dropdownMenu.style.marginLeft = '10px';
     } else {
         dropdownMenu.style.display = 'none';
-        dropdownMenu.style.display = 'none';
     }
-}
 }
 
 var chatList = document.getElementsByName("group_button");
@@ -190,8 +183,9 @@ var toggleDropdownAdd = function () {
     }
 }
 
-var createGroup = function () {
-    var groupName = document.getElementById('group-name').value;
+var addUser = function () {
+    var people = document.getElementsByName("addCheckbox");
+    var usersAdded = [];
     // Perform further actions with the group name
     for (let i = 0; i < people.length; i++) {
         if (people[i].checked) {
@@ -241,10 +235,10 @@ var clear_ping = function (group_id) {
 }
 //eventlisteners for profile
 var profileButton = function () {
-    console.log(memberlist)
+    // console.log(memberlist)
     setTimeout(function () {
         var memlist = document.getElementsByName("memlist");
-        console.log(memlist)
+        // console.log(memlist)
         for (let x = 0; x < memlist.length; x++) {
             memlist[x].addEventListener('click', (e) => {
                 e.preventDefault()
