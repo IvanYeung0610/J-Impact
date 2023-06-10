@@ -36,23 +36,21 @@
     ```
     pip install -r requirements.txt
     ```
-5. Cd into app/keys and create a secret.env file inside the directory and input the following key into the file:
+5. Make an account on cloudinary and obtain the secret key for your account. https://cloudinary.com/users/register_free 
 
-    ``` 
-    
-    ``` 
+6. Cd into app/keys and create a secret.env file inside the directory and input that key you obtained from your cloudinary account into the file.
 
-6. Run the program
+7. Run the program
 
     ``` 
     python3 __init__.py
     ```
 
-7. Click on the following link:
+8. Click on the following link:
     
     ```
     http://127.0.0.1:5000
     ```
 
-8. Start chatting!
+9. Start chatting!
 
