@@ -21,6 +21,7 @@ def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         groups = get_all_groups_from_user(session.get("CLIENT"))
         friends = search_friends("", session.get("CLIENT"))
+        pfp = get_pfp(session.get("CLIENT"))[0]
         # print(friends)
         #print(groups)
         group_info = {}
@@ -31,7 +32,7 @@ def home_page():
             else:
                 friend_username = get_all_other_users_by_group(group, session.get("CLIENT"))[0]
                 group_info[group] = [friend_username, get_pfp(friend_username), get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
-        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, FRIENDS=friends)
+        return render_template("home.html", USER=session.get("CLIENT"), GROUPS=groups, GROUP_INFO=group_info, FRIENDS=friends, PFP=pfp)
     return redirect( url_for("login_page") )
 
 @app.route("/homeajax", methods=["POST"])
@@ -98,6 +99,7 @@ def logout():
 @app.route("/friends", methods=["GET", "POST"])
 def friends_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
+        pfp = get_pfp(session.get("CLIENT"))[0]
         unsortedf_list = get_all_friends(session.get("CLIENT"))
         f_list = []
         for pair in unsortedf_list:
@@ -107,7 +109,7 @@ def friends_page():
                 f_list.append([ pair[1], get_user(pair[1])[2] ])
             else:
                 f_list.append([pair[0], get_user(pair[0])[2] ])
-        return render_template("friends.html", FRIENDS=f_list, USER=session.get("CLIENT"))  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
+        return render_template("friends.html", FRIENDS=f_list, USER=session.get("CLIENT"), PFP=pfp)  # FRIENDS is a 2D array of friends [ [username, pfp],  . . . ]
     return redirect( url_for("home_page", USER=session.get("CLIENT")) )
     
 @app.route("/friend-request-ajax", methods=["POST"])
@@ -198,6 +200,7 @@ def desc_ajax():
 
 @app.route("/profile/<username>")
 def profile(username):
+    pfp = get_pfp(session.get("CLIENT"))[0]
     info = get_user(username)
     friend1 = [] #other user's friends
     friend2 = [] #your friends
@@ -226,9 +229,9 @@ def profile(username):
             mutualpfp.append(get_pfp(f)[0])
         #print(mutualpfp)
         mutualinfo = zip(list(mutual[0]), mutualpfp)
-        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], mutual=mutualinfo, USER=session.get("CLIENT"))
+        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], mutual=mutualinfo, USER=session.get("CLIENT"), PFP=pfp)
     else:
-        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], USER=session.get("CLIENT"))
+        return render_template("profile.html", user=info[0], url=info[2], bio=info[3], USER=session.get("CLIENT"), PFP=pfp)
         
 @app.route("/create-group-search", methods=["POST"])
 def create_group_search():
