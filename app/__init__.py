@@ -54,7 +54,7 @@ def messages_ajax():
         if group[0] == session.get("CLIENT"):
             messageData["title"] = group[1]
         else:
-            messageData["title"] = session.get("CLIENT")
+            messageData["title"] = group[0]
     else:
         messageData["title"] = get_group_title(id)
     for data in messages:
