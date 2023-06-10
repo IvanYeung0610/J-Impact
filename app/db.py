@@ -12,6 +12,7 @@ c.executescript("""
     create TABLE if NOT EXISTS UserAssociation(group_id int, username text, PRIMARY KEY (group_id, username));
     create TABLE if NOT EXISTS EmojiAssociation(group_id int, emoji text, PRIMARY KEY (group_id, emoji));
     create TABLE if NOT EXISTS Groups(group_id int primary key, Title text, image text);
+    create TABLE if NOT EXISTS DefaultEmojis(emoji text primary key);
 """)
 c.close()
 
@@ -29,6 +30,14 @@ def get_pfp_from_user(username):
     user = c.fetchone()
     c.close()
     return user[0]
+
+#  Get a list of all deafult emojis
+def get_default_emojis():
+    c = db.cursor()
+    c.execute("select * from DefaultEmojis")
+    emojis = c.fetchone()
+    c.close()
+    return [emoji[0] for emoji in emojis]
 
 # Returns True or False. True if a user exists with the given info, False if not.
 def match_account_info(username, password):
@@ -227,6 +236,15 @@ def create_group(title, image, members):
         db.commit()
     except:
         print("GROUP CANNOT BE MADE")
+    c.close()
+
+def add_default_emoji(emoji):
+    c = db.cursor()
+    try:
+        c.execute("INSERT into DefaultEmojis values(?)", (emoji,))
+        db.commit()
+    except:
+        print("EMOJI ALREADY EXISTS")
     c.close()
 
 # ================ CHANGING INFORMATION ================
