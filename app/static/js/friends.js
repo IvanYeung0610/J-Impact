@@ -6,6 +6,7 @@ var title = document.getElementById("title"); //friends list label
 var friend = document.getElementById("friends");//friends tab
 var search = document.getElementById("search"); //search bar in all
 
+
 // var searchFriends = document.getElementById("searchFriends"); //search bar in friends
 
 //all tab is selected by default
@@ -140,6 +141,38 @@ var profileButton = function () {
     }, 300); // Delay of .3 second
 }
 
+//eventlisteners for profile in explore
+var profileButtonExplore = function () {
+    setTimeout(function () {
+        var memlist = document.getElementsByName("randos");
+        console.log(memlist)
+        for (let x = 0; x < memlist.length; x++) {
+            //console.log(memlist[x].parentNode.parentNode.innerHTML.split(">")[1].split("<")[0]) //gets username of friend
+            memlist[x].addEventListener('click', (e) => {
+                e.preventDefault()
+                window.location.href = '/profile/' + memlist[x].parentNode.parentNode.innerHTML.split(">")[1].split("<")[0];
+                
+            })
+        }
+    }, 300); // Delay of .3 second
+}
+
+//eventlisteners for send friend request
+var sendRequest = function(){
+    setTimeout(function () {
+        var friendrequest = document.getElementsByName("sendrequest")//send friend request button
+        for (let x = 0; x < friendrequest.length; x++) {
+            //console.log(friendrequest[x].parentNode.parentNode.innerHTML.split(">")[1].split("<")[0])//gets username of friend
+            friendrequest[x].addEventListener('click', (e) => {
+                e.preventDefault()
+                var receiver = friendrequest[x].parentNode.parentNode.innerHTML.split(">")[1].split("<")[0]; //person you send the request to
+                socket.emit("send_request", receiver);
+                document.getElementById(x).remove();
+            })
+        }
+    }, 300); // Delay of .3 second
+}
+
 var friendsList = function (friend, pfp) {
     var newButton = document.createElement("button");
     var img = document.createElement("img");
@@ -159,23 +192,70 @@ var friendsList = function (friend, pfp) {
     friends.appendChild(newButton);
 }
 
-var randos = function (rando, pfp) {
-    var newButton = document.createElement("button");
+var randos = function (rando, pfp, id) {
+    var newCard = document.createElement("div");
+    newCard.id = id;
+    newCard.className = "card";
+    newCard.style = "margin-left: 18px; margin-right: 10px; width: 18%; margin-bottom: 10px"
+    var cardBody = document.createElement("div");
+    cardBody.className = "card-body";
+    //cardBody.setAttribute('name', 'randos');
+    //cardBody.style = "text-align: center;";
+    newCard.appendChild(cardBody);
+    var cardText = document.createElement("div");
+    cardText.className = "card-text";
+    //cardText.style = "justify-content: center";
+    cardBody.appendChild(cardText);
+    friends.style = "display: flex; flex-wrap: wrap; margin: auto";
+    friends.appendChild(newCard);
     var img = document.createElement("img");
     img.src = pfp
     //console.log(pfp)
     img.style.height = "30px";
     img.style.width = "30px";
     img.style.marginRight = "10px";
-    newButton.appendChild(img);
-    newButton.type = "button";
-    newButton.classList.add("btn");
-    newButton.classList.add("btn-outline-dark");
-    newButton.classList.add("custom-button");
-    newButton.style = "background-color: #DEF2F1; width: 32vh; text-align: left; margin-bottom: 20px; margin-left: 40px;";
-    newButton.setAttribute('name', 'friend');
-    newButton.innerHTML += "" + rando;
-    friends.appendChild(newButton);
+    cardText.append(img);
+    cardText.innerHTML += rando;
+
+    //friend request button + view profile
+    var newDiv = document.createElement("div");
+    var sendRequest = document.createElement("button");
+    sendRequest.type = "button";
+    //sendRequest.style = "margin-left: 50px; padding: 3px; font-size: .7rem"
+    sendRequest.setAttribute('name', 'sendrequest');
+    sendRequest.classList.add("btn");
+    sendRequest.classList.add("btn-success");
+    sendRequest.classList.add("btn-sm");
+    sendRequest.innerHTML = "Send Friend Request";
+    var profile = document.createElement("button");
+    profile.type = "button";
+    profile.setAttribute('name', 'randos');
+    profile.classList.add("btn");
+    profile.classList.add("btn-info");
+    profile.classList.add("btn-sm");
+    profile.style = "margin-left: 7px";
+    profile.innerHTML = 'View Profile';
+    newDiv.style = "margin-top: 10px";
+    newDiv.appendChild(sendRequest);
+    newDiv.appendChild(profile);
+    cardText.appendChild(newDiv);
+
+    // var newButton = document.createElement("button");
+    // var img = document.createElement("img");
+    // img.src = pfp
+    // console.log(pfp)
+    // img.style.height = "30px";
+    // img.style.width = "30px";
+    // img.style.marginRight = "10px";
+    // newButton.appendChild(img);
+    // newButton.type = "button";
+    // newButton.classList.add("btn");
+    // newButton.classList.add("btn-outline-dark");
+    // newButton.classList.add("custom-button");
+    // newButton.style = "background-color: #DEF2F1; width: 32vh; text-align: left; margin-bottom: 20px; margin-left: 40px;";
+    // newButton.setAttribute('name', 'friend');
+    // newButton.innerHTML += "" + rando;
+    // friends.appendChild(newButton);
 }
 
 var clearFriends = function () {
@@ -250,10 +330,11 @@ var loadExplore = function (str) {
             var pfp = response.pfp;
             //console.log(r[10]);
             for (let i = 0; i < r.length; i++) {
-                randos(r[i], pfp[i]);
+                randos(r[i], pfp[i], i);
             }
         }
-        profileButton();
+        profileButtonExplore();
+        sendRequest();
     }
     xhttp.open("POST", "load-explore-ajax");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");

@@ -4,6 +4,7 @@ var bio = document.getElementById("bio")//about me section
 var editarea = document.getElementById("editarea")//where the textarea will appear
 var uploadform = document.getElementById("upload_profile_form")
 var pfp = document.getElementById("pfp")
+var nav_pfp = document.getElementById("nav-pfp")
 
 uploadform.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -21,6 +22,7 @@ uploadform.addEventListener('submit', (e) => {
 
 socket.on('successfully_updated', (e) => {
     pfp.src = e
+    nav_pfp.src = e
 })
 
 //edit bio function
