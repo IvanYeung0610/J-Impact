@@ -65,18 +65,19 @@
       <div class="col-sm-2" style="height: 91vh; padding-right: 5px;">
         <!--100vh makes column fill the page, padding makes scrollbar closer to the border-->
 
-        <div class="h-100 scrollable overflow-auto" id="scroll"> <!--scrollable div-->
+        <div class="h-100 scrollable overflow-auto" > <!--scrollable div-->
           <div>
             <div class="row">
               <div class="col-sm-6" style="text-align: center; padding-right: 0px; margin-bottom: 0px;">
-            <h5 style="padding-right: 0px;">Friends</h5>
-          </div>
-          <div class="col-sm-6" style="padding-left: 0px;">
-            <button class="dropdown-toggle" onclick="toggleDropdownCreate()" style="padding: 5px">Create Group</button>
-          </div>
-          </div>
+                <h5 style="padding-right: 0px;">Friends</h5>
+              </div>
+              <div class="col-sm-6" style="padding-left: 0px;">
+                <button class="dropdown-toggle" onclick="toggleDropdownCreate()" style="padding: 5px">Create
+                  Group</button>
+              </div>
+            </div>
             <div id="dropdown-menu-create" class="dropdown-menu">
-              <form>
+              <form action="" method="POST">
                 <label for="group-name">Group Name:</label>
                 <input type="text" id="group-name" name="group-name" required>
                 <button type="submit" onclick="createGroup()">Create</button>
@@ -90,7 +91,7 @@
               <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
               <form action="\settings" method="POST" id="upload_profile_form">
                 <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
-                  <label for="file" class="btn">Upload Profile Picture</label>
+                  <label id="uploadGroupImage" for="file" class="btn">Upload Profile Picture</label>
                   <input type="file" id="file" style="visibility:hidden; margin-right: 5px;" name="change"
                     accept=".jpg, .jpeg, .png" hidden></input>
                   <input style="display: inline-block;" type="submit" value="Change">
@@ -107,7 +108,7 @@
               <form id="friends-checkboxes-create">
                 {% for friend in FRIENDS %}
                 <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}">
+                  <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}" onchange="setChecked(this)" name="createCheckbox">
                   <label class="form-check-label" for="flexCheckDefault">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
                       class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
@@ -124,11 +125,11 @@
             <div class="btn-group-vertical" role="group" aria-label="Vertical button group">
 
               <!--button template-->
-              <div style="width:100%;">
+              <div style="width:100%;" id="friendsScroll">
                 {% for group in GROUPS %}
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
-                  style="background-color: #DEF2F1; width:100%; text-align: left;">
+                  style="background-color: #DEF2F1; width:100%; text-align: left;" onclick="createDropdownAdd(this)">
                   <img src= "{{ GROUP_INFO[group][1][0] }}"
                     width="30px" height="30px" style="margin-right: 3px;">
                   {{ GROUP_INFO[group][0] }} <!-- Group Title or Friend's name -->
@@ -155,11 +156,11 @@
 
         <div class="border-bottom border-dark-subtle border-3">
           <div class="row">
-          <div class="col-sm-4"></div>
+            <div class="col-sm-4"></div>
 
-          <div class="col-sm-4" style="text-align: center;">
-          <h4 style="text-align: center;" id="chat_name"></h4> <!--chat name-->
-          </div>
+            <div class="col-sm-4" style="text-align: center;">
+              <h4 style="text-align: center;" id="chat_name"></h4> <!--chat name-->
+            </div>
 
           <div class="col-sm-4" style="text-align: end;">
           <button id="dropdown-button-add" class="dropdown-toggle" onclick="toggleDropdownAdd()">Add User</button>
@@ -170,19 +171,9 @@
                 <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search"
                   onkeyup="addUserToGroupSearch(this.value)">
               </form>
-              <button type="submit" onclick="addUser()">Create</button>
+              <button type="submit" onclick="addUser()">Add to group</button>
 
               <form id="friends-checkboxes-add">
-                {% for friend in FRIENDS %}
-                <div class="form-check">
-                  <input class="form-check-input" type="checkbox" value="" id="{{ friend[0] }}">
-                  <label class="form-check-label" for="flexCheckDefault">
-                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg"
-                      class="rounded-circle" width="30px" height="30px" style="margin-right: 3px;">
-                    {{ friend[0] }}
-                  </label>
-                </div>
-                {% endfor %}
               </form>
             </form>
           </div>
@@ -196,13 +187,22 @@
         </div>
 
         <!--message input-->
-        <form action="" method="POST" autocomplete="off" id="messageform"><!--auto complete removes inut suggestions-->
+        <form action="" method="POST" autocomplete="off" id="messageform" style="width:75%" class="d-inline-flex">
+          <!--auto complete removes inut suggestions-->
           <input type="text" name="message" minlength="1" class="form-control" id="messageinput"
-            placeholder="Send a message..." style="bottom: 14px; width: 75%; left: 0%; right: 0; margin: auto;"
+            placeholder="Send a message..." style="bottom: 14px; width: 100%; left: 0%; right: 0; margin: auto;"
             onchange="ajaxMessage(this.value)" required><br>
           <input type="submit" style="display: none">
           <!--style makes form go to bottom of the page-->
         </form>
+
+        <!-- EMOJI BUTTON -->
+        <div class="d-inline-flex">
+          <button type="button" class="btn btn-info btn-circle p-1" id="emoji_dropdown_button">
+            <img src="https://res.cloudinary.com/dg13dndup/image/upload/v1686362344/ypjprqoslgpozmlrnv0h.png"
+              alt="emoji button" style="width: 25px;">
+          </button>
+        </div>
 
       </div>
 

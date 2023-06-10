@@ -18,6 +18,7 @@ def check_association(user1, user2):
 def search_new_friends(search_term, username):
     data = get_all_users()
     searched = []
+    print(search_term)
     # print(type(search_term))
     if (search_term == "" or search_term == None):
         for user in data:
