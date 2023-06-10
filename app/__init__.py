@@ -371,10 +371,13 @@ def send_friend_request(user):
     sender = session.get("CLIENT")
     reciever = user
     add_friend_request(sender,reciever)
+    try: 
+        recievers = connected_users[reciever]
+        for R in recievers:
+            emit('request_recieved', sender, to=R)
+    except:
+        emit("error", "error")
 
-    recievers = connected_users[reciever]
-    for R in recievers:
-        emit('request_recieved', sender, to=R)
 
 #the next 3 functions, users is array of 1, containing the other user
 @socketio.on('accepted_request')
