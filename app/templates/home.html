@@ -130,7 +130,7 @@
                 {% for group in GROUPS %}
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
-                  style="background-color: #645E9D; width:100%; text-align: left;">
+                  style="background-color: #645E9D; width:100%; text-align: left;" onclick="createDropdownAdd(this)">
                   <img src="{{ GROUP_INFO[group][1][0] }}" width="30px" height="30px" style="margin-right: 3px;">
                   {{ GROUP_INFO[group][0] }} <!-- Group Title or Friend's name -->
 
