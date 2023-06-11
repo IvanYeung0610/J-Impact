@@ -79,7 +79,7 @@
                   Group</button>
               </div>
             </div>
-            <div id="dropdown-menu-create" class="dropdown-menu">
+            <div id="dropdown-menu-create" class="dropdown-menu" style="display: none;">
               <form action="" method="POST">
                 <label for="group-name">Group Name:</label>
                 <input type="text" id="group-name" name="group-name" required>
@@ -94,7 +94,7 @@
               <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
               <form action="" id="upload_group_image_form">
                 <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
-                  <label id="uploadGroupImage" for="file" class="btn">Upload Profile Picture</label>
+                  <label id="uploadGroupImage" for="file" class="btn btn-outline-dark" style="margin-right: 5px;">Upload Profile Picture</label>
                   <input type="file" id="file" style="visibility:hidden; margin-right: 5px;" name="change"
                     accept=".jpg, .jpeg, .png" hidden></input>
                   <input style="display: inline-block;" type="submit" value="Change">
