@@ -426,4 +426,4 @@ def updated_profile_picture(file_data):
 
 if __name__ == "__main__":
     app.debug = True
-    socketio.run(app, allow_unsafe_werkzeug=True, host="0.0.0.0")
+    socketio.run(app, allow_unsafe_werkzeug=True)

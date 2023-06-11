@@ -202,6 +202,9 @@ var randos = function (rando, pfp, id) {
     //cardText.style = "justify-content: center";
     cardBody.appendChild(cardText);
     friends.style = "display: flex; flex-wrap: wrap; margin: auto";
+    //friends.classList.add("h-60");
+    //friends.classList.add("scrollable");
+    //friends.classList.add("overflow-auto");
     friends.appendChild(newCard);
     var img = document.createElement("img");
     img.src = pfp
