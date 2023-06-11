@@ -219,6 +219,7 @@ var addUser = function () {
         xhttp.send(postVars);
     } else {
         console.log("select at least 2 people, dummy");
+        
     }
 }
 
@@ -342,7 +343,7 @@ var setChecked = function (element) {
     console.log(element);
 }
 
-var createGroup = function () {
+var createGroup = function(e) {
     var people = document.getElementsByName("createCheckbox");
     var selected = [];
     // Perform further actions with the group name
@@ -351,7 +352,6 @@ var createGroup = function () {
             selected.push(people[i].id);
         }
     }
-    console.log(selected);
     if (selected.length >= 2 && document.getElementById("group-name").value != "") {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -384,6 +384,9 @@ var createGroup = function () {
         xhttp.send(postVars);
     } else {
         console.log("select at least 2 people, dummy");
+        alert("select at least 2 people, dummy");
+        e.preventDefault();
+        return false;
     }
 }
 
