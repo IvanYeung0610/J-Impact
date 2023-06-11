@@ -128,6 +128,7 @@ var createDropdownAdd = function (element) {
             var response = JSON.parse(this.responseText);
             console.log(response);
             var addable = response.addable;
+            console.log(addable);
             for (let i = 0; i < addable.length; i++) {
                 let formCheck = document.createElement("div");
                 formCheck.classList.add("form-check");

@@ -296,8 +296,7 @@ def addUserDropdown():
             if friends[i][1] == chatMembers[j]:
                 appendable = False
         if appendable:
-            addable.append(friends[i][1])
-
+            addable.append([friends[i][1], get_pfp(friends[i][1])])
     if chatMembers:
         print(addable)
         return jsonify({"addable" : addable})
