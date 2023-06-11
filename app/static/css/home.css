@@ -1,5 +1,6 @@
 #scroll::-webkit-scrollbar {
     width: 4px;               /* width of the entire scrollbar */
+    height: 4px;
   }
   
 #scroll::-webkit-scrollbar-thumb {

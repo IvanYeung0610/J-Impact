@@ -270,9 +270,9 @@ def create_group_ajax():
     users.append(session.get("CLIENT"))
     print((users))
     # image = posted.get("image")
-    image = "image"
+    image = posted["image"]
     groupName = posted["name"]
-    id = create_group(groupName, image, users)
+    create_group(groupName, image, users)
     return jsonify({"title": groupName, "image": image, "users" : users})
 
 @app.route("/add-users-to-group-ajax", methods=["POST"])
@@ -435,6 +435,11 @@ def updated_profile_picture(file_data):
     url = upload_image(file_data)['url']
     # print("URL: ", url)
     change_pfp(session.get("CLIENT"), url)
+    emit('successfully_updated', url)
+
+@socketio.on("updated_group_image")
+def update_group_image(file_data):
+    url = upload_image(file_data)['url']
     emit('successfully_updated', url)
     
 
