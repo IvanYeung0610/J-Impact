@@ -315,12 +315,9 @@ var loadExplore = function (str) {
             var response = JSON.parse(xhttp.responseText);
             var r = response.randos;
             var pfp = response.pfp;
-            //console.log(r[10]);
             for (let i = 0; i < r.length; i++) {
                 randos(r[i], pfp[i], i);
             }
-            // profileButtonExplore();
-            // sendRequest();
         }
     }
     xhttp.open("POST", "load-explore-ajax");
