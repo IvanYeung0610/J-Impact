@@ -90,7 +90,6 @@ var friendRequest = function (sender, direction, id) {
         cardText.appendChild(buttondiv);
         accept.addEventListener("click", function () {
             //reason why i used this function syntax is so i could pass in sender
-            // console.log(sender);
             socket.emit("accepted_request", sender);
             document.getElementById(id).remove();
         });

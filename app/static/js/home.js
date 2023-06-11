@@ -393,7 +393,9 @@ var addUserToGroupSearch = function (str) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("friends-checkboxes-add").innerHTML = "";
             response = JSON.parse(this.responseText);
+            console.log(response);
             selectedUsers = response.users;
             console.log(selectedUsers);
             document.getElementById("friends-checkboxes-add").innerHTML = "";
@@ -428,13 +430,21 @@ var addUserToGroupSearch = function (str) {
                 select.appendChild(checkbox);
                 select.appendChild(formLabel);
                 dropdownMenu.appendChild(select);
-                console.log(dropdownMenu);
+                // console.log(dropdownMenu);
             }
         }
     }
     xhttp.open("POST", "add-user-group-search");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    postVars = "searchTerm=" + str;
+    var groups = document.getElementsByName("group_button");
+    var id = 0;
+    for (let i = 0; i < groups.length; i++) {
+        console.log(groups[i].getAttribute("selected"));
+        if (groups[i].getAttribute("selected") == "") {
+            id = groups[i].id;
+        }
+    }
+    postVars = "searchTerm=" + str + "&id=" + id;
     xhttp.send(postVars);
 }
 
