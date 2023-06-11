@@ -40,14 +40,17 @@
           </li>
 
           <li class="nav-item" style="padding-left: 32px;">
+            <div class="row">
+              <div class="col-sm-6" style="padding-right: 0%;">
             <a class="navbar-brand">
               <img src="{{PFP}}" alt="Bootstrap" class="d-inline-block" width="30" height="30" style="display: inline-block;
               margin-top: 10px; ">
             </a>
-          </li>
-
-          <li class="nav-item">
+          </div>
+          <div class="col-sm-6" style="padding-left: 0%;">
             <a class="nav-link disabled" style="font-size: 20px; color: #460708;">{{USER}}</a>
+          </div>
+          </div>
           </li>
 
         </ul>
@@ -71,8 +74,8 @@
               <div class="col-sm-6" style="text-align: center; padding-right: 0px; margin-bottom: 0px;">
                 <h5 style="padding-right: 0px;">Friends</h5>
               </div>
-              <div class="col-sm-6" style="padding-left: 0px;">
-                <button class="dropdown-toggle" onclick="toggleDropdownCreate()" style="padding: 5px">Create
+              <div class="col-sm-6" style="padding-left: 0px; text-align: end;">
+                <button class="dropdown-toggle" onclick="toggleDropdownCreate()" style="padding: 5px; font-size: .75rem; margin-top: 3px;">Create
                   Group</button>
               </div>
             </div>
@@ -130,7 +133,7 @@
                 {% for group in GROUPS %}
                 <!-- Will change the image to the user's profile picture when we get that set up -->
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
-                  style="background-color: #DEF2F1; width:100%; text-align: left;">
+                  style="background-color: #DEF2F1; width:100%; text-align: left;" onclick="createDropdownAdd(this)">
                   <img src="{{ GROUP_INFO[group][1][0] }}" width="30px" height="30px" style="margin-right: 3px;">
                   {{ GROUP_INFO[group][0] }} <!-- Group Title or Friend's name -->
 
