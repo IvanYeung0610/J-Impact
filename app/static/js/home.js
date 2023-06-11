@@ -50,13 +50,13 @@ var getMessage = function (x) {
                 console.log("first response data: ", responseData);
                 message = document.createElement("div");
                 label = document.createElement("div");//div with pfp, username, time
-                label.style = "display: flex";
+                label.style = "display: flex; margin-left: 10px";
                 img = document.createElement("img");
                 img.src = responseData["pfp"][i];
                 img.style.height = "30px";
                 img.style.width = "30px";
                 message.innerHTML = responseData['message'][i];
-                message.style = "margin-bottom: 20px";
+                message.style = "margin-bottom: 20px; margin-left: 10px";
 
                 label.appendChild(img);
                 label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
@@ -120,6 +120,7 @@ for (let i = 0; i < chatList.length; i++) {
 }
 
 var createDropdownAdd = function (element) {
+    document.getElementById("dropdown-menu-add").style.display = "none";
     addFriendsCheckboxes = document.getElementById("friends-checkboxes-add");
     addFriendsCheckboxes.innerHTML = "";
     var xhr = new XMLHttpRequest();
@@ -128,6 +129,7 @@ var createDropdownAdd = function (element) {
             var response = JSON.parse(this.responseText);
             console.log(response);
             var addable = response.addable;
+            console.log(addable);
             for (let i = 0; i < addable.length; i++) {
                 let formCheck = document.createElement("div");
                 formCheck.classList.add("form-check");
@@ -217,6 +219,7 @@ var addUser = function () {
         xhttp.send(postVars);
     } else {
         console.log("select at least 2 people, dummy");
+        
     }
 }
 
@@ -340,7 +343,7 @@ var setChecked = function (element) {
     console.log(element);
 }
 
-var createGroup = function () {
+var createGroup = function(e) {
     var people = document.getElementsByName("createCheckbox");
     var selected = [];
     // Perform further actions with the group name
@@ -349,7 +352,6 @@ var createGroup = function () {
             selected.push(people[i].id);
         }
     }
-    console.log(selected);
     if (selected.length >= 2 && document.getElementById("group-name").value != "") {
         var xhttp = new XMLHttpRequest();
         xhttp.onreadystatechange = function () {
@@ -382,6 +384,9 @@ var createGroup = function () {
         xhttp.send(postVars);
     } else {
         console.log("select at least 2 people, dummy");
+        alert("select at least 2 people, dummy");
+        e.preventDefault();
+        return false;
     }
 }
 
@@ -391,7 +396,9 @@ var addUserToGroupSearch = function (str) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("friends-checkboxes-add").innerHTML = "";
             response = JSON.parse(this.responseText);
+            console.log(response);
             selectedUsers = response.users;
             console.log(selectedUsers);
             document.getElementById("friends-checkboxes-add").innerHTML = "";
@@ -425,13 +432,21 @@ var addUserToGroupSearch = function (str) {
                 select.appendChild(checkbox);
                 select.appendChild(formLabel);
                 dropdownMenu.appendChild(select);
-                console.log(dropdownMenu);
+                // console.log(dropdownMenu);
             }
         }
     }
     xhttp.open("POST", "add-user-group-search");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    postVars = "searchTerm=" + str;
+    var groups = document.getElementsByName("group_button");
+    var id = 0;
+    for (let i = 0; i < groups.length; i++) {
+        console.log(groups[i].getAttribute("selected"));
+        if (groups[i].getAttribute("selected") == "") {
+            id = groups[i].id;
+        }
+    }
+    postVars = "searchTerm=" + str + "&id=" + id;
     xhttp.send(postVars);
 }
 
@@ -440,13 +455,13 @@ socket.on('message', function (info) {
     //console.log(info);
     message = document.createElement("div");
     label = document.createElement("div");//div with pfp, username, time
-    label.style = "display: flex";
+    label.style = "display: flex; margin-left: 10px";
     img = document.createElement("img");
     img.src = info[3];
     img.style.height = "30px";
     img.style.width = "30px";
     message.innerHTML = info[1];
-    message.style = "margin-bottom: 20px";
+    message.style = "margin-bottom: 20px; margin-left: 10px";
 
     label.appendChild(img);
     label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + info[0] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + info[2];

@@ -244,11 +244,23 @@ def create_group_search():
 @app.route("/add-user-group-search", methods=["POST"])
 def add_user_to_group_search():
     searchTerm = request.form["searchTerm"]
+    gid = request.form["id"]
+    alreadyInGroup = get_all_users_by_group(gid)
     users = search_friends(searchTerm, session.get("CLIENT"))
-    for user in users:
-        user.append(get_pfp(user[0]))
+    addable = []
+    for i in range(len(users)):
+        notInGroup = True
+        for j in range(len(alreadyInGroup)):
+            # print(alreadyInGroup[j] + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            # print(users[i][0] + " mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+            if alreadyInGroup[j] == users[i][0]:
+                notInGroup = False
+        if notInGroup:
+            addable.append(users[i])
+    print(addable)
+    print("===============================================")
     if users:
-        return jsonify(users=users)
+        return jsonify(users=addable)
     return jsonify({"error" : "error"})
 
 @app.route("/creating-group-ajax", methods=["POST"])
@@ -278,7 +290,6 @@ def addUserDropdown():
     chatMembers = get_all_users_by_group(request.form.get("groupID"))
     friends = get_all_friends(session.get("CLIENT"))
     addable = []
-    print(friends)
     for i in range(len(friends)):
         appendable = True
         for j in range(len(chatMembers)):
@@ -286,7 +297,6 @@ def addUserDropdown():
                 appendable = False
         if appendable:
             addable.append([friends[i][1], get_pfp(friends[i][1])])
-
     if chatMembers:
         print(addable)
         return jsonify({"addable" : addable})
