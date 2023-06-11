@@ -120,6 +120,7 @@ for (let i = 0; i < chatList.length; i++) {
 }
 
 var createDropdownAdd = function (element) {
+    document.getElementById("dropdown-menu-add").style.display = "none";
     addFriendsCheckboxes = document.getElementById("friends-checkboxes-add");
     addFriendsCheckboxes.innerHTML = "";
     var xhr = new XMLHttpRequest();
