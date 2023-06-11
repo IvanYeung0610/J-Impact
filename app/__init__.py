@@ -14,18 +14,17 @@ socketio = SocketIO(app)
 connected_users = {}
 
 #sample populate
-populate()
+#populate()
 
 @app.route("/", methods=["GET", "POST"])
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         groups = get_all_groups_from_user(session.get("CLIENT"))
-        friends = search_friends("", session.get("CLIENT"))
         pfp = get_pfp(session.get("CLIENT"))[0]
-        # print(friends)
-        #print(groups)
+        friends = search_friends("", session.get("CLIENT"))
+        for friend in friends:
+            friend.append(get_pfp(friend[0]))
         group_info = {}
-        # accounts = get_all_users()
         for group in groups:
             if get_group_size(group) > 2: #Checks if it is a chat between two friends or a group
                 group_info[group] = [get_group_title(group)[0], get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
@@ -54,7 +53,7 @@ def messages_ajax():
         if group[0] == session.get("CLIENT"):
             messageData["title"] = group[1]
         else:
-            messageData["title"] = session.get("CLIENT")
+            messageData["title"] = group[0]
     else:
         messageData["title"] = get_group_title(id)
     for data in messages:
@@ -169,6 +168,7 @@ def explore_ajax():
     #print(request.form["search"])
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
     print(session.get("CLIENT"))
+    print(randos)
     pfp = []
     for n in randos:
         pfp.append(get_pfp(n))
@@ -178,8 +178,6 @@ def explore_ajax():
 def explore_search_ajax():
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
     pfp = []
-    print(session.get("CLIENT"))
-    print(randos)
     for a in randos:
         pfp.append(get_pfp(a))
     return jsonify(randos=randos, pfp=pfp)
@@ -237,6 +235,8 @@ def profile(username):
 def create_group_search():
     searchTerm = request.form["searchTerm"]
     users = search_friends(searchTerm, session.get("CLIENT"))
+    for user in users:
+        user.append(get_pfp(user[0]))
     if users:
         return jsonify(users=users)
     return jsonify({"error": "error"})
@@ -244,9 +244,62 @@ def create_group_search():
 @app.route("/add-user-group-search", methods=["POST"])
 def add_user_to_group_search():
     searchTerm = request.form["searchTerm"]
+    gid = request.form["id"]
+    alreadyInGroup = get_all_users_by_group(gid)
     users = search_friends(searchTerm, session.get("CLIENT"))
+    addable = []
+    for i in range(len(users)):
+        notInGroup = True
+        for j in range(len(alreadyInGroup)):
+            # print(alreadyInGroup[j] + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+            # print(users[i][0] + " mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
+            if alreadyInGroup[j] == users[i][0]:
+                notInGroup = False
+        if notInGroup:
+            addable.append(users[i])
+    print(addable)
+    print("===============================================")
     if users:
-        return jsonify(users=users)
+        return jsonify(users=addable)
+    return jsonify({"error" : "error"})
+
+@app.route("/creating-group-ajax", methods=["POST"])
+def create_group_ajax():
+    posted = request.get_json()
+    users = posted["selected"]
+    users.append(session.get("CLIENT"))
+    print((users))
+    # image = posted.get("image")
+    image = posted["image"]
+    groupName = posted["name"]
+    create_group(groupName, image, users)
+    return jsonify({"title": groupName, "image": image, "users" : users})
+
+@app.route("/add-users-to-group-ajax", methods=["POST"])
+def add_to_group_ajax():
+    posted = request.get_json()
+    users = posted["selected"]
+    chatID = posted["group_id"]
+    for user in users:
+        print(user)
+        add_to_group(chatID, user)
+    return jsonify({"success" : "success"})
+
+@app.route("/addUserDropdown", methods=["POST"])
+def addUserDropdown():
+    chatMembers = get_all_users_by_group(request.form.get("groupID"))
+    friends = get_all_friends(session.get("CLIENT"))
+    addable = []
+    for i in range(len(friends)):
+        appendable = True
+        for j in range(len(chatMembers)):
+            if friends[i][1] == chatMembers[j]:
+                appendable = False
+        if appendable:
+            addable.append([friends[i][1], get_pfp(friends[i][1])])
+    if chatMembers:
+        print(addable)
+        return jsonify({"addable" : addable})
     return jsonify({"error" : "error"})
 
 # ========================== SOCKETS ==========================
@@ -258,7 +311,6 @@ def check_login():
         connected_users[session.get("CLIENT")].append(request.sid)
     else:
         connected_users[session.get("CLIENT")] = [request.sid]
-    #print("LOGIN: ", connected_users)
 
 # Adds to our list of all conneceted users. IFF their cookies information is correct.
 @socketio.on('connect')
@@ -335,16 +387,19 @@ def send_friend_request(user):
     sender = session.get("CLIENT")
     reciever = user
     add_friend_request(sender,reciever)
+    try: 
+        recievers = connected_users[reciever]
+        for R in recievers:
+            emit('request_recieved', sender, to=R)
+    except:
+        emit("error", "error")
 
-    recievers = connected_users[reciever]
-    for R in recievers:
-        emit('request_recieved', sender, to=R)
 
 #the next 3 functions, users is array of 1, containing the other user
 @socketio.on('accepted_request')
 def accept_friend_request(users):
     print(users)
-    sender = users[0]
+    sender = users
     receiver = session.get("CLIENT")
     delete_friend_request(sender, receiver)
     add_friend(sender,receiver)
@@ -380,6 +435,11 @@ def updated_profile_picture(file_data):
     url = upload_image(file_data)['url']
     # print("URL: ", url)
     change_pfp(session.get("CLIENT"), url)
+    emit('successfully_updated', url)
+
+@socketio.on("updated_group_image")
+def update_group_image(file_data):
+    url = upload_image(file_data)['url']
     emit('successfully_updated', url)
     
 

@@ -6,7 +6,7 @@ from db import *
 import json
 
 key = ""
-with open("app/keys/secret.env", "r") as secret_key:
+with open("keys/secret.env", "r") as secret_key:
     key = secret_key.read()
 
 cloudinary.config(

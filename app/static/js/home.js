@@ -50,13 +50,13 @@ var getMessage = function (x) {
                 console.log("first response data: ", responseData);
                 message = document.createElement("div");
                 label = document.createElement("div");//div with pfp, username, time
-                label.style = "display: flex";
+                label.style = "display: flex; margin-left: 10px";
                 img = document.createElement("img");
                 img.src = responseData["pfp"][i];
                 img.style.height = "30px";
                 img.style.width = "30px";
                 message.innerHTML = responseData['message'][i];
-                message.style = "margin-bottom: 20px";
+                message.style = "margin-bottom: 20px; margin-left: 10px";
 
                 label.appendChild(img);
                 label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
@@ -108,6 +108,67 @@ var toggleDropdownCreate = function () {
     }
 }
 
+var chatList = document.getElementsByName("group_button");
+for (let i = 0; i < chatList.length; i++) {
+    chatList[i].addEventListener("click", function () {
+        var chats = document.getElementsByName("group_button");
+        for (let i = 0; i < chats.length; i++) {
+            chats[i].removeAttribute("selected");
+        }
+        this.setAttribute("selected", "");
+    })
+}
+
+var createDropdownAdd = function (element) {
+    document.getElementById("dropdown-menu-add").style.display = "none";
+    addFriendsCheckboxes = document.getElementById("friends-checkboxes-add");
+    addFriendsCheckboxes.innerHTML = "";
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(this.responseText);
+            console.log(response);
+            var addable = response.addable;
+            console.log(addable);
+            for (let i = 0; i < addable.length; i++) {
+                let formCheck = document.createElement("div");
+                formCheck.classList.add("form-check");
+                let formInput = document.createElement("input");
+                formInput.classList.add("form-check-input");
+                formInput.type = "checkbox";
+                formInput.id = addable[i][0];
+                formInput.name = "addCheckbox";
+                formInput.addEventListener("change", function () {
+                    if (this.checked) {
+                        this.setAttribute("checked", "");
+                    } else {
+                        this.removeAttribute("checked");
+                    }
+                })
+                var formLabel = document.createElement("label");
+                formLabel.classList.add("form-check-label");
+                formLabel.for = "flexCheckDefault";
+                var pfp = document.createElement("img");
+                pfp.src = addable[i][1];
+                pfp.style.width = "30px";
+                pfp.style.height = "30px";
+                pfp.style.marginRight = "3px";
+                formLabel.appendChild(pfp);
+                formLabel.innerHTML += addable[i][0];
+                formCheck.appendChild(formInput);
+                formCheck.appendChild(formLabel);
+                addFriendsCheckboxes.appendChild(formCheck);
+                // console.log(addFriendsCheckboxes);
+            }
+        }
+    }
+    xhr.open("POST", "addUserDropdown");
+    xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    var groupID = element.getAttribute("id");
+    var postVars = "groupID=" + groupID;
+    xhr.send(postVars);
+}
+
 var toggleDropdownAdd = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-add');
     if (dropdownMenu.style.display === 'none') {
@@ -123,15 +184,49 @@ var toggleDropdownAdd = function () {
     }
 }
 
-var createGroup = function () {
-    var groupName = document.getElementById('group-name').value;
+var addUser = function () {
+    var people = document.getElementsByName("addCheckbox");
+    var usersAdded = [];
     // Perform further actions with the group name
-    console.log('Creating group:', groupName);
+    for (let i = 0; i < people.length; i++) {
+        if (people[i].checked) {
+            usersAdded.push(people[i].id);
+        }
+    }
+    if (usersAdded.length > 0) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = JSON.parse(this.responseText);
+                console.log(response);
+                refreshPage();
+            }
+        }
+        xhttp.open("POST", "add-users-to-group-ajax");
+        xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        var group_buttons = document.getElementsByName("group_button");
+        console.log(group_buttons);
+        var groupID = 0;
+        for (let i = 0; i < group_buttons.length; i++) {
+            console.log(group_buttons[i].getAttribute("selected", "true"));
+            if (group_buttons[i].getAttribute("selected", "true") == "") {
+                groupID = group_buttons[i].id;
+            }
+        }
+
+        var postVars = JSON.stringify({ "selected": usersAdded, "group_id": groupID });
+        console.log(postVars);
+        xhttp.send(postVars);
+    } else {
+        console.log("select at least 2 people, dummy");
+        
+    }
 }
 
-var addUser = function () {
-    // action for add friends
-}
+//test refresh page so that changes load
+var refreshPage = function() {
+    window.location.reload();
+} 
 
 var clear_ping = function (group_id) {
     ping_bubble = document.getElementById("ping_bubble" + group_id)
@@ -142,10 +237,10 @@ var clear_ping = function (group_id) {
 }
 //eventlisteners for profile
 var profileButton = function () {
-    console.log(memberlist)
+    // console.log(memberlist)
     setTimeout(function () {
         var memlist = document.getElementsByName("memlist");
-        console.log(memlist)
+        // console.log(memlist)
         for (let x = 0; x < memlist.length; x++) {
             memlist[x].addEventListener('click', (e) => {
                 e.preventDefault()
@@ -158,19 +253,19 @@ var profileButton = function () {
 // We need a default group
 if (all_group_buttons.length != 0) {
     selected_group = all_group_buttons[0]
-    all_group_buttons[0].style.backgroundColor = "red"
+    all_group_buttons[0].style.backgroundColor = "#2B7A78"
     socket.emit("select_group", all_group_buttons[0].id)
     getMessage(0);
 }
 
 // Changes color of group buttons when clicked 
 // And sets the room of the user to that group in Websockets
-console.log(all_group_buttons)
+// console.log(all_group_buttons)
 for (let x = 0; x < all_group_buttons.length; x++) {
     all_group_buttons[x].addEventListener('click', (e) => {
         socket.emit("select_group", all_group_buttons[x].id)
         selected_group.style.backgroundColor = "#DEF2F1"
-        all_group_buttons[x].style.backgroundColor = "red"
+        all_group_buttons[x].style.backgroundColor = "#2B7A78"
         selected_group = all_group_buttons[x]
         //messages.innerHTML = "";
         memberlist = [];
@@ -188,16 +283,16 @@ for (let x = 0; x < memlist.length; x++) {
     })
 }
 
+
+
 var createGroupBar = function (str) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
             var response = JSON.parse(this.responseText);
             selectedUsers = response.users;
-            // console.log(selectedUsers);
-            // console.log(response);
             document.getElementById("friends-checkboxes-create").innerHTML = "";
-            var dropdownMenu = document.getElementById('friends-checkboxes');
+            var dropdownMenu = document.getElementById('friends-checkboxes-create');
             for (let i = 0; i < selectedUsers.length; i++) {
                 select = document.createElement("div");
                 select.classList.add("form-check");
@@ -205,17 +300,25 @@ var createGroupBar = function (str) {
                 checkbox.classList.add("form-check-input");
                 checkbox.type = "checkbox";
                 checkbox.id = selectedUsers[i][0];
+                checkbox.name = "createCheckbox";
+                checkbox.addEventListener("change", function () {
+                    if (this.checked) {
+                        this.setAttribute("checked", "");
+                    } else {
+                        this.removeAttribute("checked");
+                    }
+                })
                 formLabel = document.createElement("label");
                 formLabel.classList.add("form-check-label");
                 formLabel.setAttribute("for", "flexCheckDefault");
+
                 pfp = document.createElement("img");
                 //the cloudinary image is massive, but this would work
                 // pfp.src = selectedUsers[i][1];
-                pfp.classList.add("rounded-circle");
                 pfp.setAttribute("width", "30px");
                 pfp.setAttribute("height", "30px");
                 pfp.style = "margin-right: 3px;";
-                pfp.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                pfp.src = selectedUsers[i][1];
                 formLabel.appendChild(pfp);
                 formLabel.innerHTML += selectedUsers[i][0];
                 select.appendChild(checkbox);
@@ -231,13 +334,71 @@ var createGroupBar = function (str) {
     xhttp.send(postVars);
 }
 
+var setChecked = function (element) {
+    if (element.checked) {
+        element.setAttribute("checked", "checked");
+    } else {
+        element.removeAttribute("checked");
+    }
+    console.log(element);
+}
+
+var createGroup = function(e) {
+    var people = document.getElementsByName("createCheckbox");
+    var selected = [];
+    // Perform further actions with the group name
+    for (let i = 0; i < people.length; i++) {
+        if (people[i].getAttribute("checked")) {
+            selected.push(people[i].id);
+        }
+    }
+    if (selected.length >= 2 && document.getElementById("group-name").value != "") {
+        var xhttp = new XMLHttpRequest();
+        xhttp.onreadystatechange = function () {
+            if (this.readyState == 4 && this.status == 200) {
+                var response = JSON.parse(this.responseText);
+                console.log(response);
+                //not really sure what to put here
+                img = document.createElement("img");
+                img.src = image;
+                img.setAttribute("width", "30px");
+                img.setAttribute("height", "30px");
+                img.style.marginRight = "3px";
+                button = document.createElement("button");
+                button.id = response.group_id;
+                button.type = "button"
+                button.classList.add("btn");
+                button.name = "group_button";
+                button.style.backgroundColor = "#DEF2F1";
+                button.style.width = "100%";
+                button.style.textAlight = "left";
+                button.appendChild(img, name);
+            }
+        }
+        xhttp.open("POST", "creating-group-ajax");
+        xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
+        var name = document.getElementById("group-name").value;
+        var image = document.getElementById("group_image").src;
+        var postVars = JSON.stringify({ "selected": selected, "name": name, "image": image });
+        console.log(postVars);
+        xhttp.send(postVars);
+    } else {
+        console.log("select at least 2 people, dummy");
+        alert("select at least 2 people, dummy");
+        e.preventDefault();
+        return false;
+    }
+}
+
 //only reason why this is different is to account for removing members?
 //also accesses different place
 var addUserToGroupSearch = function (str) {
     var xhttp = new XMLHttpRequest();
     xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("friends-checkboxes-add").innerHTML = "";
             response = JSON.parse(this.responseText);
+            console.log(response);
             selectedUsers = response.users;
             console.log(selectedUsers);
             document.getElementById("friends-checkboxes-add").innerHTML = "";
@@ -249,29 +410,43 @@ var addUserToGroupSearch = function (str) {
                 checkbox.classList.add("form-check-input");
                 checkbox.type = "checkbox";
                 checkbox.id = selectedUsers[i][0];
+                checkbox.addEventListener("change", function () {
+                    if (this.checked) {
+                        this.setAttribute("checked", "");
+                    } else {
+                        this.removeAttribute("checked");
+                    }
+                })
                 formLabel = document.createElement("label");
                 formLabel.classList.add("form-check-label");
                 formLabel.setAttribute("for", "flexCheckDefault");
                 pfp = document.createElement("img");
                 //the cloudinary image is massive, but this would work
                 // pfp.src = selectedUsers[i][1];
-                pfp.classList.add("rounded-circle");
                 pfp.setAttribute("width", "30px");
                 pfp.setAttribute("height", "30px");
                 pfp.style = "margin-right: 3px;";
-                pfp.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                pfp.src = selectedUsers[i][1];
                 formLabel.appendChild(pfp);
                 formLabel.innerHTML += selectedUsers[i][0];
                 select.appendChild(checkbox);
                 select.appendChild(formLabel);
                 dropdownMenu.appendChild(select);
-                console.log(dropdownMenu);
+                // console.log(dropdownMenu);
             }
         }
     }
     xhttp.open("POST", "add-user-group-search");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    postVars = "searchTerm=" + str;
+    var groups = document.getElementsByName("group_button");
+    var id = 0;
+    for (let i = 0; i < groups.length; i++) {
+        console.log(groups[i].getAttribute("selected"));
+        if (groups[i].getAttribute("selected") == "") {
+            id = groups[i].id;
+        }
+    }
+    postVars = "searchTerm=" + str + "&id=" + id;
     xhttp.send(postVars);
 }
 
@@ -280,13 +455,13 @@ socket.on('message', function (info) {
     //console.log(info);
     message = document.createElement("div");
     label = document.createElement("div");//div with pfp, username, time
-    label.style = "display: flex";
+    label.style = "display: flex; margin-left: 10px";
     img = document.createElement("img");
     img.src = info[3];
     img.style.height = "30px";
     img.style.width = "30px";
     message.innerHTML = info[1];
-    message.style = "margin-bottom: 20px";
+    message.style = "margin-bottom: 20px; margin-left: 10px";
 
     label.appendChild(img);
     label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + info[0] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + info[2];
@@ -322,6 +497,22 @@ nav_friends_link.addEventListener('click', (e) => {
     socket.emit("select_group", "all_friends_page")
     //  SENDS THE USER TO THE /friends page
     window.location.replace("/friends");
+})
+
+upload_group_image_form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const image_file = document.getElementById("file").files[0]
+    console.log(image_file)
+    const reader = new FileReader();
+    reader.addEventListener('load', (event) => {
+        socket.emit('updated_group_image', event.target.result);
+    });
+    reader.readAsArrayBuffer(image_file);
+})
+
+socket.on('successfully_updated', (e) => {
+    console.log("group image uploaded")
+    document.getElementById("group_image").src = e
 })
 
 messageform.addEventListener('submit', (e) => {
