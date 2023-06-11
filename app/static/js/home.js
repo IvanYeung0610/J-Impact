@@ -50,13 +50,13 @@ var getMessage = function (x) {
                 console.log("first response data: ", responseData);
                 message = document.createElement("div");
                 label = document.createElement("div");//div with pfp, username, time
-                label.style = "display: flex";
+                label.style = "display: flex; margin-left: 10px";
                 img = document.createElement("img");
                 img.src = responseData["pfp"][i];
                 img.style.height = "30px";
                 img.style.width = "30px";
                 message.innerHTML = responseData['message'][i];
-                message.style = "margin-bottom: 20px";
+                message.style = "margin-bottom: 20px; margin-left: 10px";
 
                 label.appendChild(img);
                 label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + responseData['username'][i] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + responseData['time'][i];
@@ -443,13 +443,13 @@ socket.on('message', function (info) {
     //console.log(info);
     message = document.createElement("div");
     label = document.createElement("div");//div with pfp, username, time
-    label.style = "display: flex";
+    label.style = "display: flex; margin-left: 10px";
     img = document.createElement("img");
     img.src = info[3];
     img.style.height = "30px";
     img.style.width = "30px";
     message.innerHTML = info[1];
-    message.style = "margin-bottom: 20px";
+    message.style = "margin-bottom: 20px; margin-left: 10px";
 
     label.appendChild(img);
     label.innerHTML += '&nbsp;&nbsp;&nbsp;&nbsp;' + "<b>" + info[0] + "</b>" + '&nbsp;&nbsp;&nbsp;&nbsp;' + info[2];
