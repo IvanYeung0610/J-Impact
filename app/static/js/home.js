@@ -376,7 +376,7 @@ var createGroup = function () {
         xhttp.open("POST", "creating-group-ajax");
         xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
         var name = document.getElementById("group-name").value;
-        var image = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+        var image = document.getElementById("group_image").src;
         var postVars = JSON.stringify({ "selected": selected, "name": name, "image": image });
         console.log(postVars);
         xhttp.send(postVars);
@@ -482,6 +482,22 @@ nav_friends_link.addEventListener('click', (e) => {
     socket.emit("select_group", "all_friends_page")
     //  SENDS THE USER TO THE /friends page
     window.location.replace("/friends");
+})
+
+upload_group_image_form.addEventListener('submit', (e) => {
+    e.preventDefault()
+    const image_file = document.getElementById("file").files[0]
+    console.log(image_file)
+    const reader = new FileReader();
+    reader.addEventListener('load', (event) => {
+        socket.emit('updated_group_image', event.target.result);
+    });
+    reader.readAsArrayBuffer(image_file);
+})
+
+socket.on('successfully_updated', (e) => {
+    console.log("group image uploaded")
+    document.getElementById("group_image").src = e
 })
 
 messageform.addEventListener('submit', (e) => {
