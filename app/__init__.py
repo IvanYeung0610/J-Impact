@@ -14,7 +14,7 @@ socketio = SocketIO(app)
 connected_users = {}
 
 #sample populate
-populate()
+#populate()
 
 @app.route("/", methods=["GET", "POST"])
 def home_page():
