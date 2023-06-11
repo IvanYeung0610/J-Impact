@@ -20,12 +20,11 @@ connected_users = {}
 def home_page():
     if(session.get("CLIENT", None) != None and get_user(session.get("CLIENT")) != None):
         groups = get_all_groups_from_user(session.get("CLIENT"))
-        friends = search_friends("", session.get("CLIENT"))
         pfp = get_pfp(session.get("CLIENT"))[0]
-        # print(friends)
-        #print(groups)
+        friends = search_friends("", session.get("CLIENT"))
+        for friend in friends:
+            friend.append(get_pfp(friend[0]))
         group_info = {}
-        # accounts = get_all_users()
         for group in groups:
             if get_group_size(group) > 2: #Checks if it is a chat between two friends or a group
                 group_info[group] = [get_group_title(group)[0], get_group_image(group) , get_group_size(group), get_all_other_users_by_group(group, session.get("CLIENT"))]
@@ -236,6 +235,8 @@ def profile(username):
 def create_group_search():
     searchTerm = request.form["searchTerm"]
     users = search_friends(searchTerm, session.get("CLIENT"))
+    for user in users:
+        user.append(get_pfp(user[0]))
     if users:
         return jsonify(users=users)
     return jsonify({"error": "error"})
@@ -296,8 +297,9 @@ def addUserDropdown():
                 appendable = False
         if appendable:
             addable.append(friends[i][1])
-    print(addable)
+
     if chatMembers:
+        print(addable)
         return jsonify({"addable" : addable})
     return jsonify({"error" : "error"})
 
@@ -439,4 +441,4 @@ def updated_profile_picture(file_data):
 
 if __name__ == "__main__":
     app.debug = True
-    socketio.run(app, allow_unsafe_werkzeug=True, host="0.0.0.0")
+    socketio.run(app, allow_unsafe_werkzeug=True)

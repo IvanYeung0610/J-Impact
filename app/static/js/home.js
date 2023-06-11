@@ -134,7 +134,7 @@ var createDropdownAdd = function (element) {
                 let formInput = document.createElement("input");
                 formInput.classList.add("form-check-input");
                 formInput.type = "checkbox";
-                formInput.id = addable[i];
+                formInput.id = addable[i][0];
                 formInput.name = "addCheckbox";
                 formInput.addEventListener("change", function () {
                     if (this.checked) {
@@ -147,13 +147,12 @@ var createDropdownAdd = function (element) {
                 formLabel.classList.add("form-check-label");
                 formLabel.for = "flexCheckDefault";
                 var pfp = document.createElement("img");
-                pfp.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
-                pfp.classList.add("rounded-circle");
+                pfp.src = addable[i][1];
                 pfp.style.width = "30px";
                 pfp.style.height = "30px";
                 pfp.style.marginRight = "3px";
                 formLabel.appendChild(pfp);
-                formLabel.innerHTML += addable[i];
+                formLabel.innerHTML += addable[i][0];
                 formCheck.appendChild(formInput);
                 formCheck.appendChild(formLabel);
                 addFriendsCheckboxes.appendChild(formCheck);
@@ -313,11 +312,10 @@ var createGroupBar = function (str) {
                 pfp = document.createElement("img");
                 //the cloudinary image is massive, but this would work
                 // pfp.src = selectedUsers[i][1];
-                pfp.classList.add("rounded-circle");
                 pfp.setAttribute("width", "30px");
                 pfp.setAttribute("height", "30px");
                 pfp.style = "margin-right: 3px;";
-                pfp.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                pfp.src = selectedUsers[i][1];
                 formLabel.appendChild(pfp);
                 formLabel.innerHTML += selectedUsers[i][0];
                 select.appendChild(checkbox);
@@ -420,11 +418,10 @@ var addUserToGroupSearch = function (str) {
                 pfp = document.createElement("img");
                 //the cloudinary image is massive, but this would work
                 // pfp.src = selectedUsers[i][1];
-                pfp.classList.add("rounded-circle");
                 pfp.setAttribute("width", "30px");
                 pfp.setAttribute("height", "30px");
                 pfp.style = "margin-right: 3px;";
-                pfp.src = "https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg";
+                pfp.src = selectedUsers[i][1];
                 formLabel.appendChild(pfp);
                 formLabel.innerHTML += selectedUsers[i][0];
                 select.appendChild(checkbox);
