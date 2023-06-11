@@ -167,6 +167,8 @@ def search_friend_requests_ajax():
 def explore_ajax():
     #print(request.form["search"])
     randos = search_new_friends(request.form["search"], session.get("CLIENT"))
+    print(session.get("CLIENT"))
+    print(randos)
     pfp = []
     for n in randos:
         pfp.append(get_pfp(n))
@@ -386,7 +388,8 @@ def send_friend_request(user):
 #the next 3 functions, users is array of 1, containing the other user
 @socketio.on('accepted_request')
 def accept_friend_request(users):
-    sender = users[0]
+    print(users)
+    sender = users
     receiver = session.get("CLIENT")
     delete_friend_request(sender, receiver)
     add_friend(sender,receiver)
@@ -427,4 +430,4 @@ def updated_profile_picture(file_data):
 
 if __name__ == "__main__":
     app.debug = True
-    socketio.run(app, allow_unsafe_werkzeug=True, host="0.0.0.0")
+    socketio.run(app, allow_unsafe_werkzeug=True)

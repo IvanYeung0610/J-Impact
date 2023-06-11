@@ -4,6 +4,8 @@ from db import *
 def check_association(user1, user2):
     friends = get_all_friends(user1)
     requests = get_all_friend_requests(user1)
+    if user1 == user2:
+        return True
     for friend in friends:
         if ( (user2 == friend[0]) or (user2 == friend[1])):
             return True

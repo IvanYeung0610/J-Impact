@@ -202,6 +202,9 @@ var randos = function (rando, pfp, id) {
     //cardText.style = "justify-content: center";
     cardBody.appendChild(cardText);
     friends.style = "display: flex; flex-wrap: wrap; margin: auto";
+    //friends.classList.add("h-60");
+    //friends.classList.add("scrollable");
+    //friends.classList.add("overflow-auto");
     friends.appendChild(newCard);
     var img = document.createElement("img");
     img.src = pfp
@@ -315,12 +318,9 @@ var loadExplore = function (str) {
             var response = JSON.parse(xhttp.responseText);
             var r = response.randos;
             var pfp = response.pfp;
-            //console.log(r[10]);
             for (let i = 0; i < r.length; i++) {
                 randos(r[i], pfp[i], i);
             }
-            // profileButtonExplore();
-            // sendRequest();
         }
     }
     xhttp.open("POST", "load-explore-ajax");
