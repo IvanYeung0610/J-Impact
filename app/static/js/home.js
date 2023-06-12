@@ -344,6 +344,7 @@ var createGroupBar = function (str) {
                 select.appendChild(formLabel);
                 dropdownMenu.appendChild(select);
             }
+            refreshPage();
         }
     }
     xhttp.open("POST", "create-group-search");
