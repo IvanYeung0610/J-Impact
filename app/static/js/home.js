@@ -41,9 +41,13 @@ var get_message_and_emoji = function (x) {
             if (responseData["member_names"].length > 2) {
                 document.getElementById("dropdown-menu-add").style.visibility = "visible";
                 document.getElementById("dropdown-button-add").style.visibility = "visible";
+                document.getElementById("dropdown-button-change-image").style.visibility = "visible";
+                document.getElementById("dropdown-menu-change-image").style.visibility =  "visible";
             } else {
                 document.getElementById("dropdown-menu-add").style.visibility = "hidden";
                 document.getElementById("dropdown-button-add").style.visibility = "hidden";
+                document.getElementById("dropdown-button-change-image").style.visibility = "hidden";
+                document.getElementById("dropdown-menu-change-image").style.visibility =  "hidden";
             }
             messages.innerHTML = ""
             document.getElementById("member_tab").innerHTML = "";
@@ -189,6 +193,21 @@ var createDropdownAdd = function (element) {
 
 var toggleDropdownAdd = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-add');
+    if (dropdownMenu.style.display === 'none') {
+        dropdownMenu.style.display = 'block';
+        dropdownMenu.style.maxHeight = '400px';
+        dropdownMenu.style.maxWidth = '300px';
+        dropdownMenu.style.overflowY = 'auto';
+        dropdownMenu.style.marginLeft = '47%';
+        dropdownMenu.style.marginTop = '3%';
+        //dropdownMenu.style.justifyContent = 'end';
+    } else {
+        dropdownMenu.style.display = 'none';
+    }
+}
+
+var toggleDropdownChangeImage = function() {
+    var dropdownMenu = document.getElementById('dropdown-menu-change-image');
     if (dropdownMenu.style.display === 'none') {
         dropdownMenu.style.display = 'block';
         dropdownMenu.style.maxHeight = '400px';
@@ -526,11 +545,50 @@ upload_group_image_form.addEventListener('submit', (e) => {
         socket.emit('updated_group_image', event.target.result);
     });
     reader.readAsArrayBuffer(image_file);
-})
+});
+
+change_group_image_form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const image_file = document.getElementById("file").files[0];
+    console.log(image_file);
+    const reader = new FileReader();
+    reader.addEventListener('load', (event) => {
+      var groups = document.getElementsByName("group_button");
+      var id = 0;
+      for (let i = 0; i < groups.length; i++) {
+        //console.log(groups[i].getAttribute("selected"));
+        if (groups[i].getAttribute("selected") == "") {
+          id = groups[i].id;
+        }
+      }
+      const payload = {
+        imageFile: event.target.result,
+        id: id
+      };
+      socket.emit('changed_group_image', payload);
+    });
+    reader.readAsArrayBuffer(image_file);
+  });
+  
 
 socket.on('successfully_updated', (e) => {
-    console.log("group image uploaded")
-    document.getElementById("group_image").src = e
+    console.log("group image uploaded");
+    document.getElementById("group_image").src = e;
+})
+
+socket.on('successfully_changed', (e) => {
+    console.log("group image changed");
+    document.getElementById("change_group_image").src = e;
+    var groups = document.getElementsByName("group_button");
+    var id = 0;
+    for (let i = 0; i < groups.length; i++) {
+        console.log(groups[i].getAttribute("selected"));
+        if (groups[i].getAttribute("selected") == "") {
+          id = groups[i].id;
+        }
+      }
+    document.getElementById("image" + String(id)).src = e;
+    console.log("image" + String(id));
 })
 
 messageform.addEventListener('submit', (e) => {

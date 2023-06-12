@@ -23,7 +23,6 @@
         <a class="navbar-brand" href="/">
           jmessage</a>
       </div>
-
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
@@ -40,17 +39,14 @@
           </li>
 
           <li class="nav-item" style="padding-left: 32px;">
-            <div class="row">
-              <div class="col-sm-6" style="padding-right: 0%;">
-                <a class="navbar-brand">
-                  <img src="{{PFP}}" alt="Bootstrap" class="d-inline-block" width="30" height="30" style="display: inline-block;
+            <a class="navbar-brand">
+              <img src="{{PFP}}" alt="Bootstrap" class="d-inline-block" width="30" height="30" style="display: inline-block;
               margin-top: 10px; ">
-                </a>
-              </div>
-              <div class="col-sm-6" style="padding-left: 0%;">
-                <a class="nav-link disabled" style="font-size: 20px; color: #460708;">{{USER}}</a>
-              </div>
-            </div>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link disabled" style="font-size: 20px; color: #460708;">{{USER}}</a>
           </li>
 
         </ul>
@@ -80,7 +76,7 @@
                   Group</button>
               </div>
             </div>
-            <div id="dropdown-menu-create" class="dropdown-menu">
+            <div id="dropdown-menu-create" class="dropdown-menu" style="display: none;">
               <form action="" method="POST">
                 <label for="group-name">Group Name:</label>
                 <input type="text" id="group-name" name="group-name" required>
@@ -90,15 +86,18 @@
               <br>
 
               <div style="display: flex; align-items: center; justify-content: center;">
-                <img id="group_image" src="" width="100px" height="100px">
+                <img id="group_image"
+                  src="http://res.cloudinary.com/dg13dndup/image/upload/v1686522367/mrnjwafbtyj12i5qino9.png"
+                  width="100px" height="100px">
               </div>
               <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
               <form action="" id="upload_group_image_form">
                 <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
-                  <label id="uploadGroupImage" for="file" class="btn">Upload Profile Picture</label>
+                  <label id="uploadGroupImage" for="file" class="btn btn-outline-dark" style="margin-right: 5px;">Upload
+                    Profile Picture</label>
                   <input type="file" id="file" style="visibility:hidden; margin-right: 5px;" name="change"
                     accept=".jpg, .jpeg, .png" hidden></input>
-                  <input style="display: inline-block;" type="submit" value="Show">
+                  <input style="display: inline-block;" type="submit" value="Change">
                 </div>
               </form>
 
@@ -133,7 +132,8 @@
                 {% for group in GROUPS %}
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
                   style="background-color: #DEF2F1; width:100%; text-align: left;" onclick="createDropdownAdd(this)">
-                  <img src="{{ GROUP_INFO[group][1][0] }}" width="30px" height="30px" style="margin-right: 3px;">
+                  <img id="image{{ group }}" src="{{ GROUP_INFO[group][1][0] }}" width="30px" height="30px"
+                    style="margin-right: 3px;">
                   {{ GROUP_INFO[group][0] }} <!-- Group Title or Friend's name -->
 
                   {% if GROUP_INFO[group][2] > 2 %}
@@ -167,6 +167,8 @@
 
             <div class="col-sm-4" style="text-align: end;">
               <button id="dropdown-button-add" class="dropdown-toggle" onclick="toggleDropdownAdd()">Add User</button>
+              <button id="dropdown-button-change-image" class="dropdown-toggle"
+                onclick="toggleDropdownChangeImage()">Change Image</button>
             </div>
             <div id="dropdown-menu-add" class="dropdown-menu">
               <form>
@@ -180,6 +182,25 @@
                 </form>
               </form>
             </div>
+
+            <div id="dropdown-menu-change-image" class="dropdown-menu">
+              <div style="display: flex; align-items: center; justify-content: center;">
+                <img id="change_group_image"
+                  src="http://res.cloudinary.com/dg13dndup/image/upload/v1686522367/mrnjwafbtyj12i5qino9.png"
+                  width="100px" height="100px">
+              </div>
+              <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
+              <form action="" id="change_group_image_form">
+                <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
+                  <label id="changeGroupImage" for="file" class="btn btn-outline-dark" style="margin-right: 5px;">Upload
+                    Image</label>
+                  <input type="file" id="file" style="visibility:hidden; margin-right: 5px;" name="change"
+                    accept=".jpg, .jpeg, .png" hidden></input>
+                  <input style="display: inline-block;" type="submit" value="Change">
+                </div>
+              </form>
+            </div>
+
           </div>
         </div>
 
