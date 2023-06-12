@@ -527,7 +527,31 @@ upload_group_image_form.addEventListener('submit', (e) => {
         socket.emit('updated_group_image', event.target.result);
     });
     reader.readAsArrayBuffer(image_file);
-})
+});
+
+change_group_image_form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const image_file = document.getElementById("file").files[0];
+    console.log(image_file);
+    const reader = new FileReader();
+    reader.addEventListener('load', (event) => {
+      var groups = document.getElementsByName("group_button");
+      var id = 0;
+      for (let i = 0; i < groups.length; i++) {
+        console.log(groups[i].getAttribute("selected"));
+        if (groups[i].getAttribute("selected") == "") {
+          id = groups[i].id;
+        }
+      }
+      const payload = {
+        imageFile: event.target.result,
+        id: id
+      };
+      socket.emit('changed_group_image', payload);
+    });
+    reader.readAsArrayBuffer(image_file);
+  });
+  
 
 socket.on('successfully_updated', (e) => {
     console.log("group image uploaded")

@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="../static/css/home.css">
 </head>
 
-<body style="background-color:  #DEF2F1; height: 100%; overflow-x: hidden; overflow-y: hidden; width: 100%;">
+<body style="background-color:  #DEF2F1; overflow-y: hidden; height: 100%; overflow-x: hidden; width: 100%;">
   <!--background color, overflow removes scrollbar (fixes page overflow)-->
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2B7A78;"><!--nav bar color-->
     <div class="container-fluid">
@@ -27,11 +27,11 @@
         <ul class="navbar-nav mr-auto">
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px;" href="/">Home</a>
+            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/">Home</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/friends">Friends</a>
+            <a class="nav-link" style="font-size: 20px;" href="/friends" id="nav_friends_link">Friends</a>
           </li>
 
           <li class="nav-item">
@@ -184,14 +184,14 @@
 
             <div id="dropdown-menu-change-image" class="dropdown-menu" style="display: none;">
               <div style="display: flex; align-items: center; justify-content: center;">
-                <img id="group_image"
+                <img id="change_group_image"
                   src="http://res.cloudinary.com/dg13dndup/image/upload/v1686522367/mrnjwafbtyj12i5qino9.png"
                   width="100px" height="100px">
               </div>
               <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
-              <form action="" id="upload_group_image_form">
+              <form action="" id="change_group_image_form">
                 <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
-                  <label id="uploadGroupImage" for="file" class="btn btn-outline-dark" style="margin-right: 5px;">Upload
+                  <label id="changeGroupImage" for="file" class="btn btn-outline-dark" style="margin-right: 5px;">Upload
                     Image</label>
                   <input type="file" id="file" style="visibility:hidden; margin-right: 5px;" name="change"
                     accept=".jpg, .jpeg, .png" hidden></input>
