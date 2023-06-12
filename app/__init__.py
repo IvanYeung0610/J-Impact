@@ -443,9 +443,11 @@ def update_group_image(file_data):
     emit('successfully_updated', url)
 
 @socketio.on("changed_group_image")
-def updated_profile_picture(file_data_and_group_id):
-    url = upload_image(file_data_and_group_id[0])['url']
-    change_group_image(file_data_and_group_id[1], url)
+def handle_changed_group_image(payload):
+    file_data = payload['imageFile']
+    group_id = payload['id']
+    url = upload_image(file_data)['url']
+    change_group_image(group_id, url)
     emit('successfully_changed', url)
     
 
