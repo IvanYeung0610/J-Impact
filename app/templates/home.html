@@ -42,15 +42,15 @@
           <li class="nav-item" style="padding-left: 32px;">
             <div class="row">
               <div class="col-sm-6" style="padding-right: 0%;">
-            <a class="navbar-brand">
-              <img src="{{PFP}}" alt="Bootstrap" class="d-inline-block" width="30" height="30" style="display: inline-block;
+                <a class="navbar-brand">
+                  <img src="{{PFP}}" alt="Bootstrap" class="d-inline-block" width="30" height="30" style="display: inline-block;
               margin-top: 10px; ">
-            </a>
-          </div>
-          <div class="col-sm-6" style="padding-left: 0%;">
-            <a class="nav-link disabled" style="font-size: 20px; color: #460708;">{{USER}}</a>
-          </div>
-          </div>
+                </a>
+              </div>
+              <div class="col-sm-6" style="padding-left: 0%;">
+                <a class="nav-link disabled" style="font-size: 20px; color: #460708;">{{USER}}</a>
+              </div>
+            </div>
           </li>
 
         </ul>
@@ -75,7 +75,8 @@
                 <h5 style="padding-right: 0px;">Friends</h5>
               </div>
               <div class="col-sm-6" style="padding-left: 0px; text-align: end;">
-                <button class="dropdown-toggle rounded-pill" onclick="toggleDropdownCreate()" style="padding: 5px; font-size: .75rem; margin-top: 3px;">Create
+                <button class="dropdown-toggle rounded-pill" onclick="toggleDropdownCreate()"
+                  style="padding: 5px; font-size: .75rem; margin-top: 3px;">Create
                   Group</button>
               </div>
             </div>
@@ -153,7 +154,7 @@
       </div>
 
       <!--chat-->
-      <div class="col-sm-8 border-start border-end border-dark-subtle border-3"
+      <div class="fixed col-sm-8 border-start border-end border-dark-subtle border-3"
         style="height: 100vh; padding-left: 0px; padding-right: 0px;">
 
         <div class="border-bottom border-dark-subtle border-3" style="margin-bottom: 20px;">
@@ -183,25 +184,43 @@
         </div>
 
         <!--message div-->
-        <div class="h-75 scrollable overflow-auto" id="messages" style="height: 75vh; margin-bottom: 3%;">
+        <div class="h-75 scrollable overflow-auto position-relative" id="messages"
+          style="height: 70vh; margin-bottom: 3%;">
+
+
 
 
         </div>
 
-        <div style="display: flex; justify-content: center;">
+
+        <div class="fixed" style="display: flex; justify-content: center;">
+
+          <div class="collapse collapse-vertical scrollable overflow-auto position-absolute"
+            style="width: 400px; height:200px; z-index: 2;" id="emoji-collapse">
+            <div class="container-md text-center" id="emojicontainer">
+              <!-- <span class="btn p-0 m-0"><img
+                  src="https://res.cloudinary.com/dg13dndup/image/upload/v1686362344/ypjprqoslgpozmlrnv0h.png">
+              </span> -->
+
+            </div>
+          </div>
           <!--message input-->
-          <form action="" method="POST" autocomplete="off" id="messageform" style="width:75%" class="d-inline-flex">
+          <form action="" method="POST" autocomplete="off" id="messageform" style="width:75%"
+            class="d-inline-flex absolute z-1">
             <!--auto complete removes inut suggestions-->
-            <input type="text" name="message" minlength="1" class="form-control" id="messageinput"
-              placeholder="Send a message..." style="bottom: 14px; width: 100%; left: 0%; right: 0; margin: auto;"
-              onchange="ajaxMessage(this.value)" required><br>
-            <input type="submit" style="display: none">
+            <input inputmode="submit" contenteditable="true" type="text" name="message" minlength="1"
+              class="form-control" id="messageinput" placeholder="Send a message..."
+              style="bottom: 14px; width: 100%; left: 0%; right: 0; margin: auto;" onchange="ajaxMessage(this.value)"
+              required><br>
+            </input>
             <!--style makes form go to bottom of the page-->
           </form>
 
+
           <!-- EMOJI BUTTON -->
           <div class="d-inline-flex" style="padding-left: 10px;">
-            <button type="button" class="btn btn-info btn-circle p-1" id="emoji_dropdown_button">
+            <button type="button" class="btn btn-info btn-circle p-1" data-bs-toggle="collapse"
+              data-bs-target="#emoji-collapse" id="emoji_dropdown_button">
               <img src="https://res.cloudinary.com/dg13dndup/image/upload/v1686362344/ypjprqoslgpozmlrnv0h.png"
                 alt="emoji button" style="width: 25px;">
             </button>

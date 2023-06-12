@@ -48,7 +48,10 @@ def messages_ajax():
     id = request.form.get("group_id") #group id
     messages = get_messages_from_group(id)
     group = get_all_users_by_group(id)
-    messageData = {"username": [], "message": [], "time": [], "member_names": [], "member_pfps": [], "title": "", "pfp": []}
+    default_emojis = get_default_emojis()
+    messageData = {"username": [], "message": [], "time": [], "member_names": [], "member_pfps": [], "title": "", "pfp": [], "emojis": default_emojis}
+    for emoji in get_group_emojis(id):
+        messageData["emojis"].append(emoji)
     if len(group) <= 2:
         if group[0] == session.get("CLIENT"):
             messageData["title"] = group[1]
@@ -251,14 +254,12 @@ def add_user_to_group_search():
     for i in range(len(users)):
         notInGroup = True
         for j in range(len(alreadyInGroup)):
-            # print(alreadyInGroup[j] + " aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-            # print(users[i][0] + " mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm")
             if alreadyInGroup[j] == users[i][0]:
                 notInGroup = False
         if notInGroup:
             addable.append(users[i])
-    print(addable)
-    print("===============================================")
+    # print(addable)
+    # print("===============================================")
     if users:
         return jsonify(users=addable)
     return jsonify({"error" : "error"})
