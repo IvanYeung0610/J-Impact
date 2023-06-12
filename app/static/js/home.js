@@ -9,6 +9,7 @@ var toast = document.getElementById("message_toast")
 const message_toast = bootstrap.Toast.getOrCreateInstance(toast)
 var emoji_dropdown = document.getElementById("emoji_dropdown_button")
 var emoji_container = document.getElementById("emojicontainer")
+var border_color = document.getElementById("borderColor")
 
 var memberlist = []
 
@@ -543,7 +544,7 @@ upload_group_image_form.addEventListener('submit', (e) => {
     console.log(image_file)
     const reader = new FileReader();
     reader.addEventListener('load', (event) => {
-        socket.emit('updated_group_image', event.target.result);
+        socket.emit('updated_group_image', [event.target.result, border_color.value]);
     });
     reader.readAsArrayBuffer(image_file);
 });

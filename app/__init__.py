@@ -215,9 +215,6 @@ def profile(username):
             friend2.append(f[1])
         else:
             friend2.append(f[0])
-    #print(friend1)
-    #print(friend2)
-    #print(get_all_friends(session.get("CLIENT")))
     aset = set(friend1)
     bset = set(friend2)
     mutual = []
@@ -429,18 +426,18 @@ def cancel_friend_request(users):
     for S in senders:
         emit("request_canceled", receiver, to=S)
 
-
+# filedata is [imagedata, bordercolor]
 @socketio.on("updated_profile_picture")
 def updated_profile_picture(file_data):
     # print("FILE DATA: ", file_data)
-    url = upload_image(file_data)['url']
+    url = upload_image(file_data[0], file_data[1][1:])['url']
     # print("URL: ", url)
     change_pfp(session.get("CLIENT"), url)
     emit('successfully_updated', url)
 
 @socketio.on("updated_group_image")
 def update_group_image(file_data):
-    url = upload_image(file_data)['url']
+    url = upload_image(file_data[0],file_data[1][1:])['url']
     emit('successfully_updated', url)
 
 @socketio.on("changed_group_image")
