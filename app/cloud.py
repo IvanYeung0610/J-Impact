@@ -7,7 +7,7 @@ import json
 
 key = ""
 with open("keys/secret.env", "r") as secret_key:
-    key = secret_key.read()
+    key = secret_key.readline()
 
 cloudinary.config(
 cloud_name = "dg13dndup", 
