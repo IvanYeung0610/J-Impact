@@ -444,7 +444,8 @@ def update_group_image(file_data):
 def handle_changed_group_image(payload):
     file_data = payload['imageFile']
     group_id = payload['id']
-    url = upload_image(file_data)['url']
+    border = payload.get("border", "#FF0000")
+    url = upload_image(file_data, border[1:])['url']
     change_group_image(group_id, url)
     emit('successfully_changed', url)
     
