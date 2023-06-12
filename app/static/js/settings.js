@@ -1,9 +1,32 @@
+var socket = io();
 var edit = document.getElementById("edit");//edit button
 var bio = document.getElementById("bio")//about me section
 var editarea = document.getElementById("editarea")//where the textarea will appear
+var uploadform = document.getElementById("upload_profile_form")
+var pfp = document.getElementById("pfp")
+var nav_pfp = document.getElementById("nav-pfp")
+
+uploadform.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    // getting array buffer data from image file
+    const image_file = document.getElementById("file").files[0]
+    console.log(image_file)
+    const reader = new FileReader();
+    reader.addEventListener('load', (event) => {
+        socket.emit('updated_profile_picture', event.target.result);
+        // window.location.replace("/settings");
+    });
+    reader.readAsArrayBuffer(image_file);
+})
+
+socket.on('successfully_updated', (e) => {
+    pfp.src = e
+    nav_pfp.src = e
+})
 
 //edit bio function
-var editBio = () =>{
+var editBio = () => {
     var current = bio.innerHTML; //current bio
     bio.hidden = true;
     var textarea = document.createElement("textarea"); //input where you edit bio
@@ -30,13 +53,37 @@ var editBio = () =>{
     cancel.style = "background-color: red; margin-left: 10px";
     editarea.appendChild(cancel);
 
-    submit.addEventListener("click", (e) =>{
+    submit.addEventListener("click", (e) => {
         bio.innerHTML = textarea.value;
         editarea.removeChild(textarea);
         editarea.removeChild(submit); //don't put the parameter in quotes
         editarea.removeChild(cancel);
         edit.hidden = false;
         bio.hidden = false;
+
+        //ajax request to update db with new desc
+        fetch('/desc-ajax', {
+            method: 'POST',
+            body: "desc=" + textarea.value,
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded', // Set the content type to indicate a plain text string
+                'Accept': 'application/json' // Set the Accept header to indicate acceptance of JSON response
+            }
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not OK');
+            }
+            return response.json();
+        })
+        .then(responseData => {
+            // Handle the response from the Flask route
+           
+        })
+        .catch(error => {
+            // Handle any errors that occurred during the request
+            console.error('Error:', error);
+        });
     }
     )
 

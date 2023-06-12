@@ -126,6 +126,10 @@ ivanY -- 2023-06-05 22:56
 --------------------------------------------------------------
 * Worked on adding new Groups table along with additional accessor functions in database
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> efb6adba6104791fa74407a2acde042c5d24198e
 junW -- 2023-06-6 20:40
 --------------------------------------------------------------
 * Made sure search bars don't break by fixing empty input edge case
@@ -152,3 +156,84 @@ ivanY -- 2023-06-06 23:12
 joshuaL -- 2023-06-06 23:51
 --------------------------------------------------------------
 * Got the AJAX code working for getting past messages from the database onto html
+<<<<<<< HEAD
+=======
+
+jamesY -- 2023-06-08 19:26
+--------------------------------------------------------------
+* Worked profile page 
+* Created cards for friends
+
+junW -- 2023-06-08 19:26
+--------------------------------------------------------------
+* Linked up the accept and decline buttons to websockets code 
+* Implemented creating groups
+
+joshuaL -- 2023-06-08 19:26
+--------------------------------------------------------------
+* Got cloudinary working for uploading images
+* Pings
+* Toasts
+
+ivanY -- 2023-06-08 19:26
+--------------------------------------------------------------
+* Showed correct pfp for users on home page
+* fixed bug with names between friends 
+* create dropdown for creating groups and adding members to a group
+
+junW -- 2023-06-09 16:40
+--------------------------------------------------------------
+* Worked on creating group functionality
+jamesY -- 2023-06-09 23:16
+--------------------------------------------------------------
+* Created buttons and functionality for viewing the profile of other users and adding to friends
+
+junW -- 2023-06-09 23:16
+--------------------------------------------------------------
+* Got create group button working
+    * searches for users + checks for creating group
+* working on adding members to group
+    * searches
+joshuaL -- 2023-06-09 23:16
+--------------------------------------------------------------
+* Created emoji and uploaded default ones
+
+ivanY -- 2023-06-09 23:16
+--------------------------------------------------------------
+* Added profile pictures to members 
+* Added client's username and profile picture on the nav bar 
+* Updated readme with corrected instructions
+
+junW -- 2023-06-10 00:20
+--------------------------------------------------------------
+* Add to group functionality working
+
+jamesY -- 2023-06-10 20:55
+--------------------------------------------------------------
+* Tried to get droplet working 
+* restyled the home page
+
+ivanY -- 2023-06-10 20:55
+--------------------------------------------------------------
+* changed color scheme of home page and made borders connect
+
+junW -- 2023-06-10 20:55
+--------------------------------------------------------------
+* Got droplet working and app running using nohup
+
+jamesY -- 2023-06-11 22:56
+--------------------------------------------------------------
+* Polished site
+
+ivanY -- 2023-06-11 22:56
+--------------------------------------------------------------
+* added change group picture button
+
+junW -- 2023-06-11 22:56
+--------------------------------------------------------------
+* bugs fixes and got images uploading in droplet
+
+joshuaL -- 2023-06-11 22:56
+--------------------------------------------------------------
+* got emojis working
+>>>>>>> efb6adba6104791fa74407a2acde042c5d24198e

@@ -38,10 +38,21 @@
             <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/settings">Settings</a>
           </li>
 
+          
+          <li class="nav-item" style="padding-left: 32px;">
+            <a class="navbar-brand">
+              <img id="nav-pfp" src="{{PICTURE_URL}}" alt="Bootstrap" class="d-inline-block"  width="30" height="30" style="display: inline-block;
+              margin-top: 10px; ">
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link disabled" style="font-size: 20px; color: #460708;">{{USER}}</a>
+          </li>
+
         </ul>
 
       </div>
-      <p style="color: lightgray">Welcome, {{USER}}</p>
       <form action="/logout">
         <button class="btn btn-info btn-sm" style="margin-left: 50px;" type="submit">Log out</button>
       </form>
@@ -50,34 +61,36 @@
 
   <!--icon and name of profile-->
   <div style="display: flex; align-items: center; justify-content: center;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/3/33/Fresh_made_bread_05.jpg" class="rounded-circle" width="100px" height="100px" >
-    <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
-    <form>
-      <div>
-      <label for="file" class="btn" style="">Upload Profile Picture</label>
-      <input type="file" id="file"  style="visibility:hidden;" name="change"></input>
+    <img id="pfp" src={{PICTURE_URL}} width="100px" height="100px" style="margin-top: 10px;">
     </div>
+    <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
+    <form action="\settings" method="POST" id="upload_profile_form">
+      <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
+        <label for="file" class="btn btn-outline-dark" style="margin-right: 10px;">Click Here to Upload a Profile Picture</label>
+        <input type="file" id="file" style="visibility:hidden; margin-right: 5px;" name="change" accept=".jpg, .jpeg, .png" hidden></input>
+        <input style="display: inline-block;" type="submit" value="Change">
+      </div>
     </form>
-</div>
 
-<h4 style="text-align: center; margin-top: 3%;">About me</h4>
-<div class="row">
+  <h4 style="text-align: center; margin-top: 3%;">About me</h4>
+  <div class="row">
     <div class="col-sm-4"></div>
     <div class="col-sm-4">
       <div id="bio">
-        {{about me}} goes here this is sample text to see how the about me section looks like when it is full of amazing text that describes the user. why are you still reading this
+        {{about_me}}
       </div>
       <div id="editarea"></div>
       <br>
-        <button type="button" class="btn" id="edit" style="background-color: lightgray;">Edit</button>
-      </div>
+      <button type="button" class="btn" id="edit" style="background-color: lightgray;">Edit</button>
+    </div>
     <div class="col-sm-4"></div>
-</div>
+  </div>
 
-<div id="test">
+  <div id="test">
 
-</div>
+  </div>
 
-<script src="../static/js/settings.js"></script>
-  </body>
-  </html>
+  <script src="../static/js/settings.js"></script>
+</body>
+
+</html>
