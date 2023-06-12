@@ -14,7 +14,7 @@
   <link rel="stylesheet" href="../static/css/home.css">
 </head>
 
-<body style="background-color:  #DEF2F1; overflow-y: hidden; height: 100%; overflow-x: hidden; width: 100%;">
+<body style="background-color:  #DEF2F1; height: 100%; overflow-x: hidden; overflow-y: hidden; width: 100%;">
   <!--background color, overflow removes scrollbar (fixes page overflow)-->
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #2B7A78;"><!--nav bar color-->
     <div class="container-fluid">
@@ -23,34 +23,30 @@
         <a class="navbar-brand" href="/">
           jmessage</a>
       </div>
-
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/">Home</a>
+            <a class="nav-link" style="font-size: 20px;" href="/">Home</a>
           </li>
 
           <li class="nav-item">
-            <a class="nav-link" style="font-size: 20px;" href="/friends" id="nav_friends_link">Friends</a>
+            <a class="nav-link" style="font-size: 20px; font-weight: 850;" href="/friends">Friends</a>
           </li>
 
           <li class="nav-item">
             <a class="nav-link" style="font-size: 20px;" href="/settings">Settings</a>
           </li>
-
+          
           <li class="nav-item" style="padding-left: 32px;">
-            <div class="row">
-              <div class="col-sm-6" style="padding-right: 0%;">
-                <a class="navbar-brand">
-                  <img src="{{PFP}}" alt="Bootstrap" class="d-inline-block" width="30" height="30" style="display: inline-block;
+            <a class="navbar-brand">
+              <img src="{{PFP}}" alt="Bootstrap" class="d-inline-block"  width="30" height="30" style="display: inline-block;
               margin-top: 10px; ">
-                </a>
-              </div>
-              <div class="col-sm-6" style="padding-left: 0%;">
-                <a class="nav-link disabled" style="font-size: 20px; color: #460708;">{{USER}}</a>
-              </div>
-            </div>
+            </a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link disabled" style="font-size: 20px; color: #460708;">{{USER}}</a>
           </li>
 
         </ul>
