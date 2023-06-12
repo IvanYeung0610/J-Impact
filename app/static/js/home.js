@@ -40,9 +40,13 @@ var getMessage = function (x) {
             if (responseData["member_names"].length > 2) {
                 document.getElementById("dropdown-menu-add").style.visibility = "visible";
                 document.getElementById("dropdown-button-add").style.visibility = "visible";
+                document.getElementById("dropdown-button-change-image").style.visibility = "visible";
+                document.getElementById("dropdown-menu-change-image").style.visibility =  "visible";
             } else {
                 document.getElementById("dropdown-menu-add").style.visibility = "hidden";
                 document.getElementById("dropdown-button-add").style.visibility = "hidden";
+                document.getElementById("dropdown-button-change-image").style.visibility = "hidden";
+                document.getElementById("dropdown-menu-change-image").style.visibility =  "hidden";
             }
             messages.innerHTML = ""
             document.getElementById("member_tab").innerHTML = "";
@@ -171,6 +175,21 @@ var createDropdownAdd = function (element) {
 
 var toggleDropdownAdd = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-add');
+    if (dropdownMenu.style.display === 'none') {
+        dropdownMenu.style.display = 'block';
+        dropdownMenu.style.maxHeight = '400px';
+        dropdownMenu.style.maxWidth = '300px';
+        dropdownMenu.style.overflowY = 'auto';
+        dropdownMenu.style.marginLeft = '47%';
+        dropdownMenu.style.marginTop = '3%';
+        //dropdownMenu.style.justifyContent = 'end';
+    } else {
+        dropdownMenu.style.display = 'none';
+    }
+}
+
+var toggleDropdownChangeImage = function() {
+    var dropdownMenu = document.getElementById('dropdown-menu-change-image');
     if (dropdownMenu.style.display === 'none') {
         dropdownMenu.style.display = 'block';
         dropdownMenu.style.maxHeight = '400px';
