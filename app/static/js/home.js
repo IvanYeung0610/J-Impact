@@ -1,13 +1,14 @@
 // Get the form for submitting messages
 var socket = io();
 var messageform = document.getElementById("messageform");
+var messagebar = document.getElementById("messageinput");
 var nav_friends_link = document.getElementById("nav_friends_link")
 var all_group_buttons = document.getElementsByName("group_button")
 var messages = document.getElementById("messages")
 var toast = document.getElementById("message_toast")
 const message_toast = bootstrap.Toast.getOrCreateInstance(toast)
 var emoji_dropdown = document.getElementById("emoji_dropdown_button")
-
+var emoji_container = document.getElementById("emojicontainer")
 
 var memberlist = []
 
@@ -16,7 +17,7 @@ emoji_dropdown.addEventListener('click', (e) => {
 })
 
 //get messages from db
-var getMessage = function (x) {
+var get_message_and_emoji = function (x) {
     // console.log(typeof JSON.stringify(all_group_buttons[x].id))
     // console.log(typeof JSON.stringify(all_group_buttons[x].id))
     fetch('/messagesajax', {
@@ -51,7 +52,7 @@ var getMessage = function (x) {
             messages.innerHTML = ""
             document.getElementById("member_tab").innerHTML = "";
             for (let i = 0; i < responseData['username'].length; i++) {
-                console.log("first response data: ", responseData);
+                // console.log("first response data: ", responseData);
                 message = document.createElement("div");
                 label = document.createElement("div");//div with pfp, username, time
                 label.style = "display: flex; margin-left: 10px";
@@ -93,6 +94,23 @@ var getMessage = function (x) {
                 // console.log(member);
                 member.scrollTop = member.scrollHeight;
             }
+
+            emoji_container.innerHTML = ""
+            for (let ind = 0; ind < responseData["emojis"].length; ind++) {
+                emoji_Span = document.createElement("span")
+                emoji_Span.classList.add("btn", "p-0", "m-0")
+                emoji_img = document.createElement("img")
+                emoji_img.src = responseData["emojis"][ind]
+                emoji_img.id = "emoji" + ind
+                emoji_Span.appendChild(emoji_img)
+                emoji_container.appendChild(emoji_Span)
+                emoji_Span.addEventListener('click', (e) => {
+                    e.preventDefault()
+                    url = document.getElementById("emoji" + ind).src
+                    socket.emit("message", "<img src='" + url + "'>");
+                })
+            }
+
         })
         .catch(error => {
             // Handle any errors that occurred during the request
@@ -238,14 +256,14 @@ var addUser = function () {
         xhttp.send(postVars);
     } else {
         console.log("select at least 2 people, dummy");
-        
+
     }
 }
 
 //test refresh page so that changes load
-var refreshPage = function() {
+var refreshPage = function () {
     window.location.reload();
-} 
+}
 
 var clear_ping = function (group_id) {
     ping_bubble = document.getElementById("ping_bubble" + group_id)
@@ -274,7 +292,7 @@ if (all_group_buttons.length != 0) {
     selected_group = all_group_buttons[0]
     all_group_buttons[0].style.backgroundColor = "#2B7A78"
     socket.emit("select_group", all_group_buttons[0].id)
-    getMessage(0);
+    get_message_and_emoji(0);
 }
 
 // Changes color of group buttons when clicked 
@@ -288,7 +306,7 @@ for (let x = 0; x < all_group_buttons.length; x++) {
         selected_group = all_group_buttons[x]
         //messages.innerHTML = "";
         memberlist = [];
-        getMessage(x);
+        get_message_and_emoji(x);
         profileButton();
         clear_ping(all_group_buttons[x].id);
     })
@@ -362,7 +380,7 @@ var setChecked = function (element) {
     console.log(element);
 }
 
-var createGroup = function(e) {
+var createGroup = function (e) {
     var people = document.getElementsByName("createCheckbox");
     var selected = [];
     // Perform further actions with the group name

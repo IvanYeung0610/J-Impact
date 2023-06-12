@@ -31,11 +31,20 @@ def get_pfp_from_user(username):
     c.close()
     return user[0]
 
+def get_group_emojis(group_id):
+    c = db.cursor()
+    c.execute("select emoji from EmojiAssociation where group_id = ?", (group_id,))
+    emojis = c.fetchall()
+    if emojis == None:
+        return []
+    c.close()
+    return [emoji[0] for emoji in emojis]
+
 #  Get a list of all deafult emojis
 def get_default_emojis():
     c = db.cursor()
     c.execute("select * from DefaultEmojis")
-    emojis = c.fetchone()
+    emojis = c.fetchall()
     c.close()
     return [emoji[0] for emoji in emojis]
 
