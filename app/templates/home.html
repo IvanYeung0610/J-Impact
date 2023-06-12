@@ -100,12 +100,14 @@
                   <input style="display: inline-block;" type="submit" value="Change">
                 </div>
               </form>
+              <span class="mx-auto"><input type="color" id="borderColor" value="#FF0000"></span>
 
               <br>
 
               <form action="" method="POST" class="d-flex">
                 <input class="form-control me-2" type="search" name="search" placeholder="Search" aria-label="Search"
                   onkeyup="createGroupBar(this.value)">
+
               </form>
 
               <form id="friends-checkboxes-create">
@@ -166,8 +168,8 @@
             </div>
 
             <div class="col-sm-4" style="text-align: end;">
-              <button id="dropdown-button-add" class="dropdown-toggle" onclick="toggleDropdownAdd()">Add User</button>
-              <button id="dropdown-button-change-image" class="dropdown-toggle"
+              <button id="dropdown-button-add" class="dropdown-toggle" onclick="toggleDropdownAdd()" style="visibility: hidden;">Add User</button>
+              <button id="dropdown-button-change-image" class="dropdown-toggle" style="visibility: hidden;"
                 onclick="toggleDropdownChangeImage()">Change Image</button>
             </div>
             <div id="dropdown-menu-add" class="dropdown-menu">
@@ -192,6 +194,8 @@
               <h1 style="margin-left: 2%; margin-right: 50px;">{{user}}</h1>
               <form action="" id="change_group_image_form">
                 <div style="display: flex; align-items: center; justify-content: center; text-align: center;">
+                  <span class="mx-auto"><input type="color" id="borderColorForChange" value="#FF0000"></span>
+
                   <label id="changeGroupImage" for="file" class="btn btn-outline-dark" style="margin-right: 5px;">Upload
                     Image</label>
                   <input type="file" id="file" style="visibility:hidden; margin-right: 5px;" name="change"
@@ -205,7 +209,7 @@
         </div>
 
         <!--message div-->
-        <div class="h-75 scrollable overflow-auto position-relative" id="messages"
+        <div class="h-70 scrollable overflow-auto position-relative" id="messages"
           style="height: 70vh; margin-bottom: 3%;">
 
 

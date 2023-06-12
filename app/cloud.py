@@ -17,12 +17,12 @@ secure = True
 )
 
 # returns json of all the data
-def upload_image(image_data):
+def upload_image(image_data, border_color):
     # print("UPLOADED ONTO CLOUDINARY")
     result = cloudinary.uploader\
     .upload(image_data, 
     gravity = "center", width = 200, height = 200, crop = "scale", 
-    radius = 50, border="7px_solid_red", fetch_format="png")
+    radius = 50, border="7px_solid_rgb:"+border_color, fetch_format="png")
     return result
 
 def upload_emoji(image_data):

@@ -157,8 +157,8 @@ var sendRequestListener = function () {
             //console.log(friendrequest[x].parentNode.parentNode.innerHTML.split(">")[1].split("<")[0])//gets username of friend
             friendrequest[x].addEventListener('click', (e) => {
                 e.preventDefault();
-                console.log(x);
-                console.log(document.getElementById(x));
+                //console.log(x);
+                //console.log(document.getElementById(x));
                 var receiver = friendrequest[x].parentNode.parentNode.innerHTML.split(">")[1].split("<")[0]; //person you send the request to
                 socket.emit("send_request", receiver);
                 document.getElementById(x).remove();
@@ -262,7 +262,7 @@ var loadFriends = function () {
             var f = response.requests.friends;
             var username = response.requests.username;
             var pfp = response.requests.pfp;
-            console.log(pfp);
+            //console.log(pfp);
             for (let i = 0; i < f.length; i++) {
                 if (f[i][0] == username) {
                     friendsList(f[i][1], pfp[i]);

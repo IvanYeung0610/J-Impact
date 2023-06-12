@@ -9,6 +9,8 @@ var toast = document.getElementById("message_toast")
 const message_toast = bootstrap.Toast.getOrCreateInstance(toast)
 var emoji_dropdown = document.getElementById("emoji_dropdown_button")
 var emoji_container = document.getElementById("emojicontainer")
+var border_color = document.getElementById("borderColor")
+var change_border_color = document.getElementById("borderColorForChange")
 
 var memberlist = []
 
@@ -42,12 +44,12 @@ var get_message_and_emoji = function (x) {
                 document.getElementById("dropdown-menu-add").style.visibility = "visible";
                 document.getElementById("dropdown-button-add").style.visibility = "visible";
                 document.getElementById("dropdown-button-change-image").style.visibility = "visible";
-                document.getElementById("dropdown-menu-change-image").style.visibility =  "visible";
+                document.getElementById("dropdown-menu-change-image").style.visibility = "visible";
             } else {
                 document.getElementById("dropdown-menu-add").style.visibility = "hidden";
                 document.getElementById("dropdown-button-add").style.visibility = "hidden";
                 document.getElementById("dropdown-button-change-image").style.visibility = "hidden";
-                document.getElementById("dropdown-menu-change-image").style.visibility =  "hidden";
+                document.getElementById("dropdown-menu-change-image").style.visibility = "hidden";
             }
             messages.innerHTML = ""
             document.getElementById("member_tab").innerHTML = "";
@@ -206,7 +208,7 @@ var toggleDropdownAdd = function () {
     }
 }
 
-var toggleDropdownChangeImage = function() {
+var toggleDropdownChangeImage = function () {
     var dropdownMenu = document.getElementById('dropdown-menu-change-image');
     if (dropdownMenu.style.display === 'none') {
         dropdownMenu.style.display = 'block';
@@ -215,6 +217,16 @@ var toggleDropdownChangeImage = function() {
         dropdownMenu.style.overflowY = 'auto';
         dropdownMenu.style.marginLeft = '47%';
         dropdownMenu.style.marginTop = '3%';
+        //retrieves group that is selected
+        var groups = document.getElementsByName("group_button");
+        var id = 0;
+        for (let i = 0; i < groups.length; i++) {
+            if (groups[i].getAttribute("selected") == "") {
+                id = groups[i].id;
+            }
+        }
+        document.getElementById("change_group_image").src = document.getElementById("image" + String(id)).src;
+        //console.log(document.getElementById("image" + String(id)).src);
         //dropdownMenu.style.justifyContent = 'end';
     } else {
         dropdownMenu.style.display = 'none';
@@ -235,27 +247,27 @@ var addUser = function () {
         xhttp.onreadystatechange = function () {
             if (this.readyState == 4 && this.status == 200) {
                 var response = JSON.parse(this.responseText);
-                console.log(response);
+                //console.log(response);
                 refreshPage();
             }
         }
         xhttp.open("POST", "add-users-to-group-ajax");
         xhttp.setRequestHeader("Content-type", "application/json; charset=utf-8");
         var group_buttons = document.getElementsByName("group_button");
-        console.log(group_buttons);
+        //console.log(group_buttons);
         var groupID = 0;
         for (let i = 0; i < group_buttons.length; i++) {
-            console.log(group_buttons[i].getAttribute("selected", "true"));
+            //console.log(group_buttons[i].getAttribute("selected", "true"));
             if (group_buttons[i].getAttribute("selected", "true") == "") {
                 groupID = group_buttons[i].id;
             }
         }
 
         var postVars = JSON.stringify({ "selected": usersAdded, "group_id": groupID });
-        console.log(postVars);
+        //console.log(postVars);
         xhttp.send(postVars);
     } else {
-        console.log("select at least 2 people, dummy");
+        //console.log("select at least 2 people, dummy");
 
     }
 }
@@ -362,12 +374,13 @@ var createGroupBar = function (str) {
                 select.appendChild(formLabel);
                 dropdownMenu.appendChild(select);
             }
+            refreshPage();
         }
     }
     xhttp.open("POST", "create-group-search");
     xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     postVars = "searchTerm=" + str;
-    console.log(postVars);
+    //console.log(postVars);
     xhttp.send(postVars);
 }
 
@@ -377,7 +390,7 @@ var setChecked = function (element) {
     } else {
         element.removeAttribute("checked");
     }
-    console.log(element);
+    //console.log(element);
 }
 
 var createGroup = function (e) {
@@ -417,10 +430,10 @@ var createGroup = function (e) {
         var name = document.getElementById("group-name").value;
         var image = document.getElementById("group_image").src;
         var postVars = JSON.stringify({ "selected": selected, "name": name, "image": image });
-        console.log(postVars);
+        //console.log(postVars);
         xhttp.send(postVars);
     } else {
-        console.log("select at least 2 people, dummy");
+        //console.log("select at least 2 people, dummy");
         alert("select at least 2 people, dummy");
         e.preventDefault();
         return false;
@@ -435,9 +448,9 @@ var addUserToGroupSearch = function (str) {
         if (this.readyState == 4 && this.status == 200) {
             document.getElementById("friends-checkboxes-add").innerHTML = "";
             response = JSON.parse(this.responseText);
-            console.log(response);
+            //console.log(response);
             selectedUsers = response.users;
-            console.log(selectedUsers);
+            //console.log(selectedUsers);
             document.getElementById("friends-checkboxes-add").innerHTML = "";
             var dropdownMenu = document.getElementById('friends-checkboxes-add');
             for (let i = 0; i < selectedUsers.length; i++) {
@@ -478,7 +491,7 @@ var addUserToGroupSearch = function (str) {
     var groups = document.getElementsByName("group_button");
     var id = 0;
     for (let i = 0; i < groups.length; i++) {
-        console.log(groups[i].getAttribute("selected"));
+        //console.log(groups[i].getAttribute("selected"));
         if (groups[i].getAttribute("selected") == "") {
             id = groups[i].id;
         }
@@ -525,7 +538,7 @@ socket.on('ping', function (info) {
 });
 
 socket.on('clicked_group', function (info) {
-    console.log(info);
+    //console.log(info);
 });
 
 // sets the users's current room to "all_friends_page" then sends them to the /friends route
@@ -539,10 +552,10 @@ nav_friends_link.addEventListener('click', (e) => {
 upload_group_image_form.addEventListener('submit', (e) => {
     e.preventDefault()
     const image_file = document.getElementById("file").files[0]
-    console.log(image_file)
+    //console.log(image_file)
     const reader = new FileReader();
     reader.addEventListener('load', (event) => {
-        socket.emit('updated_group_image', event.target.result);
+        socket.emit('updated_group_image', [event.target.result, border_color.value]);
     });
     reader.readAsArrayBuffer(image_file);
 });
@@ -550,45 +563,44 @@ upload_group_image_form.addEventListener('submit', (e) => {
 change_group_image_form.addEventListener('submit', (e) => {
     e.preventDefault();
     const image_file = document.getElementById("file").files[0];
-    console.log(image_file);
     const reader = new FileReader();
     reader.addEventListener('load', (event) => {
-      var groups = document.getElementsByName("group_button");
-      var id = 0;
-      for (let i = 0; i < groups.length; i++) {
-        //console.log(groups[i].getAttribute("selected"));
-        if (groups[i].getAttribute("selected") == "") {
-          id = groups[i].id;
+        var groups = document.getElementsByName("group_button");
+        var id = 0;
+        for (let i = 0; i < groups.length; i++) {
+            //console.log(groups[i].getAttribute("selected"));
+            if (groups[i].getAttribute("selected") == "") {
+                id = groups[i].id;
+            }
         }
-      }
-      const payload = {
-        imageFile: event.target.result,
-        id: id
-      };
-      socket.emit('changed_group_image', payload);
+        const payload = {
+            imageFile: event.target.result,
+            id: id,
+            border: change_border_color.value,
+        };
+        socket.emit('changed_group_image', payload);
     });
     reader.readAsArrayBuffer(image_file);
-  });
-  
+});
+
 
 socket.on('successfully_updated', (e) => {
-    console.log("group image uploaded");
+    //console.log("group image uploaded");
     document.getElementById("group_image").src = e;
 })
 
 socket.on('successfully_changed', (e) => {
-    console.log("group image changed");
+    //console.log("group image changed");
     document.getElementById("change_group_image").src = e;
     var groups = document.getElementsByName("group_button");
     var id = 0;
     for (let i = 0; i < groups.length; i++) {
-        console.log(groups[i].getAttribute("selected"));
+        //console.log(groups[i].getAttribute("selected"));
         if (groups[i].getAttribute("selected") == "") {
-          id = groups[i].id;
+            id = groups[i].id;
         }
-      }
+    }
     document.getElementById("image" + String(id)).src = e;
-    console.log("image" + String(id));
 })
 
 messageform.addEventListener('submit', (e) => {

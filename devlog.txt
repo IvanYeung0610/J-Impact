@@ -126,7 +126,6 @@ ivanY -- 2023-06-05 22:56
 --------------------------------------------------------------
 * Worked on adding new Groups table along with additional accessor functions in database
 
-
 junW -- 2023-06-6 20:40
 --------------------------------------------------------------
 * Made sure search bars don't break by fixing empty input edge case
@@ -215,3 +214,19 @@ ivanY -- 2023-06-10 20:55
 junW -- 2023-06-10 20:55
 --------------------------------------------------------------
 * Got droplet working and app running using nohup
+
+jamesY -- 2023-06-11 22:56
+--------------------------------------------------------------
+* Polished site
+
+ivanY -- 2023-06-11 22:56
+--------------------------------------------------------------
+* added change group picture button
+
+junW -- 2023-06-11 22:56
+--------------------------------------------------------------
+* bugs fixes and got images uploading in droplet
+
+joshuaL -- 2023-06-11 22:56
+--------------------------------------------------------------
+* got emojis working

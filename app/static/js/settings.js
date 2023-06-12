@@ -5,16 +5,17 @@ var editarea = document.getElementById("editarea")//where the textarea will appe
 var uploadform = document.getElementById("upload_profile_form")
 var pfp = document.getElementById("pfp")
 var nav_pfp = document.getElementById("nav-pfp")
+var border_color = document.getElementById("borderColor")
 
 uploadform.addEventListener('submit', (e) => {
     e.preventDefault()
 
     // getting array buffer data from image file
     const image_file = document.getElementById("file").files[0]
-    console.log(image_file)
+    //console.log(image_file)
     const reader = new FileReader();
     reader.addEventListener('load', (event) => {
-        socket.emit('updated_profile_picture', event.target.result);
+        socket.emit('updated_profile_picture', [event.target.result, border_color.value]);
         // window.location.replace("/settings");
     });
     reader.readAsArrayBuffer(image_file);

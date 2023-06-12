@@ -215,9 +215,6 @@ def profile(username):
             friend2.append(f[1])
         else:
             friend2.append(f[0])
-    #print(friend1)
-    #print(friend2)
-    #print(get_all_friends(session.get("CLIENT")))
     aset = set(friend1)
     bset = set(friend2)
     mutual = []
@@ -429,26 +426,31 @@ def cancel_friend_request(users):
     for S in senders:
         emit("request_canceled", receiver, to=S)
 
-
+# filedata is [imagedata, bordercolor]
 @socketio.on("updated_profile_picture")
 def updated_profile_picture(file_data):
     # print("FILE DATA: ", file_data)
-    url = upload_image(file_data)['url']
+    url = upload_image(file_data[0], file_data[1][1:])['url']
     # print("URL: ", url)
     change_pfp(session.get("CLIENT"), url)
     emit('successfully_updated', url)
 
 @socketio.on("updated_group_image")
 def update_group_image(file_data):
+<<<<<<< HEAD
     url = upload_image(file_data)['url']
     print(url)
+=======
+    url = upload_image(file_data[0],file_data[1][1:])['url']
+>>>>>>> d086e03b88a9d6be5e21067dd561e7bfa03651ec
     emit('successfully_updated', url)
 
 @socketio.on("changed_group_image")
 def handle_changed_group_image(payload):
     file_data = payload['imageFile']
     group_id = payload['id']
-    url = upload_image(file_data)['url']
+    border = payload.get("border", "#FF0000")
+    url = upload_image(file_data, border[1:])['url']
     change_group_image(group_id, url)
     emit('successfully_changed', url)
     
