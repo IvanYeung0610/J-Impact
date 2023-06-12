@@ -132,7 +132,7 @@
                 {% for group in GROUPS %}
                 <button id="{{ group }}" type="button" class="btn" name="group_button"
                   style="background-color: #DEF2F1; width:100%; text-align: left;" onclick="createDropdownAdd(this)">
-                  <img src="{{ GROUP_INFO[group][1][0] }}" width="30px" height="30px" style="margin-right: 3px;">
+                  <img id="image{{ group }}" src="{{ GROUP_INFO[group][1][0] }}" width="30px" height="30px" style="margin-right: 3px;">
                   {{ GROUP_INFO[group][0] }} <!-- Group Title or Friend's name -->
 
                   {% if GROUP_INFO[group][2] > 2 %}
