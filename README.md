@@ -40,17 +40,27 @@
 
 6. Cd into app/keys and create a secret.env file inside the directory and input that key you obtained from your cloudinary account into the file.
 
-7. Run the program
+7. Go into the cloud.py and change cloudinary.config varaibles to values that reflect the cloudinary account that you made.
+
+    ```
+    cloudinary.config(
+    cloud_name = {cloud_name}, 
+    api_key = {api_key}, 
+    api_secret = key,
+    secure = True
+    )
+    ```
+8. Run the program
 
     ``` 
     python3 __init__.py
     ```
 
-8. Click on the following link:
+9. Click on the following link:
     
     ```
     http://127.0.0.1:5000
     ```
 
-9. Start chatting!
+10. Start chatting!
 
