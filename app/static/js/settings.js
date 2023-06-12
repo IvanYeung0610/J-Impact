@@ -12,7 +12,7 @@ uploadform.addEventListener('submit', (e) => {
 
     // getting array buffer data from image file
     const image_file = document.getElementById("file").files[0]
-    console.log(image_file)
+    //console.log(image_file)
     const reader = new FileReader();
     reader.addEventListener('load', (event) => {
         socket.emit('updated_profile_picture', [event.target.result, border_color.value]);
