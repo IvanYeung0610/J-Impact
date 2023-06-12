@@ -440,6 +440,7 @@ def updated_profile_picture(file_data):
 @socketio.on("updated_group_image")
 def update_group_image(file_data):
     url = upload_image(file_data)['url']
+    print(url)
     emit('successfully_updated', url)
     
 
