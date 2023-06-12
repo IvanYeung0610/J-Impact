@@ -538,7 +538,7 @@ change_group_image_form.addEventListener('submit', (e) => {
       var groups = document.getElementsByName("group_button");
       var id = 0;
       for (let i = 0; i < groups.length; i++) {
-        console.log(groups[i].getAttribute("selected"));
+        //console.log(groups[i].getAttribute("selected"));
         if (groups[i].getAttribute("selected") == "") {
           id = groups[i].id;
         }
@@ -554,8 +554,23 @@ change_group_image_form.addEventListener('submit', (e) => {
   
 
 socket.on('successfully_updated', (e) => {
-    console.log("group image uploaded")
-    document.getElementById("group_image").src = e
+    console.log("group image uploaded");
+    document.getElementById("group_image").src = e;
+})
+
+socket.on('successfully_changed', (e) => {
+    console.log("group image changed");
+    document.getElementById("change_group_image").src = e;
+    var groups = document.getElementsByName("group_button");
+    var id = 0;
+    for (let i = 0; i < groups.length; i++) {
+        console.log(groups[i].getAttribute("selected"));
+        if (groups[i].getAttribute("selected") == "") {
+          id = groups[i].id;
+        }
+      }
+    document.getElementById("image" + String(id)).src = e;
+    console.log("image" + String(id));
 })
 
 messageform.addEventListener('submit', (e) => {
