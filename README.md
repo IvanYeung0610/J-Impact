@@ -7,7 +7,7 @@
 ### Jun Hong Wang (devo)
 
 # Description: 
-### Our program is a messaging application where users will be able to chat with one another along with one another, featuring real-time messaging, group chats, friends, and more. Users will be able to upload their own profile pictures and emojis that they can use in their desired chats. They will be able to connect with their friends by sending friend requests to them along with being suggested new friends based on mutual friends.
+### Our program is a messaging application where users will be able to chat with one another along with one another, featuring real-time messaging, group chats, friends, and more. Users will be able to upload their own profile pictures and send emojis. They will be able to connect with their friends by sending friend requests to them along with being able to create groups with their friends where they can change the group's image and add additional members.
 
 # APIs:
 ### https://github.com/stuy-softdev/notes-and-code/blob/main/api_kb/411_on_Cloudinary.md 
