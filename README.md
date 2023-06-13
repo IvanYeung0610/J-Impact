@@ -50,19 +50,97 @@
     secure = True
     )
     ```
-8. Run the program
+
+8. Uncomment the following code in cloud.py
+
+    ```
+    # def upload_default_emojis():
+    #     result0 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     color="#1b7a1a", effect="outline:outer:2:200",
+    #     fetch_format="png")
+    #     add_default_emoji(result0["url"])
+
+
+    #     result1 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     color="#1a627a", effect="outline:outer:2:200",
+    #     fetch_format="png")
+    #     add_default_emoji(result1["url"])
+
+    #     result2 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     color="#5c178a", effect="outline:outer:2:200",
+    #     fetch_format="png")
+    #     add_default_emoji(result2["url"])
+
+    #     result3 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     color="#9e2134", effect="outline:outer:2:200",
+    #     fetch_format="png")
+    #     add_default_emoji(result3["url"])
+
+    #     result4 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     color="#a68c24", effect="outline:outer:2:200",
+    #     fetch_format="png")
+    #     add_default_emoji(result4["url"])
+
+    #     result5 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     color="#000000", effect="outline:outer:2:200",
+    #     fetch_format="png")
+    #     add_default_emoji(result5["url"])
+
+    #     result6 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     color="#fffafa", effect="outline:outer:2:200",
+    #     fetch_format="png")
+    #     add_default_emoji(result6["url"])
+
+    #     result7 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     effect="contrast:level_20;type_linear",
+    #     fetch_format="png")
+    #     add_default_emoji(result7["url"])
+
+    #     result8 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     effect="blur:100",
+    #     fetch_format="png")
+    #     add_default_emoji(result8["url"])
+
+    #     result9 = cloudinary.uploader\
+    #     .upload("https://github.com/twitter/twemoji/blob/master/assets/72x72/1f34c.png?raw=true", 
+    #     gravity = "center", width = 32, height = 32, crop = "scale", 
+    #     effect="vignette:10",
+    #     fetch_format="png")
+    #     add_default_emoji(result9["url"])
+
+    # upload_default_emojis()
+    ```
+9. Run the program
 
     ``` 
     python3 __init__.py
     ```
 
-9. Click on the following link:
+10. Click on the following link:
     
     ```
     http://127.0.0.1:5000
     ```
 
-10. Start chatting!
+11. Start chatting!
 
 
 *Note that when you are accessing the app, you should use chrome to have all features properly fuctioning. Firefox causes some features like creating groups to be inaccessible.
