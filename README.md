@@ -64,3 +64,5 @@
 
 10. Start chatting!
 
+
+*Note that when you are accessing the app, you should use chrome to have all features properly fuctioning. Firefox causes some features like creating groups to be inaccessible.
